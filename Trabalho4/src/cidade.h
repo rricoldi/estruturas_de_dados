@@ -15,7 +15,9 @@
 typedef void *Cidade;
 
 Cidade criarCidade();
+
 void iniciaComercios(Cidade, char* arquivoEc);
+
 void iniciaPessoas(Cidade, char* arquivoPm);
 
 void removeCidade(Cidade cid);
@@ -29,10 +31,6 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 void removeDaCidade(Cidade cid, char id[], char txt[]);
-
-void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[]);
-
-void qry_crd(Cidade cid, char id[], char txt[]);
 
 void adicionarCirculo(Cidade cid, Info info);
 
@@ -80,15 +78,29 @@ void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 //Pré-requisito: todos os parâmetros devem existir (caminho do arquivo é opcional);
 //Pós condição: comandos executados;
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo);
+
 void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeDoArquivoTxt[]);
+
+void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[]);
+
+void qry_crd(Cidade cid, char id[], char txt[]);
+
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
+
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);
+
 void qry_de(FILE* arquivoTxt, char* cnpj, Cidade);
+
 void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade);
+
 void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando);
+
 void qry_mplg(char caminhoDoArquivo[], Reta poligono[], int tamanhoDoPoligono, FILE* arquivoTxt, char* nomeArquivoSvg, Cidade cidade);
+
 void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cidade);
+
 void qry_nav(Cidade cid, char arvore);
+
 void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta poligono[], int tamPolig, Cidade);
 
 #endif

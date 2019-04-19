@@ -33,14 +33,6 @@ typedef struct city
     Tree arvoreSemaforo;
     Tree arvorePredio;
     Tree arvoreMuro;
-    Lista listaCirculo;
-    Lista listaRetangulo;
-    Lista listaQuadra;
-    Lista listaHidrante;
-    Lista listaRadio;
-    Lista listaSemaforo;
-    Lista listaPredio;
-    Lista listaMuro;
 } cidade;
 
 Cidade criarCidade()
@@ -76,14 +68,17 @@ Cidade criarCidade()
     return city;
 }
 
-void iniciaComercios(Cidade cid, char* arquivoEc){
+void iniciaComercios(Cidade cid, char* arquivoEc)
+{
     cidade *city = (cidade *)cid;
     city->tiposComercio_tipo = criaTabela(97);
     city->comercios_cnpj = criaTabela(97);
     city->comercios_cpf = criaTabela(97);
     leiaEc(arquivoEc, city->comercios_cnpj, city->tiposComercio_tipo, city->comercios_cpf);
 }
-void iniciaPessoas(Cidade cid, char* arquivoPm){
+
+void iniciaPessoas(Cidade cid, char* arquivoPm)
+{
     cidade *city = (cidade *)cid;
     city->pessoas_cpf = criaTabela(97);
     city->moradiaPessoa_cep = criaTabela(97);
@@ -283,58 +278,12 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     return;
 }
 
-void qry_crd(Cidade cid, char id[], char txt[])
-{
-    FILE *arquivoTxt;
-    arquivoTxt = fopen(txt, "a");
-
-    cidade *city = (cidade *)cid;
-    Info info;
-
-    info = getPrimeiroRegistro(city->quadra_cep, id);
-    if (info != NULL)
-    {
-        fprintf(arquivoTxt, "quadra -> cep: %s x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info));
-        fclose(arquivoTxt);
-        return;
-    }
-
-    info = getPrimeiroRegistro(city->hidrante_id, id);
-    if (info != NULL)
-    {
-        fprintf(arquivoTxt, "hidrante -> id: %s x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
-        fclose(arquivoTxt);
-        return;
-    }
-
-    info = getPrimeiroRegistro(city->semaforo_id, id);
-    if (info != NULL)
-    {
-        fprintf(arquivoTxt, "semaforo -> id: %s x: %lf y: %lf\n", id, retornaSX(info), retornaSY(info));
-        fclose(arquivoTxt);
-        return;
-    }
-
-    info = getPrimeiroRegistro(city->radio_id, id);
-    if (info != NULL)
-    {
-        fprintf(arquivoTxt, "radio base -> id: %s x: %lf y: %lf\n", id, retornaRX(info), retornaRY(info));
-        fclose(arquivoTxt);
-        return;
-    }
-
-    printf("Nao foi possivel achar o elemento na cidade\n");
-    fclose(arquivoTxt);
-    return;
-}
-
 void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
     insereRegistro(city->circulo_id, retornaCID(info), info);
     insereNaArvore(&(city->arvoreCirculo), info);
 }
-
 
 Circulo getCirculo(Cidade cid, char id[])
 {
@@ -418,7 +367,6 @@ Semaforo getSemaforo(Cidade cid, char id[])
     return getPrimeiroRegistro(city->semaforo_id, id);
 }
 
-
 void adicionarPredio(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
@@ -444,51 +392,6 @@ Muro getMuro(Cidade cid, int i)
     return;
 }
 
-
-void qry_trns_no(Info info, va_list args)
-{
-    va_list variaveis;
-    va_copy(variaveis, args);
-    double fx = va_arg(variaveis, double);
-    double fy = va_arg(variaveis, double);
-    double largura = va_arg(variaveis, double);
-    double altura = va_arg(variaveis, double);
-    double dx = va_arg(variaveis, double);
-    double dy = va_arg(variaveis, double);
-    char *txt = va_arg(variaveis, char*);
-    FILE *arqTxt;
-    arqTxt = fopen(txt, "a");
-    if (verificaColisao(fx, fy, largura, altura, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
-        {
-            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(info), retornaQX(info), retornaQY(info), retornaQX(info)+dx, retornaQY(info)+dy);
-            setQX(info, retornaQX(info)+dx);
-            setQY(info, retornaQY(info)+dy);
-        }
-    fclose(arqTxt);
-    va_end(variaveis);
-    
-}
-
-void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[])
-{
-    cidade *city = cid;
-    percorreArvore(city->arvoreQuadra, qry_trns_no, x, y, largura, altura, dx, dy, nomeDoArquivoTxt);
-}
-
-void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy)
-{
-    cidade *city = (cidade *)cid;
-    if (option == 1 || option == 2)
-        percorreListaQ(city->listaQuadra, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
-    else
-    {
-        percorreListaQ(city->listaQuadra, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
-        percorreListaH(city->listaHidrante, fx, fy, largura, altura, dx, dy, txt);
-        percorreListaS(city->listaSemaforo, fx, fy, largura, altura, dx, dy, txt);
-        percorreListaR(city->listaRadio, fx, fy, largura, altura, dx, dy, txt);
-    }
-}
-
 void transformaArvoreEmLista(Info info, va_list args)
 {
     va_list variaveis;
@@ -496,162 +399,6 @@ void transformaArvoreEmLista(Info info, va_list args)
     Lista lista = va_arg(variaveis, void*);
     insereLista(lista, info);
     va_end(variaveis);
-}
-
-void resolveHidrantes(Info informacao, va_list args)
-{
-    va_list variaveis;
-    va_copy(variaveis, args);
-    double xIncendio = va_arg(variaveis, double);
-    double yIncendio = va_arg(variaveis, double);
-    double raio = va_arg(variaveis, double);
-    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
-    char *nomeDoArquivoTxt = va_arg(variaveis, char*);
-    FILE* arquivoTxt;
-    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
-    char corB[] = "red";
-    char corP[] = "none";
-
-    if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
-    {
-        imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
-        imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", corP, nomeDoArquivoSvg, 2);
-        imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
-        fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
-    }
-    fclose(arquivoTxt);
-    va_end(variaveis);
-}
-
-void qry_fi(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
-{
-    cidade *city = cid;
-    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
-    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
-    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
-    transformaListaEmVetor(lista, vetor);
-    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
-    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fi");
-
-    percorreArvore(city->arvoreHidrante, resolveHidrantes, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
-}
-
-void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
-{
-    cidade *city = (cidade*) cid;
-    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
-    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
-    int sinal;
-    if (numeroDeHidrantes < 0)
-    {
-        sinal = 0;
-        numeroDeHidrantes = -numeroDeHidrantes;
-    }
-    else
-    {
-        sinal = 1;
-    }
-    
-    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreHidrante));
-    Info vetor[getTamanhoDaArvore(city->arvoreHidrante)];
-    percorreArvore(city->arvoreHidrante, transformaArvoreEmLista, lista);
-    transformaListaEmVetor(lista, vetor);
-    heapsort(vetor, getTamanhoDaArvore(city->arvoreHidrante), x, y, retornaHX, retornaHY);
-    
-    resolveFHidrantes(vetor, x, y, numeroDeHidrantes, getTamanhoDaArvore(city->arvoreHidrante), sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
-}
-
-void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
-{
-    cidade *city = (cidade*) cid;
-    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
-    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
-
-    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
-    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
-    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
-    transformaListaEmVetor(lista, vetor);
-    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
-    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fs");
-}
-
-void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
-    int tamanhoVetorInfo;
-    Info* vetorCpfs;
-    cidade *city = (cidade*)cid;
-
-    if(city->moradiaPessoa_cep == NULL){
-        printf("ERRO: nenhum arquivo -pm foi informado\n");
-    }
-
-    vetorCpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamanhoVetorInfo);
-    fprintf(arquivoTxt, "m? cep: %s\n", cep);
-
-    if(tamanhoVetorInfo == 0){
-        fprintf(arquivoTxt, " -Não há pessoas morando nesse cep");
-        free(vetorCpfs);
-        return;
-    }
-
-    for(int i=0;i<tamanhoVetorInfo;i++){
-        fprintf(arquivoTxt, " -cpf: %s\n", (char*)vetorCpfs[i]);
-        Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, vetorCpfs[i]);
-        Moradia mor = getPrimeiroRegistro(city->moradias_cpf, vetorCpfs[i]);
-
-        if(pes == NULL){
-            fprintf(arquivoTxt, "  .Pessoa não encontrada\n");
-        }else{
-            fprintf(arquivoTxt, "  .%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
-        }
-        if(mor == NULL){
-            fprintf(arquivoTxt, "  .Casa da pessoa não encontrada\n");
-        }else{
-            fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
-        }
-    }
-    free(vetorCpfs);
-    fprintf(arquivoTxt, "\n");
-}
-void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid){
-    cidade* city = (cidade*)cid;
-    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
-
-    fprintf(arquivoTxt, "dm? cpf: %s\n", cpf);
-
-    if(pes == NULL){
-        fprintf(arquivoTxt, " -Pessoa não encontrada\n");
-    }else{
-        fprintf(arquivoTxt, " -%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
-    }
-
-    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
-    if(mor == NULL){
-        fprintf(arquivoTxt, " -Endereço da pessoa não encontrado\n");
-    }else{
-        fprintf(arquivoTxt, " -%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
-    }
-    fprintf(arquivoTxt, "\n");
-}
-void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
-    cidade *city = (cidade*)cid;
-    EstabelecimentoComercial ec = getPrimeiroRegistro(city->comercios_cnpj, cnpj);
-    Pessoa pes = NULL;
-
-    fprintf(arquivoTxt, "de? cnpj: %s\n", cnpj);
-    if(ec == NULL){
-        fprintf(arquivoTxt, " -Estabelecimento não encontrado\n");
-    }else{
-        ComercioTipo ct = getPrimeiroRegistro(city->tiposComercio_tipo, estabelecimentoGetTipo(ec));
-        fprintf(arquivoTxt, " -%s, %s, %s, %c, %d\n", estabelecimentoGetNome(ec), comercioGetDescricao(ct), estabelecimentoGetCep(ec),
-                                                        estabelecimentoGetFace(ec), estabelecimentoGetNum(ec));
-        pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
-    }
-    if(pes == NULL){
-        fprintf(arquivoTxt, " -Proprietário (cpf %s) não encontrado\n", estabelecimentoGetCpf(ec));
-    }else{
-        fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
-    }
-    fprintf(arquivoTxt, "\n");
 }
 
 void qry_dq_no(Node no, Info info, va_list args)
@@ -740,7 +487,244 @@ void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeD
 }
 
 
-void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid){
+void qry_crd(Cidade cid, char id[], char txt[])
+{
+    FILE *arquivoTxt;
+    arquivoTxt = fopen(txt, "a");
+
+    cidade *city = (cidade *)cid;
+    Info info;
+
+    info = getPrimeiroRegistro(city->quadra_cep, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "quadra -> cep: %s x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->hidrante_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "hidrante -> id: %s x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->semaforo_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "semaforo -> id: %s x: %lf y: %lf\n", id, retornaSX(info), retornaSY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->radio_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "radio base -> id: %s x: %lf y: %lf\n", id, retornaRX(info), retornaRY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    printf("Nao foi possivel achar o elemento na cidade\n");
+    fclose(arquivoTxt);
+    return;
+}
+
+void qry_trns_no(Info info, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    double fx = va_arg(variaveis, double);
+    double fy = va_arg(variaveis, double);
+    double largura = va_arg(variaveis, double);
+    double altura = va_arg(variaveis, double);
+    double dx = va_arg(variaveis, double);
+    double dy = va_arg(variaveis, double);
+    char *txt = va_arg(variaveis, char*);
+    FILE *arqTxt;
+    arqTxt = fopen(txt, "a");
+    if (verificaColisao(fx, fy, largura, altura, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
+        {
+            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(info), retornaQX(info), retornaQY(info), retornaQX(info)+dx, retornaQY(info)+dy);
+            setQX(info, retornaQX(info)+dx);
+            setQY(info, retornaQY(info)+dy);
+        }
+    fclose(arqTxt);
+    va_end(variaveis);
+    
+}
+
+void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[])
+{
+    cidade *city = cid;
+    percorreArvore(city->arvoreQuadra, qry_trns_no, x, y, largura, altura, dx, dy, nomeDoArquivoTxt);
+}
+
+void resolveHidrantes(Info informacao, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    double xIncendio = va_arg(variaveis, double);
+    double yIncendio = va_arg(variaveis, double);
+    double raio = va_arg(variaveis, double);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    char *nomeDoArquivoTxt = va_arg(variaveis, char*);
+    FILE* arquivoTxt;
+    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+    char corB[] = "red";
+    char corP[] = "none";
+
+    if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
+    {
+        imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
+        imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", corP, nomeDoArquivoSvg, 2);
+        imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
+        fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
+    }
+    fclose(arquivoTxt);
+    va_end(variaveis);
+}
+
+void qry_fi(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = cid;
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
+    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
+    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
+    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fi");
+
+    percorreArvore(city->arvoreHidrante, resolveHidrantes, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
+}
+
+void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = (cidade*) cid;
+    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
+    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
+    int sinal;
+    if (numeroDeHidrantes < 0)
+    {
+        sinal = 0;
+        numeroDeHidrantes = -numeroDeHidrantes;
+    }
+    else
+    {
+        sinal = 1;
+    }
+    
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreHidrante));
+    Info vetor[getTamanhoDaArvore(city->arvoreHidrante)];
+    percorreArvore(city->arvoreHidrante, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreHidrante), x, y, retornaHX, retornaHY);
+    
+    resolveFHidrantes(vetor, x, y, numeroDeHidrantes, getTamanhoDaArvore(city->arvoreHidrante), sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
+}
+
+void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = (cidade*) cid;
+    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
+    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
+
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
+    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
+    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
+    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fs");
+}
+
+void qry_m(FILE* arquivoTxt, char cep[], Cidade cid)
+{
+    int tamanhoVetorInfo;
+    Info* vetorCpfs;
+    cidade *city = (cidade*)cid;
+
+    if(city->moradiaPessoa_cep == NULL){
+        printf("ERRO: nenhum arquivo -pm foi informado\n");
+    }
+
+    vetorCpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamanhoVetorInfo);
+    fprintf(arquivoTxt, "m? cep: %s\n", cep);
+
+    if(tamanhoVetorInfo == 0){
+        fprintf(arquivoTxt, " -Não há pessoas morando nesse cep");
+        free(vetorCpfs);
+        return;
+    }
+
+    for(int i=0;i<tamanhoVetorInfo;i++){
+        fprintf(arquivoTxt, " -cpf: %s\n", (char*)vetorCpfs[i]);
+        Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, vetorCpfs[i]);
+        Moradia mor = getPrimeiroRegistro(city->moradias_cpf, vetorCpfs[i]);
+
+        if(pes == NULL){
+            fprintf(arquivoTxt, "  .Pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+        }
+        if(mor == NULL){
+            fprintf(arquivoTxt, "  .Casa da pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+        }
+    }
+    free(vetorCpfs);
+    fprintf(arquivoTxt, "\n");
+}
+
+void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid)
+{
+    cidade* city = (cidade*)cid;
+    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
+
+    fprintf(arquivoTxt, "dm? cpf: %s\n", cpf);
+
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Pessoa não encontrada\n");
+    }else{
+        fprintf(arquivoTxt, " -%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+    }
+
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
+    if(mor == NULL){
+        fprintf(arquivoTxt, " -Endereço da pessoa não encontrado\n");
+    }else{
+        fprintf(arquivoTxt, " -%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+    }
+    fprintf(arquivoTxt, "\n");
+}
+
+void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid)
+{
+    cidade *city = (cidade*)cid;
+    EstabelecimentoComercial ec = getPrimeiroRegistro(city->comercios_cnpj, cnpj);
+    Pessoa pes = NULL;
+
+    fprintf(arquivoTxt, "de? cnpj: %s\n", cnpj);
+    if(ec == NULL){
+        fprintf(arquivoTxt, " -Estabelecimento não encontrado\n");
+    }else{
+        ComercioTipo ct = getPrimeiroRegistro(city->tiposComercio_tipo, estabelecimentoGetTipo(ec));
+        fprintf(arquivoTxt, " -%s, %s, %s, %c, %d\n", estabelecimentoGetNome(ec), comercioGetDescricao(ct), estabelecimentoGetCep(ec),
+                                                        estabelecimentoGetFace(ec), estabelecimentoGetNum(ec));
+        pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
+    }
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Proprietário (cpf %s) não encontrado\n", estabelecimentoGetCpf(ec));
+    }else{
+        fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
+    }
+    fprintf(arquivoTxt, "\n");
+}
+
+void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid)
+{
     cidade *city = (cidade*)cid;
     Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
     Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
@@ -761,7 +745,9 @@ void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* c
     }
     fprintf(arquivoTxt, "  .para: %s, %c, %d, %s\n\n", cep, face, num, complemento);
 }
-int qry_mplg_quadra_predios(Cidade cid, char* cep, Reta* poligono, int tamPolig, FILE* arquivoTxt){
+
+int qry_mplg_quadra_predios(Cidade cid, char* cep, Reta* poligono, int tamPolig, FILE* arquivoTxt)
+{
     cidade* city = cid;
     int tamVetPre=0, tamVetCpf=0;
     int qtdPessoas = 0;
@@ -789,7 +775,9 @@ int qry_mplg_quadra_predios(Cidade cid, char* cep, Reta* poligono, int tamPolig,
     free(predios);
     return qtdPessoas;
 }
-void qry_mplg_quadra(Info info, va_list args){
+
+void qry_mplg_quadra(Info info, va_list args)
+{
     va_list variaveis;
     va_copy(variaveis, args);
     Reta* polig = va_arg(variaveis, void**);
@@ -814,7 +802,9 @@ void qry_mplg_quadra(Info info, va_list args){
         retaFinalizar(retangulo[i]);
     va_end(variaveis);
 }
-void qry_mplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, Cidade cid){
+
+void qry_mplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, Cidade cid)
+{
     cidade *city = cid;
     FILE* arquivoSvg = fopen(nomeArqSvg, "a+");
     fprintf(arquivoTxt, "mplg?\n");
@@ -823,7 +813,8 @@ void qry_mplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arqui
     fprintf(arquivoTxt, "\n");
 }
 
-void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, FILE* arquivoTxt, FILE* arquivoSvg, EstabelecimentoComercial item){
+void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, FILE* arquivoTxt, FILE* arquivoSvg, EstabelecimentoComercial item)
+{
     Reta* lados = retornaPredioLados(predio);
     if(retanguloTotalDentroPoligono(lados, poligono, tamPolig)){
         fprintf(arquivoTxt, " -Estabelecimento: %s\n", estabelecimentoGetNome(item));
@@ -847,7 +838,9 @@ void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, 
     }
     free(lados);
 }
-void qry_elpg_estabelecimentos(Info item, va_list args){
+
+void qry_elpg_estabelecimentos(Info item, va_list args)
+{
     va_list variaveis;
     va_copy(variaveis, args);
     char* tipo = va_arg(variaveis, char*);
@@ -877,7 +870,9 @@ void qry_elpg_estabelecimentos(Info item, va_list args){
     free(predios);
     va_end(variaveis);
 }
-void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cid){
+
+void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cid)
+{
     cidade *city = cid;
     FILE* arquivoSvg = fopen(nomeArqSvg, "a+");
     fprintf(arquivoTxt, "eplg? %s\n", tipo);
@@ -886,19 +881,8 @@ void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arqui
     fclose(arquivoSvg);
 }
 
-// typedef double (*getX)(Info info);
-// typedef double (*getY)(Info info);
-// typedef char* (*getIdentifier)(Info info);
-// typedef void (*finalizaItem)(Info info);
-
-// void qry_catac_ponto(Node node, Info info, va_list args){
-//     va_list variaveis;
-//     va_copy(variaveis, args);
-
-
-//     va_end(variaveis);
-// }
-void qry_catac_quadra(Node node, Info info, va_list args){
+void qry_catac_quadra(Node node, Info info, va_list args)
+{
     va_list variaveis;
     va_copy(variaveis, args);
     FILE* arquivoTxt = va_arg(variaveis, FILE*);
@@ -998,7 +982,9 @@ void qry_catac_quadra(Node node, Info info, va_list args){
 
     va_end(variaveis);
 }
-void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig, Cidade cid){
+
+void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig, Cidade cid)
+{
     cidade *city = cid;
     FILE* arquivoSvg = fopen(nomeArquivoSvg, "a+");
     fprintf(arquivoTxt, "catac\n");
@@ -1014,7 +1000,6 @@ void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig
     free(nodeArray);
     fclose(arquivoSvg);
 }
-//Tree *tree,void (*imprimeSvg)(void*,void*,FILE*,int,int,char,int),FILE *arquivoSVG
 
 void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando)
 {
