@@ -45,6 +45,13 @@ Cidade criarCidade()
     return city;
 }
 
+// void imprimeCity(Cidade cid)
+// {
+//     cidade *city = (cidade *)cid;
+//     percorreArvore(city->arvoreCirculo, imprime);
+// }
+
+
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;

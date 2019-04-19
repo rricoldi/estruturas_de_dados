@@ -25,4 +25,6 @@ char *retornaCCorB(Circulo c);
 
 double comparaCirculo(Circulo c1, Circulo c2);
 
+void imprime(Circulo c);
+
 #endif
