@@ -30,7 +30,7 @@ char* comercioGetDescricao(ComercioTipo ct){
 
 struct estabelecimentoComercial{
     char* cnpj;
-    // char cpf[11];
+    char* cpf;
     char* tipo;
     char* cep;
     char face;
@@ -38,17 +38,17 @@ struct estabelecimentoComercial{
     char* nome;
 };
 
-EstabelecimentoComercial estabelecimentoNovo(char* cnpj, char* tipo, char* cep, char face, int num, char* nome){
+EstabelecimentoComercial estabelecimentoNovo(char* cnpj, char* cpf, char* tipo, char* cep, char face, int num, char* nome){
     struct estabelecimentoComercial *esse = malloc(sizeof(struct estabelecimentoComercial));
 
     esse->cnpj = malloc(strlen(cnpj));
-    // esse->cpf = malloc(strlen(cpf));
+    esse->cpf = malloc(strlen(cpf));
     esse->tipo = malloc(strlen(tipo));
     esse->cep = malloc(strlen(cep));
     esse->nome = malloc(strlen(nome));
 
     strcpy(esse->cnpj, cnpj);
-    // strcpy(esse->cpf, cpf);
+    strcpy(esse->cpf, cpf);
     strcpy(esse->tipo, tipo);
     strcpy(esse->cep, cep);
     strcpy(esse->nome, nome);
@@ -62,10 +62,10 @@ char* estabelecimentoGetCnpj(EstabelecimentoComercial ec){
     struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*) ec;
     return esse->cnpj;
 }
-// char* estabelecimentoGetCpf(EstabelecimentoComercial ec){
-//     struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*) ec;
-//     return esse->cpf;
-// }
+char* estabelecimentoGetCpf(EstabelecimentoComercial ec){
+    struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*) ec;
+    return esse->cpf;
+}
 char* estabelecimentoGetTipo(EstabelecimentoComercial ec){
     struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*) ec;
     return esse->tipo;
@@ -88,16 +88,17 @@ int estabelecimentoGetNum(EstabelecimentoComercial ec){
 }
 
 struct pessoa{
-    char cpf[11];
+    char* cpf;
     char* nome;
     char* sobrenome;
     char sexo;
     char* nascimento;
 };
 
-Pessoa pessoaNovo(char cpf[], char* nome, char* sobrenome, char* nascimento, char sexo){
+Pessoa pessoaNovo(char* cpf, char* nome, char* sobrenome, char* nascimento, char sexo){
     struct pessoa *essa = malloc(sizeof(struct pessoa));
 
+    essa->cpf = malloc(strlen(cpf));
     essa->nome = malloc(strlen(nome));
     essa->sobrenome = malloc(strlen(sobrenome));
     essa->nascimento = malloc(strlen(nascimento));

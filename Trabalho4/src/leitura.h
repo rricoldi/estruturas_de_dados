@@ -9,10 +9,12 @@
 #include "svg.h"
 #include "qry.h"
 #include "cidade.h"
+#include"hashTable.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 
 void leiaQry(char prefixoArq[], char arq[], Cidade cidade);
 
-
+void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio);
+void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias);
 #endif

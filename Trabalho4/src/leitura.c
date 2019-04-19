@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "leitura.h"
+#include"comercioPessoas.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
@@ -540,6 +541,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 			verificador2++;
 		}
+		else if(strcmp("brl", comando)==0){
+			double brlX, brlY;
+			fscanf(arquivoQry, "%d %d ", &brlX, &brlY);
+
+			// <<
+			if(verificador2 == 0){
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2++;
+			}
+			// >>
+
+			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
+		}
 	}
 	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -552,4 +568,99 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	
 
 	fclose(arquivoQry);
+}
+
+void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
+	FILE* ec = fopen(arquivoEc, "r");
+	if(!ec){
+		printf("Não foi possível abrir o arquivo ec: %s", arquivoEc);
+		exit(-1);
+	}
+	
+	char comando;
+	char linha[150];
+	while(!feof(ec)){
+		fgets(linha, 150, ec);
+		sscanf(linha, "%c", &comando);
+
+		if(comando == 't'){
+			char tipo[21], descricao[129];
+
+			sscanf(linha, "%*c %20s %[^\n]", tipo, descricao);
+
+			// tipo[20] = '\0';
+			// descricao[128] = '\0';
+
+			ComercioTipo ct = tipoComercioNovo(tipo, descricao);
+			int reg = insereRegistro(tiposComercio, tipo, ct);
+			if(reg<0){
+				printf("Erro ao inserir o tipo de comercio \'%s\'\n", tipo);
+			}
+		}
+		else if(comando == 'e'){
+			char cnpj[19], cpf[15], tipo[21], cep[10], nome[85];
+			char face;
+			int num;
+
+			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cnpj, cpf, cep, &face, &num, nome);
+
+			// cnpj[18] = '\0';
+			// cpf[14] = '\0';
+			// tipo[20] = '\0';
+			// cep[9] = '\0';
+			// nome[84] = '\0';
+
+			if(!existeChave(tiposComercio, tipo)){
+				printf("O tipo de estabelecimento %s não existe\n", tipo);
+				return;
+			}
+
+			EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
+			int reg = insereRegistro(comercios, nome, cnpj);
+			if(reg<0){
+				printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
+			}
+		}
+	}
+}
+
+void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias){
+	FILE* pm = fopen(arquivoPm, "r");
+	if(!pm){
+		printf("Erro ao abrir o arquivo pm \'%s\'\n", arquivoPm);
+		exit(-1);
+	}
+
+	char comando;
+	char linha[150];
+	while(!feof(pm)){
+		fgets(linha, 150, pm);
+		sscanf(linha, "%c", &comando);
+
+		if(comando == 'p'){
+			char cpf[15], nome[50], sobrenome[50], nascimento[11];
+			char sexo;
+
+			sscanf(linha, "%*c %14s %49s %49s %c %10s ", cpf, nome, sobrenome, sexo, nascimento);
+
+			Pessoa pes = pessoaNovo(cpf, nome, sobrenome, nascimento, sexo);
+			int reg = insereRegistro(pessoas, cpf, pes);
+			if(reg<0){
+				printf("Erro ao inserir a pessoa \'%s\'\n", cpf);
+			}
+		}
+		else if(comando == 'm'){
+			char cpf[15], cep[10], complemento[135];
+			char face;
+			int num;
+
+			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cpf, cep, &face, &num, complemento);
+
+			Moradia mor = moradiaNovo(cep, face, num, complemento);
+			int reg = insereRegistro(moradias, cpf, mor);
+			if(reg<0){
+				printf("Erro ao inserir a moradia \'%s, %c, %d\'\n", cep, face, num);
+			}
+		}
+	}
 }

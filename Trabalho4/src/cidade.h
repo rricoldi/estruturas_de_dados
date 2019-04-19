@@ -12,6 +12,8 @@
 typedef void *Cidade;
 
 Cidade criarCidade();
+void iniciaComercios(Cidade, char* arquivoEc);
+void iniciaPessoas(Cidade, char* arquivoPm);
 
 void removeCidade(Cidade cid);
 

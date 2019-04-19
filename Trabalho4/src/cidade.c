@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include "cidade.h"
+#include"comercioPessoas.h"
+
+#include"leitura.h"
 
 typedef struct city
 {
@@ -41,6 +44,10 @@ Cidade criarCidade()
     city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
     city->arvorePredio = criaArvore(comparaPredio);
+    city->pessoas = NULL;
+    city->moradias = NULL;
+    city->tiposComercio = NULL;
+    city->comercios = NULL;
 
     return city;
 }
@@ -51,6 +58,18 @@ Cidade criarCidade()
 //     percorreArvore(city->arvoreCirculo, imprime);
 // }
 
+void iniciaComercios(Cidade cidade, char* arquivoEc){
+    struct city *essa = (struct city*) cidade;
+    essa->tiposComercio = criaTabela(50);
+    essa->comercios = criaTabela(50);
+    leiaEc(arquivoEc, essa->comercios, essa->tiposComercio);
+}
+void iniciaPessoas(Cidade cidade, char* arquivoPm){
+    struct city *essa = (struct city*) cidade;
+    essa->pessoas = criaTabela(50);
+    essa->moradias = criaTabela(50);
+    leiaPm(arquivoPm, essa->pessoas, essa->moradias);
+}
 
 void removeCidade(Cidade cid)
 {
