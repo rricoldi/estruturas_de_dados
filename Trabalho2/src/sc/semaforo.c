@@ -24,37 +24,37 @@ Semaforo criaSemaforo(char id[20], char corB[20], char corP[20], double x, doubl
     return s;
 }
 
-double retornaRX(Semaforo s)
+double retornaSX(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->x;
 }
 
-double retornaRY(Semaforo s)
+double retornaSY(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->y;
 }
 
-double retornaREspessura(Semaforo s)
+double retornaSEspessura(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->espessura;
 }
 
-char *retornaRCEP(Semaforo s)
+char *retornaSID(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->id;
 }
 
-char *retornaRCorB(Semaforo s)
+char *retornaSCorB(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->corB;
 }
 
-char *retornaRCorP(Semaforo s)
+char *retornaSCorP(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->corP;

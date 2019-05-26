@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "leitura.h"
+
 
 #define padrao 1
 
-int leiaGeo(char arq[], char svg[])
+Cidade leiaGeo(char arq[], char svg[])
 {
     FILE *geo;
+	printf("%s\n", arq);
     geo = fopen(arq, "r");
 
     if (geo == NULL){ //caso nao abra o arquivo: ERRO!
@@ -16,51 +19,70 @@ int leiaGeo(char arq[], char svg[])
 	printf("Arquivo Geo foi aberto\n");
 	
     int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;
-    char comando[3];
-    char *texto;
     int nxi = 0, nqi = 0, nhi = 0, nsi = 0, nri = 0;
-    int id;
+	char comando[3];
+    char *texto;
 	double x, y, altura, largura, raio;
-	char cor1[20], cor2[20];
+	double espessuraC = 1;
+	double espessuraRe = 1;
+	char corP[20] = "white";
+	char corB[20] = "black";
+	double espessuraQ = 1;
+	char corQP[20] = "orange";
+	char corQB[20] = "blue";
+	double espessuraH = 1;
+	char corHP[20] = "red";
+	char corHB[20] = "black";
+	double espessuraS = 1;
+	char corSP[20] = "yellow";
+	char corSB[20] = "green";
+	double espessuraR = 1;
+	char corRP[20] = "purple";
+	char corRB[20] = "pink";
+	char id[20];
     size_t bufsize = 32;
-    
+    Info info;
+
     iniciaSvg(svg);
 	printf("svg inicializado\n");
 
 	fscanf(geo,"%s", comando);
-	if (strcmp("nx",comando)==0) //proximo argumento deve ser numero maximo de circulos e retangulos
+	if (strcmp("nx",comando)==0) //proximo argumento deve ser numero maximo de figuras, quadras, hidrantes, semaforos e radio-bases
 	{ 
 		fscanf(geo,"%d %d %d %d %d", &nx, &nq, &nh, &ns, &nr);
     }
 
-	Cidade cidade = criaCidade(nq, nh, nr, ns);
+	Cidade cidade = criaCidade(nx, nq, nh, nr, ns);
 	
     while(1){	
-
+		
 		if (feof(geo))
 	        break;
-        else if (strcmp("q",comando)==0){ //proximo argumento deve ser os parametros          
+        else if (strcmp("c",comando)==0){ //proximo argumento deve ser os parametros 
+			printf("circulo\n");         
 			if(nxi<nx){
-				fscanf(geo,"%d %f %f %f %s %s", &id, &raio, &x, &y, &cor1, &cor2);
-				Info info = criaQuadra("12345", "Blue", "Black", 15.2, 14.3, x, y, padrao);
-				int j = addQuadra(cidade, info);
+				fscanf(geo,"%s %lf %lf %lf %s %s", &id, &raio, &x, &y, &corB, &corP);
+				Info info = criaCirculo(id, corB, corP, raio, x, y, espessuraC);
+				addCirculo(cidade, info);
 				
-				criaCirculo(raio, x, y, cor1, cor2, svg);
+				printaCirculo(raio, x, y, corB, corP, svg, espessuraC);
 				nxi++;
 			}
         }
         else if (strcmp("r",comando)==0){ //proximo argumento deve ser os parametros
+			printf("retangulo\n");
             if(nxi<nx){
-				fscanf(geo,"%d %f %f %f %f %s %s", &id, &largura, &altura, &x, &y, &cor1, &cor2);
-            
-            	inicio = inserir(inicio, id, 0, x, y, altura, largura, cor1, cor2, 'r');
+				fscanf(geo,"%s %lf %lf %lf %lf %s %s", &id, &largura, &altura, &x, &y, &corB, &corP);
+				Info info = criaRetangulo(id, corB, corP, largura, altura, x, y, espessuraRe);
+				addRetangulo(cidade, info);
             	
-				criaRetangulo(largura, altura, x, y, cor1, cor2, svg);
+            	
+				printaRetangulo(largura, altura, x, y, corB, corP, svg, espessuraRe);
             	nxi++;
 			}
         }
         else if (strcmp("t",comando)==0){ //proximo argumento deve ser os par?metros
-            fscanf(geo,"%f %f", &x, &y);
+            fscanf(geo,"%lf %lf", &x, &y);
 	
 	    	texto = (char *)malloc(bufsize * sizeof(char));
 
@@ -68,7 +90,80 @@ int leiaGeo(char arq[], char svg[])
 	    	escreveSvg(x, y, strtok(texto,"\n"), svg);
 			free(texto);
 		}
+		else if (strcmp("q",comando)==0)
+		{
+			printf("quadra\n");
+            if(nqi < nq)
+			{
+				fscanf(geo,"%s %lf %lf %lf %lf", &id, &x, &y, &largura, &altura);
+				printf("%s, %lf, %lf, %lf ,%lf\n", id, x, y, largura, altura);
+				info = criaQuadra(id, corQB, corQP, largura, altura, x, y, espessuraQ);
+				addQuadra(cidade, info);
 
+				printaRetangulo(largura, altura, x, y, corQB, corQP, svg, espessuraQ);
+			}
+		}
+		else if (strcmp("h",comando)==0)
+		{
+			printf("hidrante\n");
+            if(nhi < nh)
+			{
+				fscanf(geo,"%s %lf %lf", &id, &x, &y);
+				info = criaHidrante(id, corHB, corHP, espessuraH, x, y);
+				addHidrante(cidade, info);
+
+				printaCirculo(2, x, y, corHB, corHP, svg, espessuraH);
+			}
+		}
+		else if (strcmp("s",comando)==0)
+		{
+			printf("semaforo\n");
+            if(nsi<ns)
+			{
+				fscanf(geo,"%s %lf %lf", &id, &x, &y);
+				info = criaSemaforo(id, corSB, corSP, x, y, espessuraS);
+				addQuadra(cidade, info);
+
+				printaRetangulo(7, 18, x, y, corSB, corSP, svg, espessuraS);
+			}
+		}
+		else if (strcmp("rb",comando)==0)
+		{
+			printf("radio\n");
+            if(nri<nr)
+			{
+				fscanf(geo,"%s %lf %lf", &id, &x, &y);
+				info = criaRadio(id, corRB, corRP, x, y, espessuraR);
+				addRadio(cidade, info);
+
+				criaElipse(svg, x, y, 5, 15, corRP, corRB, espessuraR);
+			}
+		}
+		else if (strcmp("sw",comando)==0)
+		{
+			printf("sw\n");
+			fscanf(geo,"%lf %lf", &espessuraC, &espessuraRe);	
+		}
+		else if (strcmp("cq",comando)==0)
+		{
+			printf("cq\n");
+			fscanf(geo,"%s %s %lf", &corQP, &corQB, espessuraQ);	
+		}
+		else if (strcmp("ch",comando)==0)
+		{
+			printf("ch\n");
+			fscanf(geo,"%s %s %lf", &corHP, &corHB, espessuraH);	
+		}
+		else if (strcmp("cr",comando)==0)
+		{
+			printf("cr\n");
+			fscanf(geo,"%s %s %lf", &corRP, &corRB, espessuraR);	
+		}
+		else if (strcmp("cs",comando)==0)
+		{
+			printf("cs\n");
+			fscanf(geo,"%s %s %lf", &corSP, &corSB, espessuraS);	
+		}
 		fscanf(geo,"%s", comando);
     }
 	
@@ -78,124 +173,5 @@ int leiaGeo(char arq[], char svg[])
     fclose(geo);
 	printf("Arquivo Geo foi fechado\n");
 
-	return inicio;
-}
-
-void leiaQry(char prefixoArq[], char arq[], No *inicio)
-{
-	FILE *qry;		
-	qry = fopen(arq,"r");
-	if(qry == NULL){
-		printf("erro ao tentar abrir o arquivo qry!\n");
-		exit(1);
-	}
-	printf("Arquivo Qry foi aberto\n");
-
-	No *Np1, *Np2;
-	par *par1, *par2;
-
-	int j, k;
-	float x, y;
-    char comando[4];
-    char sufixo[20];
-    char cor[20];
-
-    char *svg = (char*) malloc((strlen(prefixoArq)+5)*sizeof(char));
-    sprintf(svg,"%s.svg", prefixoArq);
-
-	iniciaSvg(svg);
-	printf("svg incializa do\n");
-
-    No *lista;
-    lista = inicio;
-
-    par *par;
-    
-	FILE *arqout;
-    arqout = fopen(svg, "w");
-    fprintf(arqout, "<svg>");
-
-    while(lista != NULL){
-    	par = lista->par;
-    	if (par->type == 'c'){
-    	    fprintf(arqout, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"%f\" stroke=\"%s\" fill=\"%s\" />", par->x, par->y, par->raio, par->raio, par->cor1, par->cor2);
-    	}
-    	else if (par->type == 'r'){
-    	    fprintf(arqout, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill:%s;stroke:%s\" />", par->x, par->y, par->largura, par->altura, par->cor2, par->cor1);
-    	}
-
-	    lista = lista->prox;
-    }
-
-   fclose(arqout);
-    
-	char *txt = (char*) malloc((strlen(prefixoArq)+5)*sizeof(char));
-    sprintf(txt,"%s.txt", prefixoArq);
-
-	FILE *texto;
-	texto = fopen(txt, "w");
-	if (texto == NULL)
-		printf("ERRO AO CRIAR TXT\n");
-	fclose(texto);
-
-    while(1){
-		fscanf(qry,"%s", comando);
-	
-		if (feof(qry))
-        	break;
-       
-	    if (strcmp("o?",comando)==0){ //proximo argumento deve ser n?mero m?ximo de c?rculos e ret?ngulos
-        	fscanf(qry, "%d %d", &j, &k);
-
-			Np1 = buscar(inicio, j);
-            Np2 = buscar(inicio, k);
-			
-			par1 = Np1->par;
-			par2 = Np2->par;
-            
-			if (par1->type == 'c' && par2->type == 'r') {
-                colisaoCR(par1->x, par1->y, par1->raio, par2->x, par2->y, par2->largura, par2->altura, j, k, txt, svg);
-            } else if (par1->type == 'r' && par2->type == 'c') {
-                colisaoCR(par2->x, par2->y, par2->raio, par1->x, par1->y, par1->largura, par1->altura, j, k, txt, svg);
-            } else if (par1->type == 'c' && par2->type == 'c') {
-                colisaoCC(par1->x, par1->y, par1->raio, par2->x, par2->y, par2->raio, j, k, txt, svg);
-            } else if (par1->type == 'r' && par2->type == 'r') {
-                colisaoRR(par1->x, par1->y, par1->largura, par1->altura, par2->x, par2->y, par2->largura, par2->altura, j, k, txt, svg);
-            }
-		}
-        else if (strcmp("i?",comando)==0){ //proximo argumento deve ser os par?metros
-        	fscanf(qry, "%d %f %f", &j, &x, &y);
-
-        	Np1 = buscar(inicio, j);
-			par1 = Np1->par;
-
-        	if (par1->type == 'c')
-        	    pontoInternoCirculo(x, y, par1->x, par1->y, par1->raio, txt, j, svg);
-		    else
-		        pontoInternoQuadrado(x, y, par1->x, par1->y, par1->altura, par1->largura, txt, par1->id, svg);
-        }
-        else if (strcmp("d?",comando)==0){ //proximo argumento deve ser os par?metros
-			fscanf(qry, "%d %d", &j, &k);
-
-            Np1 = buscar(inicio, j);
-            Np2 = buscar(inicio, k);
-
-			par1 = Np1->par;
-			par2 = Np2->par;
-
-            distanciaFig(par1->x, par1->y, par2->x, par2->y, txt, svg, j, k);
-        }
-        else if (strcmp("bb",comando)==0){ //proximo argumento deve ser os par?metros
-            fscanf(qry, " %s %s", &sufixo, &cor);
-
-            boundingBox(cor, prefixoArq, sufixo, inicio);
-        } 
-    }
-    finalizaSvg(svg);
-	printf("svg finalizado\n");
-
-    free(txt);
-
-    fclose(qry);
-	printf("O arquivo Qry foi fechado\n");
+	return cidade;
 }

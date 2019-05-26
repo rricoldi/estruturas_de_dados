@@ -2,9 +2,9 @@
 #define __LEITURA_H
 
 #include "cidade.h"
+#include "svg.h"
 
-int leiaGeo(char arq[], char svg[]);
+Cidade leiaGeo(char arq[], char svg[]);
 
-void leiaQry(char prefixoArq[], char arq[], No *inicio);
 
 #endif

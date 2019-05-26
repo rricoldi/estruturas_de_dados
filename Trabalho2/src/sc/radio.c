@@ -42,7 +42,7 @@ double retornaREspessura(Radio r)
     return item->espessura;
 }
 
-char *retornaRCEP(Radio r)
+char *retornaRID(Radio r)
 {
     ItemR* item = (ItemR*) r;
     return item->id;

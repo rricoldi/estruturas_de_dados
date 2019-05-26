@@ -4,22 +4,24 @@
 #include "hidrante.h"
 #include "radio.h"
 #include "semaforo.h"
+#include "circulo.h"
+#include "retangulo.h"
 
 typedef void *Lista;
-typedef long int Posic;
+typedef int Posic;
 typedef void *Info;
 
-Lista iniciaLista(long int capacidade);
+Lista iniciaLista(int capacidade);
 
 void finalizaLista(Lista L);
 
-long int getLivre(Lista L);
+int getLivre(Lista L);
 
 Info get(Lista L, Posic pos);
 
 Posic insereLista(Lista L, Info info);
 
-//Info procuraLista(Lista L, char cep[]);
+Info procuraLista(Lista L, char cep[]);
 
 
 

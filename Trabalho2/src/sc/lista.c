@@ -7,21 +7,21 @@
 
 typedef struct no
 {
-   long int ant;
+   int ant;
    Info info;  
-   long int prox; 
+   int prox; 
 }No;
 
 typedef struct VetorQ
 {
    No *v;
-   long int primeiro;
-   long int livre;
-   long int ultimo;
-   long int capacidade;
+   int primeiro;
+   int livre;
+   int ultimo;
+   int capacidade;
 }List;
 
-Lista iniciaLista(long int capacidade)
+Lista iniciaLista(int capacidade)
 {
    Lista l;    //Colocar _t
 
@@ -52,10 +52,10 @@ void finalizaLista(Lista L)
    free(lista);
 }
 
-long int getLivre(Lista L)
+int getLivre(Lista L)
 {
    List* lista = (List*) L; //CASTING LISTA para LIST
-   long int posLivre = lista->livre;
+   int posLivre = lista->livre;
    lista->livre = lista->v[lista->livre].prox; //recebe o próximo livre
 
    return posLivre;
@@ -64,7 +64,7 @@ long int getLivre(Lista L)
 Posic insereLista(Lista L, Info info)
 {
   List* lista = (List*) L; //CASTING LISTA para LIST
-  long int iLivre = getLivre(L); // semelhante ao malloc
+  int iLivre = getLivre(L); // semelhante ao malloc
   
   if (iLivre == -1) //verifica se a lista nao esta cheia ao ver se o livre nao e nulo
   {
@@ -90,7 +90,6 @@ Posic insereLista(Lista L, Info info)
 
       lista->ultimo = iLivre;
 
-      printf("Elemento Inserido com sucesso!\n");
   }
 
   return iLivre;
@@ -136,7 +135,7 @@ Info procuraLista(Lista L, char cep[])
 {
    List* lista = (List*) L;
    
-   long int i = lista->primeiro;
+   int i = lista->primeiro;
    
 
    while(lista->v[i].prox != -1)
@@ -145,23 +144,30 @@ Info procuraLista(Lista L, char cep[])
       Info informacao = lista->v[i].info;
       
       
-      if(strcmp(retornaQCEP(lista->v[i].info), cep))
+      if(strcmp(retornaQCEP(informacao), cep))
       {
-         return lista->v[i].info; 
+         return informacao; 
       }
-      else if(strcmp(retornaHID(lista->v[i].info), cep))
+      else if(strcmp(retornaHID(informacao), cep))
       {
-         return lista->v[i].info; 
+         return informacao; 
       }
-      else if(strcmp(retornaSID(lista->v[i].info), cep))
+      else if(strcmp(retornaSID(informacao), cep))
       {
-         return lista->v[i].info; 
+         return informacao; 
       }
-      else if(strcmp(retornaRID(lista->v[i].info), cep))
+      else if(strcmp(retornaRID(informacao), cep))
       {
-         return lista->v[i].info; 
+         return informacao; 
       }
-      
+      else if(strcmp(retornaCID(informacao), cep))
+      {
+         return informacao; 
+      }
+      else if(strcmp(retornaReID(informacao), cep))
+      {
+         return informacao; 
+      }
       
       i = lista->v[i].prox;
    }

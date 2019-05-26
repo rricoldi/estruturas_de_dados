@@ -5,24 +5,32 @@
 
 typedef void *Cidade;
 
-Cidade criaCidade(long int nq, long int nh, long int nr, long int ns);
+Cidade criaCidade(int nx, int nq, int nh, int nr, int ns);
 
 void removeCidade(Cidade cid);
 
+int addCirculo(Cidade cid, Info info);
+
+Circulo getCirculo(Cidade cid, int i);
+
+int addRetangulo(Cidade cid, Info info);
+
+Retangulo getRetangulo(Cidade cid, int i);
+
 int addQuadra(Cidade cid, Info info);
 
-Quadra getQuadra(Cidade cid, long int i);
+Quadra getQuadra(Cidade cid, int i);
 
 int addHidrante(Cidade cid, Info info);
 
-Hidrante getHidrante(Cidade cid, long int i);
+Hidrante getHidrante(Cidade cid, int i);
 
 int addRadio(Cidade cid, Info info);
 
-Radio getRadio(Cidade cid, long int i);
+Radio getRadio(Cidade cid, int i);
 
 int addSemaforo(Cidade cid, Info info);
 
-Semaforo getSemaforo(Cidade cid, long int i);
+Semaforo getSemaforo(Cidade cid, int i);
 
 #endif
