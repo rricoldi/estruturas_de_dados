@@ -71,6 +71,8 @@ void criaElipse(char svg[], double cx, double cy, double rx, double ry, char cor
 	}
 
     fprintf(arq, "\n\t<ellipse cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" style=\"fill:%s;stroke:%s;stroke-width:%f;fill-oppacity:0.5;stroke-oppacity:0.7\" />", cx, cy, rx, ry, corP, corB, espessura);
+
+    fclose(arq);
 }
 
 void escreveSvg(float x, float y, char texto[], char svg[])

@@ -96,7 +96,7 @@ Cidade leiaGeo(char arq[], char svg[])
             if(nqi < nq)
 			{
 				fscanf(geo,"%s %lf %lf %lf %lf", &id, &x, &y, &largura, &altura);
-				printf("%s, %lf, %lf, %lf ,%lf\n", id, x, y, largura, altura);
+				//printf("%s, %lf, %lf, %lf ,%lf\n", id, x, y, largura, altura);
 				info = criaQuadra(id, corQB, corQP, largura, altura, x, y, espessuraQ);
 				addQuadra(cidade, info);
 
