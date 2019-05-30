@@ -422,15 +422,14 @@ int procuraListaC(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaCID(informacao), id))
-         printf("cid: %s\n", retornaCID(informacao));
+      if(strcmp(retornaCID(informacao), id) == 0)
+         return i;
       
       i = lista->v[i].prox;
    }
-   printf("cid: %s\n", retornaCID(informacao));
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaCID(informacao), id))
+   if(strcmp(retornaCID(informacao), id) == 0)
       return i;
 
    return -1;
@@ -447,14 +446,14 @@ int procuraListaRe(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaReID(informacao), id))
+      if(strcmp(retornaReID(informacao), id) == 0)
          return i;
       
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaReID(informacao), id))
+   if(strcmp(retornaReID(informacao), id) == 0)
       return i;
 
    return -1;
@@ -471,14 +470,14 @@ int procuraListaQ(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaQCEP(informacao), id))
+      if(strcmp(retornaQCEP(informacao), id) == 0)
          return i;
       
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaQCEP(informacao), id))
+   if(strcmp(retornaQCEP(informacao), id) == 0)
       return i;
 
    return -1;
@@ -495,14 +494,14 @@ int procuraListaH(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaHID(informacao), id))
+      if(strcmp(retornaHID(informacao), id) == 0)
          return i;
       
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaHID(informacao), id))
+   if(strcmp(retornaHID(informacao), id) == 0)
       return i;
 
    return -1;
@@ -519,14 +518,14 @@ int procuraListaS(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaSID(informacao), id))
+      if(strcmp(retornaSID(informacao), id) == 0)
          return i;
       
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaSID(informacao), id))
+   if(strcmp(retornaSID(informacao), id) == 0)
       return i;
 
    return -1;
@@ -543,14 +542,14 @@ int procuraListaR(Lista L, char id[])
    {
       informacao = lista->v[i].info;
 
-      if(strcmp(retornaRID(informacao), id))
+      if(strcmp(retornaRID(informacao), id) == 0)
          return i;
       
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   if(strcmp(retornaRID(informacao), id))
+   if(strcmp(retornaRID(informacao), id) == 0)
       return i;
 
    return -1;
@@ -593,13 +592,18 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
          fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
          fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
          removeLista(lista, i);
-      }   
+      }  
    }
    else
    {
       while(lista->v[i].prox != -1)
       {
          informacao = lista->v[i].info;
+         if (informacao == NULL)
+         {
+            i = lista->v[i].prox;
+            continue;
+         }
 
          if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
          {
@@ -617,7 +621,7 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
             }
              
          }
-         if (inRR(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
+         else if (inRR(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
          {
             fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
             setQX(informacao, retornaQX(informacao)+dx);
@@ -625,31 +629,38 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
          }
          
          i = lista->v[i].prox;
+         //printf("opcao: %d\n", opcao);
+         //printf("i= %d\n", i);
       }
       
       informacao = lista->v[i].info;
-      
-      if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
+      if (informacao != NULL)
       {
-         if(opcao == 1)
+         if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
          {
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-            removeLista(lista, i);
+            if(opcao == 1)
+            {
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+               removeLista(lista, i);
+            }
+            else if (opcao == 2)
+            {
+               setQCorB(informacao, cor);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+            }             
          }
-         else if (opcao == 2)
+         if (inRR(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
          {
-            setQCorB(informacao, cor);
-            fprintf(arqTxt, "cep: %s", retornaQCEP(informacao));
-         }             
+            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
+            setQX(informacao, retornaQX(informacao)+dx);
+            setQY(informacao, retornaQY(informacao)+dy);
+         } 
       }
-      if (inRR(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
-      {
-         fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
-         setQX(informacao, retornaQX(informacao)+dx);
-         setQY(informacao, retornaQY(informacao)+dy);
-      } 
+      fclose(arqSvg);
+      fclose(arqTxt);
+      
    }
 }
 //percorrelistaH(city->listaH, fx, fy, largura, altura, dx, dy, txt);
@@ -665,6 +676,11 @@ void percorreListaH(Lista L, double x, double y, double w, double h, double dx, 
    while(lista->v[i].prox != -1)
    {
       informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
 
       if(pontoInternoRetangulo(retornaHX(informacao), retornaHY(informacao), x, y, h, w))
       {
@@ -677,12 +693,14 @@ void percorreListaH(Lista L, double x, double y, double w, double h, double dx, 
    }
 
    informacao = lista->v[i].info;
+   
    if(pontoInternoRetangulo(retornaHX(informacao), retornaHY(informacao), x, y, h, w))
    {
       fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaHID(informacao), retornaHX(informacao), retornaHY(informacao), retornaHX(informacao)+dx, retornaHY(informacao)+dy);
       setHX(informacao, retornaHX(informacao)+dx);
       setHY(informacao, retornaHY(informacao)+dy);
    }
+   fclose(arq);
 }
 
 void percorreListaS(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[])
@@ -697,6 +715,11 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
    while(lista->v[i].prox != -1)
    {
       informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
 
       if(pontoInternoRetangulo(retornaSX(informacao), retornaSY(informacao), x, y, h, w))
       {
@@ -715,6 +738,7 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
       setSX(informacao, retornaSX(informacao)+dx);
       setSY(informacao, retornaSY(informacao)+dy);
    }
+   fclose(arq);
 }
 
 void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[])
@@ -729,6 +753,11 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
    while(lista->v[i].prox != -1)
    {
       informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
 
       if(pontoInternoRetangulo(retornaRX(informacao), retornaRY(informacao), x, y, h, w))
       {
@@ -747,4 +776,5 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
       setRX(informacao, retornaRX(informacao)+dx);
       setRY(informacao, retornaRY(informacao)+dy);
    }
+   fclose(arq);
 }
