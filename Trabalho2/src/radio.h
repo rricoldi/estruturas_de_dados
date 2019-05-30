@@ -1,6 +1,11 @@
 #ifndef __RADIO_H
 #define __RADIO_H
 
+/*
+    Aqui temos a radio base, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaR... e setR...
+    Eh reresentada por uma elipse comprida    
+*/
+
 typedef void *Radio;
 
 Radio criaRadio(char id[20], char corB[20], char corP[20], double x, double y, double espessura);

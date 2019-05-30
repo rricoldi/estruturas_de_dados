@@ -1,6 +1,10 @@
 #ifndef __QRY_H
 #define __QRY_H
 
+/*
+    Aqui temos quase todas as funcoes usadas para resolver os procedimentos informados pelo .qry
+*/
+
 #include <stdbool.h>
 
 double max(double n1, double n2);

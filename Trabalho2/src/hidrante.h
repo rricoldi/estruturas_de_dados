@@ -1,6 +1,10 @@
 #ifndef __HIDRANTE_H
 #define __HIDRANTE_H
 
+/*
+    Aqui temos o hidrante, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaH... e setH...
+*/
+
 typedef void *Hidrante;
 
 Hidrante criaHidrante(char id[20], char corB[20], char corP[20], double espessura, double x, double y);

@@ -1,6 +1,12 @@
 #ifndef __SVG_H
 #define __SVG_H
 
+/*
+    Aqui realizamos a impressao dos codigos svg no arquivo determinado  
+*/
+
+
+
 //Cria a tag inicial de um svg para o arquivo com o nome recebido
 void iniciaSvg(char arq[]);
 

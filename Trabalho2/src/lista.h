@@ -7,6 +7,12 @@
 #include "circulo.h"
 #include "retangulo.h"
 
+
+/*
+    Aqui implementamos o TAD da lista estatica duplamente encadeada, tendo as funcoes pedidas no TAD, alem de funcoes que realizam a impressao, busca e remocao dos elementos
+    contidos nela 
+*/
+
 typedef void *Lista;
 typedef int Posic;
 typedef void *Info;

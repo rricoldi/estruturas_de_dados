@@ -1,6 +1,10 @@
 #ifndef __CIRCULO_H
 #define __CIRCULO_H
 
+/*
+    Aqui temos a forma do circulo, definimos um void pointer para podermos acessar os atributos desta forma apenas a partir das funcoes retornaC...
+*/
+
 typedef void *Circulo;
 
 Circulo criaCirculo(char id[20], char corB[20], char corP[20], double raio, double x, double y, double espessura);
