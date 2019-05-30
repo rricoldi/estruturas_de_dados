@@ -45,20 +45,15 @@ int main(int argc, char *argv[])
     char *svg = NULL;
     char *consultaArq = NULL;
 
-    
-
-
     while(i<argc)
     {
         if (strcmp("-f",argv[i])==0){ //proximo argumento deve ser nome do arquivos
             i++;
 
-
             if (argv[i] == NULL){ //se n?o existir pr?ximo parametro: ERRO!
                 printf("\n!Erro! Sem parametros em -f");
                 exit(1);
             }
-
 
             geoNome = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(geoNome,argv[i]);
@@ -66,12 +61,10 @@ int main(int argc, char *argv[])
         else if (strcmp("-e",argv[i])==0){ //proximo argumento deve ser o nome do caminho
             i++;
 
-
             if (argv[i] == NULL){ //se n?o existir pr?ximo parametro: ERRO!
                 printf("\n!Erro! Sem parametros em -e");
                 exit(1);
             }
-
 
             path = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(path,argv[i]);
@@ -79,12 +72,10 @@ int main(int argc, char *argv[])
         else if (strcmp("-q",argv[i])==0){ //proximo argumento deve ser um arquivo de consultas
             i++;
 
-
             if (argv[i] == NULL){ //se n?o existir pr?ximo parametro: ERRO!
                 printf("\n!Erro! Sem parametros em -q");
                 exit(1);
             }
-
 
             consulta = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(consulta,argv[i]);
@@ -92,17 +83,14 @@ int main(int argc, char *argv[])
         else if (strcmp("-o",argv[i])==0){ //proximo argumento deve ser o nome do diret?rio
             i++;
 
-
             if (argv[i] == NULL){ //se n?o existir pr?ximo parametro: ERRO!
                 printf("\n!Erro! Sem parametros em -o");
                 exit(1);
             }
 
-
             outpath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(outpath,argv[i]);
         }
-
 
         i++;
     }
@@ -129,10 +117,14 @@ int main(int argc, char *argv[])
 
 
 	prefixoGeo = (char *) malloc((strlen(geoNome)+1)*sizeof(char));	
-    prefixoGeo = tratamento(geoNome);    
+    prefixoGeo = tratamento(geoNome);
+
+    if(consulta != NULL)
+    {
+        prefixoQry = (char *) malloc((strlen(consulta)+1)*sizeof(char));
+        prefixoQry = tratamento(consulta);
+    }
 	
-    prefixoQry = (char *) malloc((strlen(consulta)+1)*sizeof(char));
-    prefixoQry = tratamento(consulta);
     
 	svg = (char *)malloc((strlen(outpath)+strlen(prefixoGeo)+6)*sizeof(char));
     sprintf(svg, "%s/%s.svg", outpath, prefixoGeo);
@@ -141,11 +133,23 @@ int main(int argc, char *argv[])
     printf("Bloco do Geo inicializado\n");
 	Cidade cidade = leiaGeo(geoArq, svg);
     printf("Bloco do Geo finalizado\n");
-	
-    //ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
-	prefixoArq = (char *) malloc((strlen(svg)+strlen(prefixoQry)+6)*sizeof(char));	
-	sprintf(prefixoArq, "%s/%s-%s", outpath, prefixoGeo, prefixoQry);
 
+
+	if(consulta != NULL)
+    {
+        //ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
+    	prefixoArq = (char *) malloc((strlen(svg)+strlen(prefixoQry)+6)*sizeof(char));	
+	    sprintf(prefixoArq, "%s/%s-%s", outpath, prefixoGeo, prefixoQry);
+
+        printf("Bloco do Qry inicializado\n");
+        leiaQry(prefixoArq, consultaArq, cidade);
+	    printf("Bloco do Qry finalizado\n");
+        
+        free(consulta);
+        free(prefixoQry);
+        free(prefixoArq); 
+    }
+    
     
     removeCidade(cidade);
 	printf("Lista desalocada\n");
@@ -155,11 +159,7 @@ int main(int argc, char *argv[])
 	free(geoNome);
     free(path);
 	free(outpath);
-    free(consulta);
-    free(consultaArq);
-	free(prefixoGeo);
-    free(prefixoQry);
-    free(prefixoArq);  
+    free(consultaArq);    
     free(svg);
     printf("Mémoria desalocada\n");
     

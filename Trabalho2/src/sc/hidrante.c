@@ -33,10 +33,22 @@ double retornaHX(Hidrante h)
     return h2->x;
 }
 
+void setHX(Hidrante h, double x)
+{
+    ItemH* h2 = (ItemH*) h;
+    h2->x = x;
+}
+
 double retornaHY(Hidrante h)
 {
     ItemH* h2 = (ItemH*) h;
     return h2->y;
+}
+
+void setHY(Hidrante h, double y)
+{
+    ItemH* h2 = (ItemH*) h;
+    h2->y = y;
 }
 
 double retornaHEspessura(Hidrante h)

@@ -19,7 +19,7 @@ float distancia (float x1, float y1, float x2, float y2);
 void distanciaFig(float x1, float y1, float x2, float y2, char txt[], char svg[], int j, int k);
 
 //Verifica se ha colisao entre dois retangulos
-void colisaoRR(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2, int j, int k, char txt[], char svg[]);
+void colisaoRR(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2, char j[], char k[], char txt[], char svg[]);
 
 //Verifica se ha colisao entre um circulo e um retangulo
 void colisaoCR(float cx, float cy, float r, float rx, float ry, float w, float h, int j, int k, char txt[], char svg[]);

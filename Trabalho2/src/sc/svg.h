@@ -18,4 +18,8 @@ void criaElipse(char svg[], double cx, double cy, double rx, double ry, char cor
 //Escreve o texto no ponto x y
 void escreveSvg(float x, float y, char texto[], char svg[]);
 
+void criaLinha(float x1, float y1, float x2, float y2, char cor[], char svg[]);
+
+void escreveDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[]);
+
 #endif

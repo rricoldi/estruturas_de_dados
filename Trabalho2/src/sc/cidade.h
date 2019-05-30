@@ -3,11 +3,26 @@
 
 #include "lista.h"
 
+
 typedef void *Cidade;
 
 Cidade criaCidade(int nx, int nq, int nh, int nr, int ns);
 
 void removeCidade(Cidade cid);
+
+void printaCeR(Cidade cid, char svg[]);
+
+void printaCidade(Cidade cid, char svg[]);
+
+void boudingBoxCirculos(Cidade cid, char arquivo[]);
+
+void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[]);
+
+Info procuraCidade(Cidade cid, char id[], int *tipo);
+
+void removeDaCidade(Cidade cid, char id[], char txt[]);
+
+void percorreCidadeLQ(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 
 int addCirculo(Cidade cid, Info info);
 

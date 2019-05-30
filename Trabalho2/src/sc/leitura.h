@@ -6,5 +6,6 @@
 
 Cidade leiaGeo(char arq[], char svg[]);
 
+void leiaQry(char prefixoArq[], char arq[], Cidade cidade);
 
 #endif

@@ -32,10 +32,22 @@ double retornaQX(Quadra q)
     return item->x;
 }
 
+void setQX(Quadra q, double x)
+{
+    ItemQ* q2 = (ItemQ*) q;
+    q2->x = x;
+}
+
 double retornaQY(Quadra q)
 {
     ItemQ* item = (ItemQ*) q;
     return item->y;
+}
+
+void setQY(Quadra q, double y)
+{
+    ItemQ* q2 = (ItemQ*) q;
+    q2->y = y;
 }
 
 double retornaQW(Quadra q)
@@ -67,6 +79,14 @@ char *retornaQCorB(Quadra q)
     ItemQ* item = (ItemQ*) q;
     return item->corB;
 }
+
+
+void setQCorB(Quadra q, char cor[])
+{
+    ItemQ* q2 = (ItemQ*) q;
+    sprintf(q2->corB, cor);
+}
+
 
 char *retornaQCorP(Quadra q)
 {

@@ -30,10 +30,22 @@ double retornaRX(Radio r)
     return item->x;
 }
 
+void setRX(Radio r, double x)
+{
+    ItemR* item = (ItemR*) r;
+    item->x = x;
+}
+
 double retornaRY(Radio r)
 {
     ItemR* item = (ItemR*) r;
     return item->y;
+}
+
+void setRY(Radio r, double y)
+{
+    ItemR* item = (ItemR*) r;
+    item->y = y;
 }
 
 double retornaREspessura(Radio r)

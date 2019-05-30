@@ -83,3 +83,37 @@ void escreveSvg(float x, float y, char texto[], char svg[])
     fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%s</text>", x, y, texto);
     fclose(arq);
 }
+
+void criaLinha(float x1, float y1, float x2, float y2, char cor[], char svg[])
+{
+    FILE *arq;
+    
+    arq = fopen(svg, "a");
+    if (arq == NULL){
+        printf("Erro ao abrir o arquivo de saida");
+        exit(1);
+	}
+
+	fprintf(arq, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:%s\" />", x1, y1, x2, y2, cor);
+
+    fclose(arq);
+}
+
+void escreveDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[])
+{
+    FILE *arq;
+    
+    arq = fopen(svg, "a");
+
+    if(x1>=x2 && y1>=y2){
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x2+((x1-x2)/2), y2+((y1-y2)/2), distancia);    
+    } else if(x1<=x2 && y1>=y2) {
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x1+((x2-x1)/2), y2+((y1-y2)/2), distancia);
+    } else if(x1>=x2 && y1<=y2){
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x2+((x1-x2)/2), y1+((y2-y1)/2), distancia);
+    } else if(x1<=x2 && y1<=y2) {
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x1+((x2-x1)/2), y1+((y2-y1)/2), distancia);
+    }
+
+    fclose(arq);
+}

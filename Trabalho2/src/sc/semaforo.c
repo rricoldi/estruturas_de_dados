@@ -30,10 +30,22 @@ double retornaSX(Semaforo s)
     return item->x;
 }
 
+void setSX(Semaforo s, double x)
+{
+    ItemS* item = (ItemS*) s;
+    item->x = x;
+}
+
 double retornaSY(Semaforo s)
 {
     ItemS* item = (ItemS*) s;
     return item->y;
+}
+
+void setSY(Semaforo s, double y)
+{
+    ItemS* item = (ItemS*) s;
+    item->y = y;
 }
 
 double retornaSEspessura(Semaforo s)
