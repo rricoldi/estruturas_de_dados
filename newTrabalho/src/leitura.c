@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "leitura.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
@@ -33,6 +34,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
     int numeroMaximoDeMuros      = 1000;
 
     double x, y, altura, largura, raio;
+	double x1, x2, y1, y2;
     double tamanhoDaFrente; 
     double tamanhoDoLado;
     double larguraDaCalcada;
@@ -174,6 +176,16 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
                 numeroDePredios ++;
             }
         }
+		else if (strcmp("mur", comando) == 0)
+		{
+			fscanf(arquivoGeo, "%lf %lf %lf %lf", &x1, &y1, &x2, &y2);
+			if (numeroDeMuros < numeroMaximoDeMuros)
+			{
+				info = criarMuro(x1, y1, x2, y2);
+				adicionarMuro(cidade, info);
+				numeroDeMuros ++;
+			}
+		}
 		else if (strcmp("sw", comando) == 0)
 		{
 			fscanf(arquivoGeo, "%lf %lf", &espessuraDosCirculos, &espessuraDosRetangulos);
@@ -196,6 +208,8 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		}
 		fscanf(arquivoGeo, "%s", comando);
 	}
+
+	imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);
 
