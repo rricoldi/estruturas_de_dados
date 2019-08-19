@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "radio.h": "c",
+        "predio.h": "c"
     }
 }

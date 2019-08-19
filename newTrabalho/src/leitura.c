@@ -169,10 +169,10 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
             fscanf(arquivoGeo, "%s %s %d %lf %lf %lf", &id, &face, &numeroDoPredio, &tamanhoDaFrente, &tamanhoDoLado, &larguraDaCalcada);
             if (numeroDePredios < numeroMaximoDePredios)
             {
-                info = criarPredio(id, corDaBordaDoPredio, corDoPreenchimentoDoPredio, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
+                info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
                 adicionarPredio(cidade, info);
 
-                imprimirPredio(id, corDaBordaDoPredio, corDoPreenchimentoDoPredio, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
+                imprimirPredio(id, face, corDoPreenchimentoDoPredio, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
                 numeroDePredios ++;
             }
         }

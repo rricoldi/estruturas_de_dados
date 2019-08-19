@@ -6,6 +6,8 @@
 #include "semaforo.h"
 #include "circulo.h"
 #include "retangulo.h"
+#include "predio.h"
+#include "muro.h"
 
 
 /*
