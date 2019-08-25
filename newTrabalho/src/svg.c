@@ -26,7 +26,7 @@ void imprimirCirculo(double raio, double x, double y, char corB[], char corP[], 
         exit(1);
 	}
 	
-	fprintf(arq, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"%f\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%f\" fill-oppacity=\"0.5\" stroke-oppacity=\"0.7\" />", x, y, raio, corB, corP, espessura);
+	fprintf(arq, "\n\t<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%lf\" fill-oppacity=\"0.5\" stroke-oppacity=\"0.7\" />", x, y, raio, corB, corP, espessura);
 	
     fclose(arq);
 }
@@ -42,7 +42,7 @@ void imprimirRetangulo(double largura, double altura, double x, double y, char c
         exit(1);
 	}
 	
-	fprintf(arq, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill:%s;stroke:%s;stroke-width:%f;fill-oppacity:0.5;stroke-oppacity:0.7\" />", x, y, largura, altura, corP, corB, espessura);
+	fprintf(arq, "\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:%s;stroke:%s;stroke-width:%lf;fill-oppacity:0.5;stroke-oppacity:0.7\" />", x, y, largura, altura, corP, corB, espessura);
 	
     fclose(arq);
 }
@@ -66,7 +66,24 @@ void imprimirElipse(char svg[], double cx, double cy, double rx, double ry, char
         exit(1);
 	}
 
-    fprintf(arq, "\n\t<ellipse cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" style=\"fill:%s;stroke:%s;stroke-width:%f;fill-oppacity:0.5;stroke-oppacity:0.7\" />", cx, cy, rx, ry, corP, corB, espessura);
+    fprintf(arq, "\n\t<ellipse cx=\"%lf\" cy=\"%lf\" rx=\"%lf\" ry=\"%lf\" style=\"fill:%s;stroke:%s;stroke-width:%lf;fill-oppacity:0.5;stroke-oppacity:0.7\" />", cx, cy, rx, ry, corP, corB, espessura);
+
+    fclose(arq);
+}
+
+void imprimirPredio(char svg[], double x, double y, double tamanhoDaFrente, double tamanhoDoLado, double xCalcada, double yCalcada, double xCalcadaMax, double yCalcadaMax, char numeroDoPredio[], double xNum, double yNum)
+{
+    FILE *arq;
+
+    arq = fopen(svg, "a");
+    if (arq == NULL){
+        printf("Erro ao abrir o arquivo de saida");
+        exit(1);
+	}
+
+    fprintf(arq, "\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:\"grey\";stroke:\"black\";fill-oppacity:0.5;stroke-oppacity:0.7\" />", x, y, tamanhoDaFrente, tamanhoDoLado);
+    fprintf(arq, "\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:\"red\";stroke:\"black\";fill-oppacity:0.9;stroke-oppacity:0.7\" />", xCalcada, yCalcada, xCalcadaMax, yCalcadaMax);
+    fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%s</text>", xNum, yNum, numeroDoPredio);
 
     fclose(arq);
 }

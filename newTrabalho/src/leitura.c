@@ -16,51 +16,52 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		exit(1);
 	}
 
-    int numeroDoPredio;
-    int numeroDeFiguras    = 0;
-    int numeroDeQuadras    = 0;
-    int numeroDeHidrantes  = 0;
-    int numeroDeSemaforos  = 0;
-    int numeroDeRadioBases = 0;
-    int numeroDePredios    = 0;
-    int numeroDeMuros      = 0;
+	int *tipo;
+	int numeroDoPredio;
+	int numeroDeFiguras = 0;
+	int numeroDeQuadras = 0;
+	int numeroDeHidrantes = 0;
+	int numeroDeSemaforos = 0;
+	int numeroDeRadioBases = 0;
+	int numeroDePredios = 0;
+	int numeroDeMuros = 0;
 
-    int numeroMaximoDeFiguras    = 1000;
-    int numeroMaximoDeQuadras    = 1000;
-    int numeroMaximoDeHidrantes  = 1000;
-    int numeroMaximoDeSemaforos  = 1000;
-    int numeroMaximoDeRadioBases = 1000;
-    int numeroMaximoDePredios    = 1000;
-    int numeroMaximoDeMuros      = 1000;
+	int numeroMaximoDeFiguras = 1000;
+	int numeroMaximoDeQuadras = 1000;
+	int numeroMaximoDeHidrantes = 1000;
+	int numeroMaximoDeSemaforos = 1000;
+	int numeroMaximoDeRadioBases = 1000;
+	int numeroMaximoDePredios = 1000;
+	int numeroMaximoDeMuros = 1000;
 
-    double x, y, altura, largura, raio;
+	double x, y, altura, largura, raio;
+	double xCalcada, yCalcada, xCalcadaMax, yCalcadaMax;
+	double xNum, yNum;
 	double x1, x2, y1, y2;
-    double tamanhoDaFrente; 
-    double tamanhoDoLado;
-    double larguraDaCalcada;
-    double espessuraDosCirculos   = 1;
-    double espessuraDosRetangulos = 1;
-    double espessuraDasQuadras    = 1;
-    double espessuraDosHidrantes  = 1;
-    double espessuraDosSemaforos  = 1;
-    double espessuraDasRadioBases = 1;
+	double tamanhoDaFrente;
+	double tamanhoDoLado;
+	double larguraDaCalcada;
+	double espessuraDosCirculos = 1;
+	double espessuraDosRetangulos = 1;
+	double espessuraDasQuadras = 1;
+	double espessuraDosHidrantes = 1;
+	double espessuraDosSemaforos = 1;
+	double espessuraDasRadioBases = 1;
 
-    char *texto;
-    char comando[3];
-    char id[20];
-    char face[6];
-    char corDoPreenchimentoDaFigura[20]    = "white";
-    char corDaBordaDaFigura[20]            = "black";
-    char corDoPreenchimentoDaQuadra[20]    = "orange";
-    char corDaBordaDaQuadra[20]            = "blue";
-    char corDoPreenchimentoDoHidrante[20]  = "red";
-    char corDaBordaDoHidrante[20]          = "black";
-    char corDoPreenchimentoDoSemaforo[20]  = "yellow";
-    char corDaBordaDoSemagoro[20]          = "green";
-    char corDoPreenchimentoDaRadioBase[20] = "purple";
-    char corDaBordaDaRadioBase[20]         = "pink";
-    char corDoPreenchimentoDoPredio[20]    = "grey";
-    char corDaBordaDoPredio[20]            = "black";
+	char *texto;
+	char comando[3];
+	char id[20];
+	char face[6];
+	char corDoPreenchimentoDaFigura[20] = "white";
+	char corDaBordaDaFigura[20] = "black";
+	char corDoPreenchimentoDaQuadra[20] = "orange";
+	char corDaBordaDaQuadra[20] = "blue";
+	char corDoPreenchimentoDoHidrante[20] = "red";
+	char corDaBordaDoHidrante[20] = "black";
+	char corDoPreenchimentoDoSemaforo[20] = "yellow";
+	char corDaBordaDoSemagoro[20] = "green";
+	char corDoPreenchimentoDaRadioBase[20] = "purple";
+	char corDaBordaDaRadioBase[20] = "pink";
 
 	size_t bufsize = 32;
 	Info info;
@@ -79,9 +80,9 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	{
 
 		if (feof(arquivoGeo))
-        {
+		{
 			break;
-        }
+		}
 		else if (strcmp("c", comando) == 0)
 		{
 			fscanf(arquivoGeo, "%s %lf %lf %lf %s %s", id, &raio, &x, &y, corDaBordaDaFigura, corDoPreenchimentoDaFigura);
@@ -91,7 +92,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				adicionarCirculo(cidade, info);
 
 				imprimirCirculo(raio, x, y, corDaBordaDaFigura, corDoPreenchimentoDaFigura, nomeDoArquivoSvg, espessuraDosCirculos);
-				numeroDeFiguras ++;
+				numeroDeFiguras++;
 			}
 		}
 		else if (strcmp("r", comando) == 0)
@@ -103,7 +104,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				adicionarRetangulo(cidade, info);
 
 				imprimirRetangulo(largura, altura, x, y, corDaBordaDaFigura, corDoPreenchimentoDaFigura, nomeDoArquivoSvg, espessuraDosRetangulos);
-				numeroDeFiguras ++;
+				numeroDeFiguras++;
 			}
 		}
 		else if (strcmp("t", comando) == 0)
@@ -125,7 +126,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				adicionarQuadra(cidade, info);
 
 				imprimirRetangulo(largura, altura, x, y, corDaBordaDaQuadra, corDoPreenchimentoDaQuadra, nomeDoArquivoSvg, espessuraDasQuadras);
-				numeroDeQuadras ++;
+				numeroDeQuadras++;
 			}
 		}
 		else if (strcmp("h", comando) == 0)
@@ -137,7 +138,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				adicionarHidrante(cidade, info);
 
 				imprimirCirculo(2, x, y, corDaBordaDoHidrante, corDoPreenchimentoDoHidrante, nomeDoArquivoSvg, espessuraDosHidrantes);
-				numeroDeHidrantes ++;
+				numeroDeHidrantes++;
 			}
 		}
 		else if (strcmp("s", comando) == 0)
@@ -149,33 +150,79 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				adicionarSemaforo(cidade, info);
 
 				imprimirRetangulo(7, 18, x, y, corDaBordaDoSemagoro, corDoPreenchimentoDoSemaforo, nomeDoArquivoSvg, espessuraDosSemaforos);
-				numeroDeSemaforos ++;
+				numeroDeSemaforos++;
 			}
 		}
 		else if (strcmp("rb", comando) == 0)
 		{
-            fscanf(arquivoGeo, "%s %lf %lf", id, &x, &y);
+			fscanf(arquivoGeo, "%s %lf %lf", id, &x, &y);
 			if (numeroDeRadioBases < numeroMaximoDeRadioBases)
 			{
 				info = criarRadioBase(id, corDaBordaDaRadioBase, corDoPreenchimentoDaRadioBase, x, y, espessuraDasRadioBases);
 				adicionarRadioBase(cidade, info);
 
 				imprimirElipse(nomeDoArquivoSvg, x, y, 5, 15, corDoPreenchimentoDaRadioBase, corDaBordaDaRadioBase, espessuraDasRadioBases);
-				numeroDeRadioBases ++;
+				numeroDeRadioBases++;
 			}
 		}
-        else if (strcmp("prd", comando) == 0)
-        {
-            fscanf(arquivoGeo, "%s %s %d %lf %lf %lf", &id, &face, &numeroDoPredio, &tamanhoDaFrente, &tamanhoDoLado, &larguraDaCalcada);
-            if (numeroDePredios < numeroMaximoDePredios)
-            {
-                info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
-                adicionarPredio(cidade, info);
+		else if (strcmp("prd", comando) == 0)
+		{
+			fscanf(arquivoGeo, "%s %s %d %lf %lf %lf", &id, &face, &numeroDoPredio, &tamanhoDaFrente, &tamanhoDoLado, &larguraDaCalcada);
+			if (numeroDePredios < numeroMaximoDePredios)
+			{
+				info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
+				adicionarPredio(cidade, info);
 
-                imprimirPredio(id, face, corDoPreenchimentoDoPredio, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
-                numeroDePredios ++;
-            }
-        }
+				Info quadra = procuraNaCidade(cidade, id, tipo);
+
+				if (strcmp("N", face) == 0)
+				{
+					x = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					y = retornaQY(quadra) + retornaQH(quadra) - tamanhoDoLado;
+					xCalcada = retornaQX(quadra);
+					xCalcadaMax = retornaQW(quadra);
+					yCalcada = retornaQY(quadra) + retornaQH(quadra);
+					yCalcadaMax = larguraDaCalcada;
+					xNum = retornaQX(quadra) + (retornaQW(quadra) / 2);
+					yNum = retornaQY(quadra) + (retornaQH(quadra) - 2);
+				}
+				else if (strcmp("S", face) == 0)
+				{
+					x = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					y = retornaQY(quadra);
+					xCalcada = retornaQX(quadra);
+					xCalcadaMax = retornaQW(quadra);
+					yCalcada = retornaQY(quadra) - larguraDaCalcada;
+					yCalcadaMax = larguraDaCalcada;
+					xNum = retornaQX(quadra) + (retornaQW(quadra) / 2);
+					yNum = retornaQY(quadra) + 2;
+				}
+				else if (strcmp("L", face) == 0)
+				{
+					x = retornaQX(quadra);
+					y = retornaQY(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					xCalcada = retornaQX(quadra) - larguraDaCalcada;
+					xCalcadaMax = larguraDaCalcada;
+					yCalcada = retornaQY(quadra);
+					yCalcadaMax = retornaQH(quadra);
+					xNum = retornaQX(quadra) + 2;
+					yNum = retornaQY(quadra) + (retornaQH(quadra) / 2);
+				}
+				else if (strcmp("O", face) == 0)
+				{
+					x = retornaQX(quadra) + retornaQW(quadra) - tamanhoDoLado;
+					y = retornaQY(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					xCalcada = retornaQX(quadra) + retornaQW(quadra);
+					xCalcadaMax = larguraDaCalcada;
+					yCalcada = retornaQY(quadra);
+					yCalcadaMax = retornaQH(quadra);
+					xNum = retornaQX(quadra) + retornaQW(quadra) - 2;
+					yNum = retornaQY(quadra) + (retornaQH(quadra) / 2);
+				}
+				imprimirPredio(x, y, tamanhoDaFrente, tamanhoDoLado, xCalcada, yCalcada, xCalcadaMax, yCalcadaMax, numeroDoPredio, xNum, yNum);
+				numeroDePredios++;
+			}
+		}
 		else if (strcmp("mur", comando) == 0)
 		{
 			fscanf(arquivoGeo, "%lf %lf %lf %lf", &x1, &y1, &x2, &y2);
@@ -183,7 +230,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			{
 				info = criarMuro(x1, y1, x2, y2);
 				adicionarMuro(cidade, info);
-				numeroDeMuros ++;
+				numeroDeMuros++;
 			}
 		}
 		else if (strcmp("sw", comando) == 0)

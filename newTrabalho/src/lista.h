@@ -36,4 +36,24 @@ void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[]);
 
 void imprimeRadios(Lista L, char nomeDoArquivoSvg[]);
 
+int lenght(Lista L);
+
+Posic getFirst(Lista L);
+
+Posic getLast(Lista L);
+
+Posic getNext(Lista L, Posic p);
+
+Posic getPrevious(Lista L, Posic p);
+
+int getLivre(Lista L);
+
+Posic insertBefore(Lista L, Info info, Posic posicao);
+
+Posic insertAfter(Lista L, Info info, Posic posicao);
+
+Posic insereLista(Lista L, Info info);
+
+Info get(Lista L, Posic pos);
+
 #endif

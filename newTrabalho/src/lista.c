@@ -207,3 +207,125 @@ void imprimeRadios(Lista L, char nomeDoArquivoSvg[])
 
    imprimirElipse(nomeDoArquivoSvg, retornaRX(radio), retornaRY(radio), 5, 15, retornaSCorP(radio), retornaSCorB(radio), retornaSEspessura(radio));
 }
+
+int lenght(Lista L)
+{
+   List* lista = (List*) L;
+   return lista->tamanho;
+}
+
+Posic getFirst(Lista L)
+{
+   List* lista = (List*) L;
+   if(lenght(lista) == 0)
+      return NULO;
+   return lista->primeiro;
+}
+
+Posic getLast(Lista L)
+{
+   List* lista = (List*) L;
+   if(lenght(lista) == 0)
+      return NULO;
+   return lista->ultimo;
+}
+
+Posic getNext(Lista L, Posic p)
+{
+   List* lista = (List*) L;
+   if(lista->ultimo == p)
+      return NULO;
+   return lista->v[p].prox;
+}
+
+Posic getPrevious(Lista L, Posic p)
+{
+   List* lista = (List*) L;
+   if(lista->primeiro == p)
+      return NULO;
+   return lista->v[p].ant;
+}
+
+int getLivre(Lista L)
+{
+   List* lista = (List*) L; //CASTING LISTA para LIST
+   int posLivre = lista->livre;
+   lista->livre = lista->v[lista->livre].prox; //recebe o próximo livre
+   return posLivre;
+}
+
+Posic insertBefore(Lista L, Info info, Posic posicao)
+{
+   List* lista = (List*) lista;
+   int iLivre = getLivre(L);
+
+   lista->v[iLivre].info = info;
+
+   lista->v[iLivre].prox = posicao;
+   lista->v[iLivre].ant = lista->v[posicao].ant;
+   lista->v[lista->v[posicao].ant].prox = iLivre;
+   lista->v[posicao].ant = iLivre;
+
+   lista->tamanho++;
+
+   return iLivre;
+}
+
+Posic insertAfter(Lista L, Info info, Posic posicao)
+{
+   List* lista = (List*) lista;
+   int iLivre = getLivre(L);
+
+   lista->v[iLivre].info = info;
+
+   lista->v[iLivre].ant = posicao;
+   lista->v[iLivre].prox = lista->v[posicao].prox;
+   lista->v[lista->v[posicao].prox].ant = iLivre;
+   lista->v[posicao].prox = iLivre;
+
+   lista->tamanho++;
+
+   return iLivre;
+}
+
+
+Posic insereLista(Lista L, Info info)
+{
+  List* lista = (List*) L; //CASTING LISTA para LIST
+  int iLivre = getLivre(L); // semelhante ao malloc
+  
+  if (iLivre == -1) //verifica se a lista nao esta cheia ao ver se o livre nao e nulo
+  {
+     printf("A lista esta cheia\n");
+     return -1;
+  }
+  else //se a lista tiver espaço então insere o elemento nela
+  {
+      lista->v[iLivre].info = info;
+
+      //faz o encadeamento
+
+      lista->v[iLivre].prox = NULO;
+      lista->v[iLivre].ant = lista->ultimo;
+      
+      if (lista->primeiro == -1) // Se a lista for vazia define o elemento inserido como primeiro
+      {
+         lista->primeiro = iLivre;
+      } 
+      else  //senao atribui o elemento atual como o proximo do elemento anterior
+      {
+         lista->v[lista->ultimo].prox = iLivre;
+      }
+
+      lista->ultimo = iLivre;
+  }
+  lista->tamanho++;
+
+  return iLivre;
+}
+
+Info get(Lista L, Posic pos)
+{
+   List* lista = (List*) L;
+   return lista->v[pos].info;
+}

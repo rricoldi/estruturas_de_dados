@@ -16,4 +16,35 @@ void removeCidade(Cidade cid);
 
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 
+Info procuraNaCidade(Cidade cid, char id[], int *tipo);
+
+int adicionarCirculo(Cidade cid, Info info);
+
+int adicionarRetangulo(Cidade cid, Info info);
+
+int adicionarQuadra(Cidade cid, Info info);
+
+int adicionarHidrante(Cidade cid, Info info);
+
+int adicionarRadioBase(Cidade cid, Info info);
+
+int adicionarSemaforo(Cidade cid, Info info);
+
+int adicionarPredio(Cidade cid, Info info);
+
+Circulo getCirculo(Cidade cid, int i);
+
+Retangulo getRetangulo(Cidade cid, int i);
+
+Quadra getQuadra(Cidade cid, int i);
+
+Hidrante getHidrante(Cidade cid, int i);
+
+Radio getRadio(Cidade cid, int i);
+
+Semaforo getSemaforo(Cidade cid, int i);
+
+Predio getPredio(Cidade cid, int i);
+
+
 #endif

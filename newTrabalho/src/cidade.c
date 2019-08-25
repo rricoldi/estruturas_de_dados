@@ -198,3 +198,16 @@ Semaforo getSemaforo(Cidade cid, int i)
     cidade *city = (cidade *)cid;
     return get(city->listaSemaforo, i);
 }
+
+
+int adicionarPredio(Cidade cid, Info info)
+{
+    cidade *city = (cidade *)cid;
+    return insereLista(city->listaPredio, info);
+}
+
+Predio getPredio(Cidade cid, int i)
+{
+    cidade *city = (cidade *)cid;
+    return get(city->listaPredio, i);
+}
