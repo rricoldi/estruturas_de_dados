@@ -10,13 +10,13 @@
 
 typedef void *Cidade;
 
-Cidade criaCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros);
+Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros);
 
 void removeCidade(Cidade cid);
 
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 
-Info procuraNaCidade(Cidade cid, char id[], int *tipo);
+Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 int adicionarCirculo(Cidade cid, Info info);
 

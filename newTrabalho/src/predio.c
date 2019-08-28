@@ -7,21 +7,33 @@
 
 
 typedef struct predio{
-    char cep[20], face[10], numero[20];
+    char cep[20], face[10];
+    double numero;
     double x, y, frente, profundidade, calcada;
+    double xCalcada, yCalcada, xCalcadaMax, yCalcadaMax;
+	double xNum, yNum;
 }ItemP;
 
-Predio criarPredio(char cep[20], char face[10], char numero[20], double frente, double profundidade, double calcada)
+Predio criarPredio(char cep[20], char face[10], double numero, double frente, double profundidade, double calcada, double x, double y, double xCalcada, double xCalcadaMax, double yCalcada, double yCalcadaMax, double xNum, double yNum)
 {
     /* arrumar a questão pra impressão do geo*/
     ItemP *p;
     p = (ItemP*) calloc(1, sizeof(ItemP));
     strcpy(p->cep, cep);
     strcpy(p->face, face);
-    strcpy(p->numero, numero);
-    p->frente = frente;
+    p->numero       = numero;
+    p->frente       = frente;
     p->profundidade = profundidade;
-    p->calcada = calcada;
+    p->calcada      = calcada;
+    p->x            = x;
+    p->y            = y;
+    p->xCalcada     = xCalcada;
+    p->xCalcadaMax  = xCalcadaMax;
+    p->yCalcada     = yCalcada;
+    p->yCalcadaMax  = yCalcadaMax;
+    p->xNum         = xNum;
+    p->yNum         = yNum;
+    
 
     return p;
 }
@@ -50,7 +62,7 @@ char *retornaPFace(Predio p)
     return item->face;
 }
 
-char *retornaPNumero(Predio p)
+double retornaPNumero(Predio p)
 {
     ItemP* item = (ItemP*) p;
     return item->numero;

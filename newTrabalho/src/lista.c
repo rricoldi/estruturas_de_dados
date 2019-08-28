@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lista.h"
-#include "qry.h"
+// #include "qry.h"
 #include "svg.h"
 #define NULO -1;
 
@@ -328,4 +328,186 @@ Info get(Lista L, Posic pos)
 {
    List* lista = (List*) L;
    return lista->v[pos].info;
+}
+
+int procuraCirculo(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+      
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+      if(strcmp(retornaCID(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaCID(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+
+
+int procuraRetangulo(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+   
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaReID(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaReID(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+int procuraQuadra(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaQCEP(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+   informacao = lista->v[i].info;
+   if(strcmp(retornaQCEP(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+int procuraHidrante(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaHID(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaHID(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+int procuraSemaforo(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaSID(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaSID(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+int procuraRadio(Lista L, char id[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaRID(informacao), id) == 0)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaRID(informacao), id) == 0)
+      return i;
+
+   return -1;
+}
+
+int procuraPredio(Lista L, char id[], char face[], double num)
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(lista->primeiro == -1)
+      return -1;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(strcmp(retornaPCep(informacao), id) == 0 && strcmp(retornaPFace(informacao), face) == 0 && retornaPNumero(informacao) == num)
+         return i;
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(strcmp(retornaPCep(informacao), id) == 0 && strcmp(retornaPFace(informacao), face) == 0 && retornaPNumero(informacao) == num)
+      return i;
+
+   return -1;
 }

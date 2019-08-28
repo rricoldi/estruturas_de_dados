@@ -9,7 +9,7 @@ typedef struct muro{
     double x1, x2, y1, y2;
 }ItemM;
 
-Muro criarPredio(double x1, double x2, double y1, double y2)
+Muro criarMuro(double x1, double x2, double y1, double y2)
 {
     /* arrumar a questão pra impressão do geo*/
     ItemM *m;
@@ -28,19 +28,19 @@ double retornaMX1(Muro m)
     return item->x1;
 }
 
-double retornaMY1(Muro m)
-{
-    ItemM* item = (ItemM*) m;
-    return item->y1;
-}
-
-double retornaMX1(Muro m)
+double retornaMX2(Muro m)
 {
     ItemM* item = (ItemM*) m;
     return item->x2;
 }
 
 double retornaMY1(Muro m)
+{
+    ItemM* item = (ItemM*) m;
+    return item->y1;
+}
+
+double retornaMY2(Muro m)
 {
     ItemM* item = (ItemM*) m;
     return item->y2;

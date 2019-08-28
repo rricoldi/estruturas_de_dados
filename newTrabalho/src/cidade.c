@@ -15,7 +15,7 @@ typedef struct city
 } cidade;
 
 
-Cidade criaCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros)
+Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros)
 {
     Cidade cid    = calloc(1, sizeof(cidade));
     cidade *city  = (cidade *)  cid;
@@ -57,15 +57,14 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
     imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
     imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
     imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
-    imprimePredios(city->listaPredio, nomeDoArquivoSvg);
-    imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
+    // imprimePredios(city->listaPredio, nomeDoArquivoSvg);
+    // imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
 }
 
-Info procuraNaCidade(Cidade cid, char id[], int *tipo)
+Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
 {
     cidade *city = (cidade *)cid;
     int posicao;
-
     posicao = procuraCirculo(city->listaCirculo, id);
     if (posicao != -1)
     {
@@ -108,14 +107,7 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo)
         return get(city->listaRadio, posicao);
     }
 
-    posicao = procuraPredio(city->listaPredio, id);
-    if (posicao != -1)
-    {
-        *tipo = 7;
-        return get(city->listaPredio, posicao);
-    }
-
-    posicao = procuraMuro(city->listaPredio, id);
+    posicao = procuraPredio(city->listaPredio, id, face, num);
     if (posicao != -1)
     {
         *tipo = 7;
@@ -210,4 +202,16 @@ Predio getPredio(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
     return get(city->listaPredio, i);
+}
+
+int adicionarMuro(Cidade cid, Info info)
+{
+    cidade *city = (cidade *)cid;
+    return insereLista(city->listaMuro, info);
+}
+
+Muro getMuro(Cidade cid, int i)
+{
+    cidade *city = (cidade *)cid;
+    return get(city->listaMuro, i);
 }

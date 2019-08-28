@@ -8,16 +8,15 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
 	FILE *arquivoGeo;
 	printf("%s\n", nomeDoArquivoGeo);
+	printf("%s\n", nomeDoArquivoSvg);
 	arquivoGeo = fopen(nomeDoArquivoGeo, "r");
-
 	if (arquivoGeo == NULL)
 	{
 		printf("Nao foi possivel Abrir o arquivo Geo\n");
 		exit(1);
 	}
 
-	int *tipo;
-	int numeroDoPredio;
+	int *tipo = 0;
 	int numeroDeFiguras = 0;
 	int numeroDeQuadras = 0;
 	int numeroDeHidrantes = 0;
@@ -34,6 +33,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	int numeroMaximoDePredios = 1000;
 	int numeroMaximoDeMuros = 1000;
 
+	double numeroDoPredio;
 	double x, y, altura, largura, raio;
 	double xCalcada, yCalcada, xCalcadaMax, yCalcadaMax;
 	double xNum, yNum;
@@ -65,7 +65,6 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 
 	size_t bufsize = 32;
 	Info info;
-
 	iniciaSvg(nomeDoArquivoSvg);
 
 	fscanf(arquivoGeo, "%s", comando);
@@ -73,9 +72,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	{
 		fscanf(arquivoGeo, "%d %d %d %d %d %d %d", &numeroMaximoDeFiguras, &numeroMaximoDeQuadras, &numeroMaximoDeHidrantes, &numeroMaximoDeSemaforos, &numeroMaximoDeRadioBases, &numeroMaximoDePredios, &numeroMaximoDeMuros);
 	}
-
 	Cidade cidade = criarCidade(numeroMaximoDeFiguras, numeroMaximoDeQuadras, numeroMaximoDeHidrantes, numeroMaximoDeSemaforos, numeroMaximoDeRadioBases, numeroMaximoDePredios, numeroMaximoDeMuros);
-
 	while (1)
 	{
 
@@ -167,13 +164,11 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		}
 		else if (strcmp("prd", comando) == 0)
 		{
-			fscanf(arquivoGeo, "%s %s %d %lf %lf %lf", &id, &face, &numeroDoPredio, &tamanhoDaFrente, &tamanhoDoLado, &larguraDaCalcada);
+			fscanf(arquivoGeo, "%s %s %lf %lf %lf %lf", id, face, &numeroDoPredio, &tamanhoDaFrente, &tamanhoDoLado, &larguraDaCalcada);
 			if (numeroDePredios < numeroMaximoDePredios)
 			{
-				info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada);
-				adicionarPredio(cidade, info);
-
-				Info quadra = procuraNaCidade(cidade, id, tipo);
+				
+				Info quadra = procuraNaCidade(cidade, id, tipo, "", 0.0);
 
 				if (strcmp("N", face) == 0)
 				{
@@ -219,7 +214,10 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 					xNum = retornaQX(quadra) + retornaQW(quadra) - 2;
 					yNum = retornaQY(quadra) + (retornaQH(quadra) / 2);
 				}
-				imprimirPredio(x, y, tamanhoDaFrente, tamanhoDoLado, xCalcada, yCalcada, xCalcadaMax, yCalcadaMax, numeroDoPredio, xNum, yNum);
+				info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada, x, y, xCalcada, xCalcadaMax, yCalcada, yCalcadaMax, xNum, yNum);
+				adicionarPredio(cidade, info);
+
+				imprimirPredio(nomeDoArquivoSvg, x, y, tamanhoDaFrente, tamanhoDoLado, xCalcada, yCalcada, xCalcadaMax, yCalcadaMax, numeroDoPredio, xNum, yNum);
 				numeroDePredios++;
 			}
 		}
@@ -229,7 +227,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			if (numeroDeMuros < numeroMaximoDeMuros)
 			{
 				info = criarMuro(x1, y1, x2, y2);
-				adicionarMuro(cidade, info);
+				imprimirLinha(x1, y1, x2, y2, nomeDoArquivoSvg);
 				numeroDeMuros++;
 			}
 		}
@@ -256,7 +254,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		fscanf(arquivoGeo, "%s", comando);
 	}
 
-	imprimeCidade(cidade, nomeDoArquivoSvg);
+	// imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);
 

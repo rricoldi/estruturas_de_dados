@@ -4,22 +4,22 @@
 
 typedef void *Predio;
 
-Predio criarPredio(char cep[20], char face[10], char numero[20], double frente, double profundidade, double calcada);
+Predio criarPredio(char cep[20], char face[10], double numero, double frente, double profundidade, double calcada, double x, double y, double xCalcada, double xCalcadaMax, double yCalcada, double yCalcadaMax, double xNum, double yNum);
 
-double retornaPX(Predio r);
+double retornaPX(Predio p);
 
-void setPX(Predio r, double x);
+double retornaPY(Predio p);
 
-double retornaPY(Predio r);
+char *retornaPCep(Predio p);
 
-void setPY(Predio r, double y);
+char *retornaPFace(Predio p);
 
-double retornaPEspessura(Predio r);
+double retornaPNumero(Predio p);
 
-char *retornaPID(Predio r);
+double retornaPFrente(Predio p);
 
-char *retornaPCorP(Predio r);
+double retornaPProfundidade(Predio p);
 
-char *retornaPCorB(Predio r);
+double retornaPCalcada(Predio p);
 
 #endif

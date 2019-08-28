@@ -8,7 +8,7 @@
 
 typedef void *Radio;
 
-Radio criarRadio(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
+Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
 
 double retornaRX(Radio r);
 

@@ -56,4 +56,18 @@ Posic insereLista(Lista L, Info info);
 
 Info get(Lista L, Posic pos);
 
+int procuraCirculo(Lista L, char id[]);
+
+int procuraRetangulo(Lista L, char id[]);
+
+int procuraQuadra(Lista L, char id[]);
+
+int procuraHidrante(Lista L, char id[]);
+
+int procuraSemaforo(Lista L, char id[]);
+
+int procuraRadio(Lista L, char id[]);
+
+int procuraPredio(Lista L, char id[], char face[], double num);
+
 #endif
