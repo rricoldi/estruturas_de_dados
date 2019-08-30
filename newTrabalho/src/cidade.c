@@ -71,18 +71,16 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
         *tipo = 1;
         return get(city->listaCirculo, posicao);
     }
-
     posicao = procuraRetangulo(city->listaRetangulo, id);
     if (posicao != -1)
     {
         *tipo = 2;
         return get(city->listaRetangulo, posicao);
     }
-
     posicao = procuraQuadra(city->listaQuadra, id);
     if (posicao != -1)
     {
-        *tipo = 3;
+        // *tipo = 3;
         return get(city->listaQuadra, posicao);
     }
 

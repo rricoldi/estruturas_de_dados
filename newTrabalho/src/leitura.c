@@ -169,7 +169,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			{
 				
 				Info quadra = procuraNaCidade(cidade, id, tipo, "", 0.0);
-
+				
 				if (strcmp("N", face) == 0)
 				{
 					x = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
