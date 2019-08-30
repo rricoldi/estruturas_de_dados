@@ -124,20 +124,20 @@ int main(int argc, char *argv[])
     printf("Bloco do Geo finalizado\n");
 
 
-	// if(nomeDoArquivoQry != NULL)
-    // {
-    //     //ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
-    // 	prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));	
-	//     sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
+ if(nomeDoArquivoQry != NULL)
+ {
+    //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
+ 	prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));	
+    sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
-    //     printf("Bloco do Qry inicializado\n");
-    //     leiaQry(prefixoFinalDoQry, arquivoQry, cidade);
-	//     printf("Bloco do Qry finalizado\n");
-        
-    //     free(nomeDoArquivoQry);
-    //     free(prefixoDoAquivoQry);
-    //     free(prefixoFinalDoQry); 
-    // }
+    printf("Bloco do Qry inicializado\n");
+    leiaQry(prefixoFinalDoQry, arquivoQry, cidade);
+    printf("Bloco do Qry finalizado\n");
+
+    free(nomeDoArquivoQry);
+    free(prefixoDoAquivoQry);
+    free(prefixoFinalDoQry); 
+ }
         
     removeCidade(cidade);
 	printf("Lista desalocada\n");

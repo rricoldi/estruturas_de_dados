@@ -262,3 +262,25 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 
 	return cidade;
 }
+
+void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
+{
+	FILE *ArquivoQry;
+	ArquivoQry = fopen(nomeDoArquivoQry, "r");
+
+	if (ArquivoQry == NULL)
+	{
+		printf("erro ao tentar abrir o arquivo qry!\n");
+		exit(1);
+	}
+	char *nomeDoArquivoSvg = (char *)malloc((strlen(prefixoDoArquivoQry) + 5) * sizeof(char));
+	sprintf(nomeDoArquivoSvg, "%s.svg", prefixoDoArquivoQry);
+
+	iniciaSvg(nomeDoArquivoSvg);
+
+	finalizaSvg(nomeDoArquivoSvg);
+
+	free(nomeDoArquivoSvg);
+
+	fclose(ArquivoQry);
+}
