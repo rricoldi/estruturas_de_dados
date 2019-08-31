@@ -47,18 +47,34 @@ void removeCidade(Cidade cid)
     free(city);
 }
 
-void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
+void boudingBoxCirculos(Cidade cid, char arquivo[])
+{
+    cidade *city = (cidade *)cid;
+    bbcLista(city->listaC, arquivo);
+}
+
+void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[])
+{
+    cidade *city = (cidade *)cid;
+    bbrLista(city->listaRe, arquivo, cor);
+}
+
+void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[])
 {
     cidade *city = (cidade *)cid;
     
     imprimeCirculos(city->listaCirculo, nomeDoArquivoSvg);
     imprimeRetangulos(city->listaRetangulo, nomeDoArquivoSvg);
+}
+
+void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
+{
+    cidade *city = (cidade *)cid;
+ 
     imprimeQuadras(city->listaQuadra, nomeDoArquivoSvg);
     imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
     imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
     imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
-    // imprimePredios(city->listaPredio, nomeDoArquivoSvg);
-    // imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
 }
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
@@ -80,7 +96,7 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
     posicao = procuraQuadra(city->listaQuadra, id);
     if (posicao != -1)
     {
-        // *tipo = 3;
+        *tipo = 3;
         return get(city->listaQuadra, posicao);
     }
 

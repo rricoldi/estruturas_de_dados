@@ -36,6 +36,10 @@ void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[]);
 
 void imprimeRadios(Lista L, char nomeDoArquivoSvg[]);
 
+void bbcLista(Lista L, char arqout[]);
+
+void bbrLista(Lista L, char arqout[], char cor[]);
+
 int lenght(Lista L);
 
 Posic getFirst(Lista L);

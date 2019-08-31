@@ -8,6 +8,7 @@
 
 #include "cidade.h"
 #include "svg.h"
+#include "qry.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 

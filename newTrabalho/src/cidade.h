@@ -14,6 +14,12 @@ Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrant
 
 void removeCidade(Cidade cid);
 
+void boudingBoxCirculos(Cidade cid, char arquivo[]);
+
+void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[]);
+
+void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[]);
+
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);

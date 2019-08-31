@@ -117,3 +117,22 @@ void imprimirLinha(float x1, float y1, float x2, float y2, char svg[])
 
     fclose(arq);
 }
+
+void escreverDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[])
+{
+    FILE *arq;
+    
+    arq = fopen(svg, "a");
+
+    if(x1>=x2 && y1>=y2){
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x2+((x1-x2)/2), y2+((y1-y2)/2), distancia);    
+    } else if(x1<=x2 && y1>=y2) {
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x1+((x2-x1)/2), y2+((y1-y2)/2), distancia);
+    } else if(x1>=x2 && y1<=y2){
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x2+((x1-x2)/2), y1+((y2-y1)/2), distancia);
+    } else if(x1<=x2 && y1<=y2) {
+        fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%f</text>", x1+((x2-x1)/2), y1+((y2-y1)/2), distancia);
+    }
+
+    fclose(arq);
+}

@@ -16,7 +16,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		exit(1);
 	}
 
-	int *tipo = 0;
+	int tipo = 0;
 	int numeroDeFiguras = 0;
 	int numeroDeQuadras = 0;
 	int numeroDeHidrantes = 0;
@@ -168,7 +168,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			if (numeroDePredios < numeroMaximoDePredios)
 			{
 				
-				Info quadra = procuraNaCidade(cidade, id, tipo, "", 0.0);
+				Info quadra = procuraNaCidade(cidade, id, &tipo, "", 0.0);
 				
 				if (strcmp("N", face) == 0)
 				{
@@ -265,18 +265,149 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 
 void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 {
+	int tipo1, tipo2;
+	int verificador = 0;
+
+	double x, y;
+	double dx, dy;
+	double distancia, largura, altura;
+
+	char id1[20], id2[20];
+	char L[3];
+	char comando[5];
+	char sufixo[30];
+	char cor[30];
+	
+	Info info1 = 0, info2 = 0;
+
 	FILE *ArquivoQry;
 	ArquivoQry = fopen(nomeDoArquivoQry, "r");
-
 	if (ArquivoQry == NULL)
 	{
 		printf("erro ao tentar abrir o arquivo qry!\n");
 		exit(1);
 	}
+
 	char *nomeDoArquivoSvg = (char *)malloc((strlen(prefixoDoArquivoQry) + 5) * sizeof(char));
 	sprintf(nomeDoArquivoSvg, "%s.svg", prefixoDoArquivoQry);
 
 	iniciaSvg(nomeDoArquivoSvg);
+	imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
+
+	char *nomeDoArquivoTxt = (char *)malloc((strlen(prefixoArq) + 5) * sizeof(char));
+	sprintf(nomeDoArquivoTxt, "%s.txt", prefixoDoArquivoQry);
+
+	FILE *arquivoTxt;
+	arquivoTxt = fopen(nomeDoArquivoTxt, "w");
+	if (arquivoTxt == NULL)
+	{
+		printf("nao foi possivel abrir o arquivo txt\n");
+		exit(1);
+	}
+
+	while (1)
+	{
+		fscanf(qry, "%s", comando);
+
+		if (feof(qry))
+			break;
+		
+		if (strcmp("o?", comando) == 0)
+		{ //proximo argumento deve ser numero maximo de circulos e retangulos
+			fscanf(qry, "%s %s", &id1, &id2);
+			
+			info1 = procuraCidade(cidade, id1, &tipo1);
+			info2 = procuraCidade(cidade, id2, &tipo2);
+			fclose(arquivoTxt);
+
+			if (tipo1 == 1 && tipo2 == 2)
+			{
+				colisaoEntreCirculosERetangulos(retornaCX(info1), retornaCY(info1), retornaCR(info1), retornaReX(info2), retornaReY(info2), retornaReW(info2), retornaReH(info2), id1, id2, txt, svg);
+			}
+			else if (tipo1 == 2 && tipo2 == 1)
+			{
+				colisaoEntreCirculosERetangulos(retornaCX(info2), retornaCY(info2), retornaCR(info2), retornaReX(info1), retornaReY(info1), retornaReW(info1), retornaReH(info1), id1, id2, txt, svg);
+			}
+			else if (tipo1 == 1 && tipo2 == 1)
+			{
+				colisaoEntreCirculos(retornaCX(info1), retornaCY(info1), retornaCR(info1), retornaCX(info2), retornaCY(info2), retornaCR(info2), id1, id2, txt, svg);
+			}
+			else if (tipo1 == 2 && tipo2 == 2)
+			{
+				colisaoRR(retornaReX(info1), retornaReY(info1), retornaReW(info1), retornaReH(info1), retornaReX(info2), retornaReY(info2), retornaReW(info2), retornaReH(info2), id1, id2, txt, svg);
+			}
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+		}
+		else if (strcmp("i?", comando) == 0)
+		{ //proximo argumento deve ser os parametros
+			fscanf(qry, "%s %lf %lf", &id1, &x, &y);
+
+			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
+
+			if (tipo1 == 1)
+			{
+				if (pontoInternoCirculo(x, y, retornaCX(info1), retornaCY(info1), retornaCR(info1)))
+				{
+					fprintf(arqTxt, "i? %s %lf %lf\nINTERNO\n", id1, x, y);
+					imprimirCirculo(2, x, y, "black", "green", svg, 1);
+				}
+				else
+				{
+					fprintf(arqTxt, "i? %s %lf %lf\nNAO INTERNO\n", id1, x, y);
+					imprimirCirculo(2, x, y, "black", "red", svg, 1);
+				}
+				imprimirLinha(x, y, retornaCX(info1), retornaCY(info1), "black", svg);
+			}
+			else if (tipo2 == 2)
+			{
+				if (pontoInternoRetangulo(x, y, retornaReX(info1), retornaReY(info1), retornaReW(info1), retornaReH(info1)))
+				{
+					fprintf(arqTxt, "i? %s %lf %lf\nINTERNO\n", id1, x, y);
+					imprimirCirculo(2, x, y, "black", "green", svg, 1);
+				}
+				else
+				{
+					fprintf(arqTxt, "i? %s %lf %lf\nNAO INTERNO\n", id1, x, y);
+					imprimirCirculo(2, x, y, "black", "red", svg, 1);
+				}
+				imprimirLinha(x, y, retornaReX(info1), retornaReY(info1), "black", svg);
+			}
+		}
+		else if (strcmp("d?", comando) == 0)
+		{ //proximo argumento deve ser os parametros
+			fscanf(qry, "%s %s", &id1, &id2);
+			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
+			info2 = procuraNaCidade(cidade, id2, &tipo2, "", 0.0);
+
+			if(info1 == NULL || info2 == NULL)
+				continue;	
+			if (tipo1 == 1 && tipo2 == 2)
+				distancia = distanciaDaFigura(retornaCX(info1), retornaCY(info1), retornaReX(info2), retornaReY(info2), svg);
+			else if (tipo1 == 2 && tipo2 == 1)
+				distancia = distanciaDaFigura(retornaCX(info2), retornaCY(info2), retornaReX(info1), retornaReY(info1), svg);
+			else if (tipo1 == 1 && tipo2 == 1)
+			{
+				distancia = distanciaDaFigura(retornaCX(info2), retornaCY(info2), retornaCX(info1), retornaCY(info1), svg);
+			}
+			else if (tipo1 == 2 && tipo2 == 2)
+				distancia = distanciaDaFigura(retornaReX(info2), retornaReY(info2), retornaReX(info1), retornaReY(info1), svg);
+
+			fprintf(arqTxt, "d? %s %s\n%lf\n", id1, id2, distancia);
+		}
+		else if (strcmp("bb", comando) == 0)
+		{ //proximo argumento deve ser os parametros
+			fscanf(qry, " %s %s", &sufixo, &cor);
+
+			char *arquivoDeSaida = (char *)(malloc((strlen(prefixoArq) + strlen(sufixo) + 7) * sizeof(char)));
+			sprintf(arquivoDeSaida, "%s-%s.svg", prefixoArq, sufixo);
+			iniciaSvg(arquivoDeSaida);
+
+			boudingBoxCirculos(cidade, arquivoDeSaida );
+			boundingBoxRetangulos(cidade, arquivoDeSaida , cor);
+
+			finalizaSvg(arquivoDeSaida);
+		}
+	}
 
 	finalizaSvg(nomeDoArquivoSvg);
 
