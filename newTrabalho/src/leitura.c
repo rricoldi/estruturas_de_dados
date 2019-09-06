@@ -432,6 +432,9 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 	}
 
+	if(verificador != 0)
+		imprimeCidade(cidade, nomeDoArquivoSvg);
+
 	finalizaSvg(nomeDoArquivoSvg);
 
 	free(nomeDoArquivoSvg);

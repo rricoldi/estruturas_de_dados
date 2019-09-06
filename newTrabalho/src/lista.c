@@ -371,7 +371,7 @@ Posic insereLista(Lista L, Info info)
   return iLivre;
 }
 
-void removerLista(Lista L, Posic pos)
+void removerDaLista(Lista L, Posic pos)
 {
    List* lista = (List*) L;
 
@@ -602,26 +602,31 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
       while(lista->v[i].prox != -1)
       {
          informacao = lista->v[i].info;
+         if (informacao == NULL)
+         {
+            i = lista->v[i].prox;
+            continue;
+         }
 
          if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
          {
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-            removerLista(lista, i);
+            removerDaLista(lista, i);
          }        
          
          i = lista->v[i].prox;
       }
-      
+
       informacao = lista->v[i].info;
       
       if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
       {
-         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
          fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-         removerLista(lista, i);
+         removerDaLista(lista, i);
       }  
    }
    else
@@ -634,15 +639,14 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
             i = lista->v[i].prox;
             continue;
          }
-
          if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
          {
             if(opcao == 1)
             {
-               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-               removerLista(lista, i);
+               removerDaLista(lista, i);
             }
             else if (opcao == 2)
             {
@@ -668,10 +672,10 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
          {
             if(opcao == 1)
             {
-               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
-               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-               removerLista(lista, i);
+               removerDaLista(lista, i);
             }
             else if (opcao == 2)
             {

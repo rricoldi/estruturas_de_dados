@@ -59,7 +59,7 @@ Posic insertAfter(Lista L, Info info, Posic posicao);
 
 Posic insereLista(Lista L, Info info);
 
-void removerLista(Lista L, Posic pos);
+void removerDaLista(Lista L, Posic pos);
 
 Info get(Lista L, Posic pos);
 
