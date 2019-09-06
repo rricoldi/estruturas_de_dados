@@ -8,6 +8,7 @@
 #include "retangulo.h"
 #include "predio.h"
 #include "muro.h"
+#include "qry.h"
 
 
 /*
@@ -57,6 +58,8 @@ Posic insertBefore(Lista L, Info info, Posic posicao);
 Posic insertAfter(Lista L, Info info, Posic posicao);
 
 Posic insereLista(Lista L, Info info);
+
+void removerLista(Lista L, Posic pos);
 
 Info get(Lista L, Posic pos);
 

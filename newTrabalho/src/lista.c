@@ -371,6 +371,34 @@ Posic insereLista(Lista L, Info info)
   return iLivre;
 }
 
+void removerLista(Lista L, Posic pos)
+{
+   List* lista = (List*) L;
+
+   lista->v[pos].info = NULL; //informacao da posicao e removida
+
+   if(lista->primeiro == pos && lista->ultimo != pos)
+   {
+      lista->primeiro = lista->v[pos].prox;
+   }
+
+   if(lista->ultimo == pos && lista->primeiro != pos)
+   {
+      lista->primeiro = lista->v[pos].ant;
+   }
+   
+   lista->v[lista->v[pos].ant].prox = lista->v[pos].prox; // o proximo
+   lista->v[lista->v[pos].prox].ant = lista->v[pos].ant;
+
+   lista->v[pos].ant = lista->livre;
+   lista->v[pos].prox = lista->v[lista->livre].prox;
+   
+   lista->v[lista->v[lista->livre].prox].ant = pos;
+   lista->v[lista->livre].prox = pos;
+
+   lista->tamanho--;
+}
+
 Info get(Lista L, Posic pos)
 {
    List* lista = (List*) L;
@@ -401,8 +429,6 @@ int procuraCirculo(Lista L, char id[])
 
    return -1;
 }
-
-
 
 int procuraRetangulo(Lista L, char id[])
 {
@@ -557,4 +583,226 @@ int procuraPredio(Lista L, char id[], char face[], double num)
       return i;
 
    return -1;
+}
+
+void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int opcao, char cor[], double largura, double altura, double dx, double dy)
+{
+   FILE *arqSvg, *arqTxt;
+   arqSvg = fopen(svg,"a");
+   arqTxt = fopen(txt, "a");
+   List* lista = (List*) L;
+
+   if(opcao == 1)
+      fprintf(arqTxt, "dq %s %s %lf\n", tipo, id, r);
+
+   int i = lista->primeiro;
+   Info informacao;
+   if(strcmp(tipo, "L1") == 0)
+   {
+      while(lista->v[i].prox != -1)
+      {
+         informacao = lista->v[i].info;
+
+         if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
+         {
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+            removerLista(lista, i);
+         }        
+         
+         i = lista->v[i].prox;
+      }
+      
+      informacao = lista->v[i].info;
+      
+      if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
+      {
+         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+         fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+         fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+         removerLista(lista, i);
+      }  
+   }
+   else
+   {
+      while(lista->v[i].prox != -1)
+      {
+         informacao = lista->v[i].info;
+         if (informacao == NULL)
+         {
+            i = lista->v[i].prox;
+            continue;
+         }
+
+         if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
+         {
+            if(opcao == 1)
+            {
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+               removerLista(lista, i);
+            }
+            else if (opcao == 2)
+            {
+               setQCorB(informacao, cor);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+            }
+             
+         }
+         else if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
+         {
+            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
+            setQX(informacao, retornaQX(informacao)+dx);
+            setQY(informacao, retornaQY(informacao)+dy);
+         }
+         
+         i = lista->v[i].prox;
+      }
+      
+      informacao = lista->v[i].info;
+      if (informacao != NULL)
+      {
+         if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
+         {
+            if(opcao == 1)
+            {
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"4\" stroke= \"black\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"6\" stroke= \"yellow\" fill=\"none\" stroke-width=\"1\" stroke-oppacity=\"0.7\" />", fx, fy);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+               removerLista(lista, i);
+            }
+            else if (opcao == 2)
+            {
+               setQCorB(informacao, cor);
+               fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+            }             
+         }
+         if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
+         {
+            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
+            setQX(informacao, retornaQX(informacao)+dx);
+            setQY(informacao, retornaQY(informacao)+dy);
+         } 
+      }
+      fclose(arqSvg);
+      fclose(arqTxt);
+      
+   }
+}
+//percorrelistaH(city->listaH, fx, fy, largura, altura, dx, dy, txt);
+void percorreListaH(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[])
+{
+   FILE* arq;
+   arq = fopen(txt, "a");
+
+   List* lista = (List*) L;
+   int i = lista->primeiro;
+   Info informacao;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
+
+      if(pontoInternoRetangulo(retornaHX(informacao), retornaHY(informacao), x, y, h, w))
+      {
+         fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaHID(informacao), retornaHX(informacao), retornaHY(informacao), retornaHX(informacao)+dx, retornaHY(informacao)+dy);
+         setHX(informacao, retornaHX(informacao)+dx);
+         setHY(informacao, retornaHY(informacao)+dy);
+      }
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   
+   if(pontoInternoRetangulo(retornaHX(informacao), retornaHY(informacao), x, y, h, w))
+   {
+      fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaHID(informacao), retornaHX(informacao), retornaHY(informacao), retornaHX(informacao)+dx, retornaHY(informacao)+dy);
+      setHX(informacao, retornaHX(informacao)+dx);
+      setHY(informacao, retornaHY(informacao)+dy);
+   }
+   fclose(arq);
+}
+
+void percorreListaS(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[])
+{
+   FILE* arq;
+   arq = fopen(txt, "a");
+
+   List* lista = (List*) L;
+   int i = lista->primeiro;
+   Info informacao;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
+
+      if(pontoInternoRetangulo(retornaSX(informacao), retornaSY(informacao), x, y, h, w))
+      {
+         fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaSID(informacao), retornaSX(informacao), retornaSY(informacao), retornaSX(informacao)+dx, retornaSY(informacao)+dy);
+         setSX(informacao, retornaSX(informacao)+dx);
+         setSY(informacao, retornaSY(informacao)+dy);
+      }
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(pontoInternoRetangulo(retornaSX(informacao), retornaSY(informacao), x, y, h, w))
+   {
+      fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaSID(informacao), retornaSX(informacao), retornaSY(informacao), retornaSX(informacao)+dx, retornaSY(informacao)+dy);
+      setSX(informacao, retornaSX(informacao)+dx);
+      setSY(informacao, retornaSY(informacao)+dy);
+   }
+   fclose(arq);
+}
+
+void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[])
+{
+   FILE* arq;
+   arq = fopen(txt, "a");
+
+   List* lista = (List*) L;
+   int i = lista->primeiro;
+   Info informacao;
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+      if (informacao == NULL)
+      {
+         i = lista->v[i].prox;
+         continue;
+      }
+
+      if(pontoInternoRetangulo(retornaRX(informacao), retornaRY(informacao), x, y, h, w))
+      {
+         fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaRID(informacao), retornaRX(informacao), retornaRY(informacao), retornaRX(informacao)+dx, retornaRY(informacao)+dy);
+         setRX(informacao, retornaRX(informacao)+dx);
+         setRY(informacao, retornaRY(informacao)+dy);
+      }
+      
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+   if(pontoInternoRetangulo(retornaRX(informacao), retornaRY(informacao), x, y, h, w))
+   {
+      fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaRID(informacao), retornaRX(informacao), retornaRY(informacao), retornaRX(informacao)+dx, retornaRY(informacao)+dy);
+      setRX(informacao, retornaRX(informacao)+dx);
+      setRY(informacao, retornaRY(informacao)+dy);
+   }
+   fclose(arq);
 }

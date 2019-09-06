@@ -273,7 +273,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	double distancia, largura, altura;
 
 	char id1[20], id2[20];
-	char L[3];
+	char metrica[3];
 	char comando[5];
 	char sufixo[30];
 	char cor[30];
@@ -397,7 +397,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("bb", comando) == 0)
 		{ //proximo argumento deve ser os parametros
-			fscanf(ArquivoQry, " %s %s", &sufixo, &cor);
+			fscanf(ArquivoQry, "%s %s", &sufixo, &cor);
 
 			char *arquivoDeSaida = (char *)(malloc((strlen(prefixoDoArquivoQry) + strlen(sufixo) + 7) * sizeof(char)));
 			sprintf(arquivoDeSaida, "%s-%s.svg", prefixoDoArquivoQry, sufixo);
@@ -407,6 +407,28 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			boundingBoxRetangulos(cidade, arquivoDeSaida , cor);
 
 			finalizaSvg(arquivoDeSaida);
+		}
+		else if (strcmp("dq", comando) == 0)
+		{
+			fscanf(ArquivoQry, "%s %s %lf", metrica, id1, &distancia);
+			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
+			verificador++;
+
+			fclose(arquivoTxt);
+
+			if (tipo1 == 4)
+			{
+				percorreCidade(cidade, distancia, retornaHX(info1), retornaHY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+			}
+			else if (tipo1 == 5)
+			{
+				percorreCidade(cidade, distancia, retornaSX(info1), retornaSY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+			}
+			else if (tipo1 == 6)
+			{
+				percorreCidade(cidade, distancia, retornaRX(info1), retornaRY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+			}
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
 	}
 

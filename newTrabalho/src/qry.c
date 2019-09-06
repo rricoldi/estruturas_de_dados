@@ -72,6 +72,24 @@ bool retornaDistanciaL2(double r, double fx, double fy, double x, double y, doub
     return false;
 }
 
+bool retornaDistanciaL1(double r, double fx, double fy, double x, double y, double w, double h)
+{
+    if(fabs(x-fx)+fabs(y-fy) <= r)
+    {
+        if(fabs((x+w)-fx)+fabs(y-fy)<=r)
+        {
+            if(fabs(x-fx)+fabs((y+h)-fy)<=r)
+            {
+                if(fabs((x+w)-fx)+fabs((y+h)-fy)<=r)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void colisaoEntreCirculos(int x1, int y1, float r1, int x2, int y2, float r2, char j[], char k[], char txt[], char svg[])
 {
     FILE *arq;
@@ -117,7 +135,7 @@ void colisaoEntreRetangulos(float x1, float y1, float w1, float h1, float x2, fl
     float w = max(x1+w1, x2+w2) - min(x1, x2);
     float h = max(y1+h1, y2+h2) - min(y1, y2);
 
-    if(VerificaColisao(x1, y1, w1, h1, x2, y2, w2, h2)){
+    if(verificaColisao(x1, y1, w1, h1, x2, y2, w2, h2)){
         fprintf(arq, "o? %s %s\nSIM\n", j, k);
         fprintf(arqsvg,"\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill:none;stroke:black;stroke-width:2\" />",x,y,w,h);
     }else{
@@ -128,7 +146,7 @@ void colisaoEntreRetangulos(float x1, float y1, float w1, float h1, float x2, fl
     fclose(arq);
 }
 
-bool VerificaColisao(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2)
+bool verificaColisao(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2)
 {
     if(x1<x2+w2 && x1+w1>x2 && y1<y2+h2 && y1+h1>y2)
     {
