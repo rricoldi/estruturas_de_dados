@@ -25,6 +25,6 @@ void imprimirPredio(char svg[], double x, double y, double tamanhoDaFrente, doub
 
 void imprimirLinha(float x1, float y1, float x2, float y2, char svg[]);
 
-void escreveDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[]);
+void escreverDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[]);
 
 #endif

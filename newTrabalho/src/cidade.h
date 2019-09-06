@@ -52,5 +52,7 @@ Semaforo getSemaforo(Cidade cid, int i);
 
 Predio getPredio(Cidade cid, int i);
 
+// void percorreCidadeLQ(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
+
 
 #endif

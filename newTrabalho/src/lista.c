@@ -25,20 +25,6 @@ typedef struct Vetor
    int tamanho;
 }List;
 
-void percorreCidadeLQ(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy)
-{
-    cidade *city = (cidade *)cid;
-    if (option == 1 || option == 2)
-        percorreListaQ(city->listaQ, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
-    else
-    {
-        percorreListaQ(city->listaQ, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
-        percorreListaH(city->listaH, fx, fy, largura, altura, dx, dy, txt);
-        percorreListaS(city->listaS, fx, fy, largura, altura, dx, dy, txt);
-        percorreListaR(city->listaR, fx, fy, largura, altura, dx, dy, txt);
-    }
-}
-
 Lista iniciaLista(int capacidade)
 {
    Lista l;    //Colocar _t
@@ -229,7 +215,7 @@ void bbcLista(Lista L, char arqout[])
       circulo = lista->v[i].info;
 
       imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), arqout, retornaCEspessura(circulo));
-      imprimirRetangulo(retornaCR(circulo)*2, retornaCR(circulo)*2, retornaCX(circulo)-retornaCR(circulo), retornaCY(circulo)-retornaCR(circulo), "none", "black", 2)
+      imprimirRetangulo(retornaCR(circulo)*2, retornaCR(circulo)*2, retornaCX(circulo)-retornaCR(circulo), retornaCY(circulo)-retornaCR(circulo), "none", "black", arqout, 2);
 
       i = lista->v[i].prox;
    }
@@ -237,7 +223,7 @@ void bbcLista(Lista L, char arqout[])
    circulo = lista->v[i].info;
 
       imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), arqout, retornaCEspessura(circulo));
-      imprimirRetangulo(retornaCR(circulo)*2, retornaCR(circulo)*2, retornaCX(circulo)-retornaCR(circulo), retornaCY(circulo)-retornaCR(circulo), "none", "black", arqout, 2)
+      imprimirRetangulo(retornaCR(circulo)*2, retornaCR(circulo)*2, retornaCX(circulo)-retornaCR(circulo), retornaCY(circulo)-retornaCR(circulo), "none", "black", arqout, 2);
 }
 
 void bbrLista(Lista L, char arqout[], char cor[])
@@ -258,7 +244,7 @@ void bbrLista(Lista L, char arqout[], char cor[])
       retangulo = lista->v[i].info;
 
       imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorP(retangulo), retornaReCorB(retangulo), arqout, retornaReEspessura(retangulo));
-    	void imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);
+    	imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);
     	
       i = lista->v[i].prox;
    }
@@ -266,7 +252,7 @@ void bbrLista(Lista L, char arqout[], char cor[])
    retangulo = lista->v[i].info;
 
       imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorP(retangulo), retornaReCorB(retangulo), arqout, retornaReEspessura(retangulo));
-    	void imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);   	
+      imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);   	
 }
 
 int lenght(Lista L)

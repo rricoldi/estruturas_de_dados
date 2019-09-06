@@ -50,13 +50,13 @@ void removeCidade(Cidade cid)
 void boudingBoxCirculos(Cidade cid, char arquivo[])
 {
     cidade *city = (cidade *)cid;
-    bbcLista(city->listaC, arquivo);
+    bbcLista(city->listaCirculo, arquivo);
 }
 
 void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[])
 {
     cidade *city = (cidade *)cid;
-    bbrLista(city->listaRe, arquivo, cor);
+    bbrLista(city->listaRetangulo, arquivo, cor);
 }
 
 void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[])
@@ -229,3 +229,17 @@ Muro getMuro(Cidade cid, int i)
     cidade *city = (cidade *)cid;
     return get(city->listaMuro, i);
 }
+
+// void percorreCidadeLQ(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy)
+// {
+//     cidade *city = (cidade *)cid;
+//     if (option == 1 || option == 2)
+//         percorreListaQ(city->listaQuadra, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
+//     else
+//     {
+//         percorreListaQ(city->listaQuadra, r, fx, fy, tipo, svg, txt, id, option, cor, largura, altura, dx, dy);
+//         percorreListaH(city->listaHidrante, fx, fy, largura, altura, dx, dy, txt);
+//         percorreListaS(city->listaSemaforo, fx, fy, largura, altura, dx, dy, txt);
+//         percorreListaR(city->listaRadio, fx, fy, largura, altura, dx, dy, txt);
+//     }
+// }

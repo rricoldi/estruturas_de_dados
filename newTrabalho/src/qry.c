@@ -171,7 +171,7 @@ bool pontoInternoRetangulo(float px, float py, float rx, float ry, float h, floa
 double distanciaDaFigura(double x1, double y1, double x2, double y2, char svg[])
 {
     double dist = distancia(x1, y1, x2, y2);
-    imprimirLinha(x1, y1, x2, y2, "black", svg);
+    imprimirLinha(x1, y1, x2, y2, svg);
 
     escreverDistancia(x1, y1, x2, y2, dist, svg);
 

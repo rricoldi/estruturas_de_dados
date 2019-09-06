@@ -27,4 +27,6 @@ bool pontoInternoCirculo(float px, float py, float cx, float cy, float r);
 
 bool pontoInternoRetangulo(float px, float py, float rx, float ry, float h, float w);
 
+double distanciaDaFigura(double x1, double y1, double x2, double y2, char svg[]);
+
 #endif
