@@ -34,7 +34,6 @@ Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrant
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;
-
     finalizaLista(city->listaCirculo);
     finalizaLista(city->listaRetangulo);
     finalizaLista(city->listaQuadra);
@@ -43,7 +42,6 @@ void removeCidade(Cidade cid)
     finalizaLista(city->listaSemaforo);
     finalizaLista(city->listaPredio);
     finalizaLista(city->listaMuro);
-
     free(city);
 }
 

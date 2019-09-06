@@ -77,4 +77,12 @@ int procuraRadio(Lista L, char id[]);
 
 int procuraPredio(Lista L, char id[], char face[], double num);
 
+void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int opcao, char cor[], double largura, double altura, double dx, double dy);
+
+void percorreListaH(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
+
+void percorreListaS(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
+
+void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
+
 #endif

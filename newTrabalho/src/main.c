@@ -92,10 +92,8 @@ int main(int argc, char *argv[])
 		arquivoGeo = (char *)malloc((strlen(nomeDoArquivoGeo)+strlen(caminhoDoArquivo)+2)*sizeof(char));
     	sprintf(arquivoGeo,"%s/%s",caminhoDoArquivo,nomeDoArquivoGeo);
 
-    	// arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+strlen(caminhoDoArquivo)+2)*sizeof(char));
-    	// sprintf(arquivoQry,"%s/%s",caminhoDoArquivo,nomeDoArquivoQry);
-
-        printf("oioi\n");
+        arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+strlen(caminhoDoArquivo)+2)*sizeof(char));
+    	sprintf(arquivoQry,"%s/%s",caminhoDoArquivo,nomeDoArquivoQry);
 	}
     else
     {
