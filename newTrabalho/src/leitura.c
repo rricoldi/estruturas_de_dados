@@ -280,10 +280,10 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	
 	Info info1 = 0, info2 = 0;
 
-	FILE *ArquivoQry;
+	FILE *arquivoQry;
 	printf("%s\n", nomeDoArquivoQry);
-	ArquivoQry = fopen(nomeDoArquivoQry, "r");
-	if (ArquivoQry == NULL)
+	arquivoQry = fopen(nomeDoArquivoQry, "r");
+	if (arquivoQry == NULL)
 	{
 		printf("erro ao tentar abrir o arquivo qry!\n");
 		exit(1);
@@ -308,14 +308,14 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 	while (1)
 	{
-		fscanf(ArquivoQry, "%s", comando);
+		fscanf(arquivoQry, "%s", comando);
 
-		if (feof(ArquivoQry))
+		if (feof(arquivoQry))
 			break;
 		
 		if (strcmp("o?", comando) == 0)
 		{ //proximo argumento deve ser numero maximo de circulos e retangulos
-			fscanf(ArquivoQry, "%s %s", &id1, &id2);
+			fscanf(arquivoQry, "%s %s", &id1, &id2);
 			
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 			info2 = procuraNaCidade(cidade, id2, &tipo2, "", 0.0);
@@ -341,7 +341,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("i?", comando) == 0)
 		{ //proximo argumento deve ser os parametros
-			fscanf(ArquivoQry, "%s %lf %lf", &id1, &x, &y);
+			fscanf(arquivoQry, "%s %lf %lf", &id1, &x, &y);
 
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 
@@ -376,7 +376,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("d?", comando) == 0)
 		{ //proximo argumento deve ser os parametros
-			fscanf(ArquivoQry, "%s %s", &id1, &id2);
+			fscanf(arquivoQry, "%s %s", &id1, &id2);
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 			info2 = procuraNaCidade(cidade, id2, &tipo2, "", 0.0);
 
@@ -397,7 +397,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("bb", comando) == 0)
 		{ //proximo argumento deve ser os parametros
-			fscanf(ArquivoQry, "%s %s", &sufixo, &cor);
+			fscanf(arquivoQry, "%s %s", &sufixo, &cor);
 
 			char *arquivoDeSaida = (char *)(malloc((strlen(prefixoDoArquivoQry) + strlen(sufixo) + 7) * sizeof(char)));
 			sprintf(arquivoDeSaida, "%s-%s.svg", prefixoDoArquivoQry, sufixo);
@@ -410,7 +410,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("dq", comando) == 0)
 		{
-			fscanf(ArquivoQry, "%s %s %lf", metrica, id1, &distancia);
+			fscanf(arquivoQry, "%s %s %lf", metrica, id1, &distancia);
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 			verificador++;
 
@@ -430,14 +430,71 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			}
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
-	}
+		else if (strcmp("del", comando) == 0)
+		{
+			fscanf(arquivoQry, " %s", &id1);
+			verificador++;
 
+			fclose(arquivoTxt);
+
+			removeDaCidade(cidade, id1, nomeDoArquivoTxt);
+
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+		}
+		else if (strcmp("cbq", comando) == 0)
+		{
+			fscanf(arquivoQry, "%lf %lf %lf %s", &x, &y, &distancia, cor);
+			verificador++;
+			fprintf(arquivoTxt, "cbq %lf %lf %lf %s\n", x, y, distancia, cor);
+			fclose(arquivoTxt);
+			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 2, cor, 0, 0, 0, 0);
+
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+		}
+		else if (strcmp("crd?", comando) == 0)
+		{
+			verificador = 84;
+			fscanf(arquivoQry, " %s", id1);
+			fprintf(arquivoTxt, "crd? %s\n", id1);
+			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
+			if(info1 == NULL)
+				continue;
+			if (tipo1 == 3)
+			{
+				fprintf(arquivoTxt, "quadra -> cep: %s x: %lf y: %lf w: %lf h: %lf\n", id1, retornaQX(info1), retornaQY(info1), retornaQW(info1), retornaQH(info1));
+			}
+			else if (tipo1 == 4)
+			{
+				fprintf(arquivoTxt, "hidrante -> id: %s x: %lf y: %lf\n", id1, retornaHX(info1), retornaHY(info1));
+			}
+			else if (tipo1 == 5)
+			{
+				fprintf(arquivoTxt, "semaforo -> id: %s x: %lf y: %lf\n", id1, retornaSX(info1), retornaSY(info1));
+			}
+			else if (tipo1 == 6)
+			{
+				fprintf(arquivoTxt, "radio base -> id: %s x: %lf y: %lf\n", id1, retornaRX(info1), retornaRY(info1));
+			}
+		}
+		else if (strcmp("trns", comando) == 0)
+		{
+			fscanf(arquivoQry, "%lf %lf %lf %lf %lf %lf", &x, &y, &largura, &altura, &dx, &dy);
+			verificador++;
+			fprintf(arquivoTxt, "trns %lf %lf %lf %lf %lf %lf\n", x, y, largura, altura, dx, dy);
+			fclose(arquivoTxt);
+			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 3, cor, largura, altura, dx, dy);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+		}
+	}
 	if(verificador != 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);
+	if (verificador == 84)
+		remove(nomeDoArquivoSvg);
 
 	free(nomeDoArquivoSvg);
+	
 
-	fclose(ArquivoQry);
+	fclose(arquivoQry);
 }

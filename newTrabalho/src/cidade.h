@@ -24,6 +24,8 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
+void removeDaCidade(Cidade cid, char id[], char txt[]);
+
 int adicionarCirculo(Cidade cid, Info info);
 
 int adicionarRetangulo(Cidade cid, Info info);

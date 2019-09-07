@@ -130,6 +130,55 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
     return NULL;
 }
 
+void removeDaCidade(Cidade cid, char id[], char txt[])
+{
+    FILE *arqTxt;
+    arqTxt = fopen(txt, "a");
+
+    cidade *city = (cidade *)cid;
+    int posicao;
+
+    posicao = procuraQuadra(city->listaQuadra, id);
+    if (posicao != -1)
+    {
+        fprintf(arqTxt, "del %s\nquadra -> x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(getQuadra(city, posicao)), retornaQY(getQuadra(city, posicao)), retornaQW(getQuadra(city, posicao)), retornaQH(getQuadra(city, posicao)));
+        removerDaLista(city->listaQuadra, posicao);
+        fclose(arqTxt);
+        return;
+    }
+
+    posicao = procuraHidrante(city->listaHidrante, id);
+    if (posicao != -1)
+    {
+        fprintf(arqTxt, "del %s\nhidrante -> x: %lf y: %lf\n", id, retornaHX(getHidrante(city, posicao)), retornaHY(getHidrante(city, posicao)));
+        removerDaLista(city->listaHidrante, posicao);
+        fclose(arqTxt);
+        return;
+    }
+
+    posicao = procuraSemaforo(city->listaSemaforo, id);
+    if (posicao != -1)
+    {
+        fprintf(arqTxt, "del %s\nsemaforo -> x: %lf y: %lf\n", id, retornaSX(getSemaforo(city, posicao)), retornaSY(getSemaforo(city, posicao)));
+        removerDaLista(city->listaHidrante, posicao);
+        fclose(arqTxt);
+        return;
+    }
+
+    posicao = procuraRadio(city->listaRadio, id);
+    if (posicao != -1)
+    {
+        fprintf(arqTxt, "del %s\nradio base -> x: %lf y: %lf\n", id, retornaRX(getRadio(city, posicao)), retornaRY(getRadio(city, posicao)));
+        removerDaLista(city->listaHidrante, posicao);
+        fclose(arqTxt);
+        return;
+    }
+
+    printf("Nao foi possivel achar o elemento na cidade\n");
+    fclose(arqTxt);
+    return;
+}
+
 int adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
