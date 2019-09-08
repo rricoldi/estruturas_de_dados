@@ -27,4 +27,6 @@ void imprimirLinha(float x1, float y1, float x2, float y2, char svg[]);
 
 void escreverDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[]);
 
+void imprimirIncendio(double x, double y, char nomeDoArquivoSvg[]);
+
 #endif

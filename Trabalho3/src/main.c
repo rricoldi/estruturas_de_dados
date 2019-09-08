@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
             nomeDoArquivoQry = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoQry,argv[contador]);
         }
-        else if (strcmp("-o",argv[contador])==0){ 
+        else if (strcmp("-o",argv[contador])==0){  
             contador++;
             if (argv[contador] == NULL){    
                 printf("\n!Erro! Sem parametros em -o");
@@ -91,18 +91,26 @@ int main(int argc, char *argv[])
     {
 		arquivoGeo = (char *)malloc((strlen(nomeDoArquivoGeo)+strlen(caminhoDoArquivo)+2)*sizeof(char));
     	sprintf(arquivoGeo,"%s/%s",caminhoDoArquivo,nomeDoArquivoGeo);
-
-        arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+strlen(caminhoDoArquivo)+2)*sizeof(char));
-    	sprintf(arquivoQry,"%s/%s",caminhoDoArquivo,nomeDoArquivoQry);
+        
+        if (nomeDoArquivoQry != NULL)
+        {
+            arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+strlen(caminhoDoArquivo)+2)*sizeof(char));
+            sprintf(arquivoQry,"%s/%s",caminhoDoArquivo,nomeDoArquivoQry);
+        }
 	}
     else
     {
 		arquivoGeo = (char *)malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));
     	sprintf(arquivoGeo, nomeDoArquivoGeo);
 
-    	arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+1)*sizeof(char));
-    	strcpy(arquivoQry, nomeDoArquivoQry);
+    	if (nomeDoArquivoQry != NULL)
+        {
+            arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+1)*sizeof(char));
+    	    strcpy(arquivoQry, nomeDoArquivoQry);
+        }
 	}
+
+   
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
     prefixoDoArquivoGeo = retornarPrefixoDoArquivo(nomeDoArquivoGeo);
@@ -122,21 +130,21 @@ int main(int argc, char *argv[])
     printf("Bloco do Geo finalizado\n");
 
 
- if(nomeDoArquivoQry != NULL)
- {
-    //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
- 	prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));	
-    sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
+    if(nomeDoArquivoQry != NULL)
+    {
+        //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
+        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));	
+        sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
-    printf("Bloco do Qry inicializado\n");
-    leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
-    printf("Bloco do Qry finalizado\n");
+        printf("Bloco do Qry inicializado\n");
+        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
+        printf("Bloco do Qry finalizado\n");
 
-    free(nomeDoArquivoQry);
-    free(prefixoDoAquivoQry);
-    free(prefixoFinalDoQry); 
- }
-        
+        free(nomeDoArquivoQry);
+        free(prefixoDoAquivoQry);
+        free(prefixoFinalDoQry);
+        free(arquivoQry);
+    }
     removeCidade(cidade);
 	printf("Lista desalocada\n");
 
@@ -144,7 +152,7 @@ int main(int argc, char *argv[])
 	free(nomeDoArquivoGeo);
     free(caminhoDoArquivo);
 	free(caminhoDoArquivoDeSaida);
-    free(arquivoQry);    
+    
     free(nomeDoArquivoSvg);
     printf("Mémoria desalocada\n");
     

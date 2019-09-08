@@ -173,46 +173,46 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 				if (strcmp("N", face) == 0)
 				{
 					x = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
-					y = retornaQY(quadra) + retornaQH(quadra) - tamanhoDoLado;
+					y = retornaQY(quadra) + retornaQH(quadra) - tamanhoDoLado - larguraDaCalcada;
 					xCalcada = retornaQX(quadra);
 					xCalcadaMax = retornaQW(quadra);
-					yCalcada = retornaQY(quadra) + retornaQH(quadra);
+					yCalcada = retornaQY(quadra) + retornaQH(quadra) - larguraDaCalcada;
 					yCalcadaMax = larguraDaCalcada;
-					xNum = retornaQX(quadra) + (retornaQW(quadra) / 2);
-					yNum = retornaQY(quadra) + (retornaQH(quadra) - 2);
+					xNum = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					yNum = retornaQY(quadra) + (retornaQH(quadra) - 2) - larguraDaCalcada;
 				}
 				else if (strcmp("S", face) == 0)
 				{
 					x = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
-					y = retornaQY(quadra);
+					y = retornaQY(quadra) + larguraDaCalcada;
 					xCalcada = retornaQX(quadra);
 					xCalcadaMax = retornaQW(quadra);
-					yCalcada = retornaQY(quadra) - larguraDaCalcada;
+					yCalcada = retornaQY(quadra);
 					yCalcadaMax = larguraDaCalcada;
-					xNum = retornaQX(quadra) + (retornaQW(quadra) / 2);
-					yNum = retornaQY(quadra) + 2;
+					xNum = retornaQX(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
+					yNum = retornaQY(quadra) + 10 + larguraDaCalcada;
 				}
 				else if (strcmp("L", face) == 0)
 				{
-					x = retornaQX(quadra);
+					x = retornaQX(quadra)  + larguraDaCalcada;
 					y = retornaQY(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
-					xCalcada = retornaQX(quadra) - larguraDaCalcada;
+					xCalcada = retornaQX(quadra);
 					xCalcadaMax = larguraDaCalcada;
 					yCalcada = retornaQY(quadra);
 					yCalcadaMax = retornaQH(quadra);
-					xNum = retornaQX(quadra) + 2;
-					yNum = retornaQY(quadra) + (retornaQH(quadra) / 2);
+					xNum = retornaQX(quadra) + larguraDaCalcada;
+					yNum = retornaQY(quadra) + numeroDoPredio + 5;
 				}
 				else if (strcmp("O", face) == 0)
 				{
-					x = retornaQX(quadra) + retornaQW(quadra) - tamanhoDoLado;
+					x = retornaQX(quadra) + retornaQW(quadra) - tamanhoDoLado - larguraDaCalcada;
 					y = retornaQY(quadra) + numeroDoPredio - (tamanhoDaFrente / 2);
-					xCalcada = retornaQX(quadra) + retornaQW(quadra);
+					xCalcada = retornaQX(quadra) + retornaQW(quadra) - larguraDaCalcada;
 					xCalcadaMax = larguraDaCalcada;
 					yCalcada = retornaQY(quadra);
 					yCalcadaMax = retornaQH(quadra);
-					xNum = retornaQX(quadra) + retornaQW(quadra) - 2;
-					yNum = retornaQY(quadra) + (retornaQH(quadra) / 2);
+					xNum = retornaQX(quadra) + retornaQW(quadra) - 10 - larguraDaCalcada;
+					yNum = retornaQY(quadra) + numeroDoPredio + 5;
 				}
 				info = criarPredio(id, face, numeroDoPredio, tamanhoDaFrente, tamanhoDoLado, larguraDaCalcada, x, y, xCalcada, xCalcadaMax, yCalcada, yCalcadaMax, xNum, yNum);
 				adicionarPredio(cidade, info);
@@ -267,6 +267,8 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 {
 	int tipo1, tipo2;
 	int verificador = 0;
+	int verificador2 = 0;
+	int numeroDeSemaforos = 0;
 
 	double x, y;
 	double dx, dy;
@@ -413,6 +415,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			fscanf(arquivoQry, "%s %s %lf", metrica, id1, &distancia);
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 			verificador++;
+			verificador2 = 0;
 
 			fclose(arquivoTxt);
 
@@ -434,6 +437,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, " %s", &id1);
 			verificador++;
+			verificador2 = 0;
 
 			fclose(arquivoTxt);
 
@@ -445,6 +449,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, "%lf %lf %lf %s", &x, &y, &distancia, cor);
 			verificador++;
+			verificador2 = 0;
 			fprintf(arquivoTxt, "cbq %lf %lf %lf %s\n", x, y, distancia, cor);
 			fclose(arquivoTxt);
 			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 2, cor, 0, 0, 0, 0);
@@ -453,7 +458,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if (strcmp("crd?", comando) == 0)
 		{
-			verificador = 84;
+			verificador += 84;
 			fscanf(arquivoQry, " %s", id1);
 			fprintf(arquivoTxt, "crd? %s\n", id1);
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
@@ -480,13 +485,29 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, "%lf %lf %lf %lf %lf %lf", &x, &y, &largura, &altura, &dx, &dy);
 			verificador++;
+			verificador2 = 0;
 			fprintf(arquivoTxt, "trns %lf %lf %lf %lf %lf %lf\n", x, y, largura, altura, dx, dy);
 			fclose(arquivoTxt);
 			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 3, cor, largura, altura, dx, dy);
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
+		else if (strcmp("fi", comando) == 0)
+		{
+			fscanf(arquivoQry, "%lf %lf %d %lf", &x, &y, &numeroDeSemaforos, &distancia);
+			if(verificador2 == 0)
+			{
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);
+				verificador2 ++;
+			}
+			fclose(arquivoTxt);
+			resolveIncendios(cidade, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+			
+		}
 	}
-	if(verificador != 0)
+	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);

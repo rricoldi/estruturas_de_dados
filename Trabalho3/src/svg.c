@@ -136,3 +136,13 @@ void escreverDistancia(float x1, float y1, float x2, float y2, float distancia, 
 
     fclose(arq);
 }
+
+void imprimirIncendio(double x, double y, char nomeDoArquivoSvg[])
+{
+    FILE *arq;
+    arq = fopen(nomeDoArquivoSvg, "a");
+
+    fprintf(arq, "\n\t<polygon points=\"%lf,%lf %lf,%lf %lf,%lf\" style=\"fill:red;stroke:yellow;stroke-width:1\" />", x, y, x+10, y, x+5, y-10);
+
+    fclose(arq);
+}

@@ -85,4 +85,10 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
 
 void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
 
+void transformaListaEmVetor(Lista L, Info vetor[]);
+
+void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
+void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio);
+
 #endif

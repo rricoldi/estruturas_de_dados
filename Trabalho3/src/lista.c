@@ -52,8 +52,12 @@ Lista iniciaLista(int capacidade)
 void finalizaLista(Lista L)
 {
    List* lista = (List*) L;
-   free(lista->v);
-   free(lista);
+   if( lista->tamanho != 0)
+   {
+      free(lista->v);
+      free(lista);
+   }
+   
 }
 
 void imprimeCirculos(Lista L, char nomeDoArquivoSvg[])
@@ -786,4 +790,83 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
       setRY(informacao, retornaRY(informacao)+dy);
    }
    fclose(arq);
+}
+
+void transformaListaEmVetor(Lista L, Info vetor[])
+{
+   List* lista = (List*) L;
+   
+   int i = lista->primeiro;
+   int contador = 0;
+   
+   while(lista->v[i].prox != -1)
+   {
+      vetor[contador] = lista->v[i].info;
+      i = lista->v[i].prox;
+      contador++;
+   }
+   vetor[contador] = lista->v[i].info;
+}
+
+
+
+void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+   FILE* arquivoTxt;
+   arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+   Info vetor[lenght(L)];
+   transformaListaEmVetor(L, vetor);
+   int inicio = 0;
+   int fim = lenght(L) - 1;
+
+   quickSortSemaforo(vetor, inicio, fim, xIncendio, yIncendio);
+
+   imprimirIncendio(xIncendio, yIncendio, nomeDoArquivoSvg);
+   fprintf(arquivoTxt, "fi\n");
+   for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+   {
+      imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+      fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+   }
+
+
+}
+
+void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio)
+{
+   double pivo = distancia(xIncendio, yIncendio, retornaSX(vetor[(inicio + fim) / 2]), retornaSY(vetor[(inicio + fim) / 2]));
+   Info aux;
+   int fimReal = fim;
+
+   while(inicio <= fim)
+   {
+      while(distancia(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio])) < pivo)
+      {
+         inicio ++;
+      }
+      
+      while(distancia(xIncendio, yIncendio, retornaSX(vetor[fim]), retornaSY(vetor[fim])) > pivo)
+      {
+         fim --;
+      }
+
+      if(inicio <= fim)
+      {
+         aux = vetor[inicio];
+         vetor[inicio] = vetor[fim];
+         vetor[fim] = aux;
+         inicio ++;
+         fim --;
+      }
+   }
+
+   if(0 < fim)
+   {
+      quickSortSemaforo(vetor, 0, fim, xIncendio, yIncendio);
+   }
+
+   if(inicio < fimReal)
+   {
+      quickSortSemaforo(vetor, inicio, fimReal, xIncendio, yIncendio);
+   }
 }

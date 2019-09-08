@@ -37,7 +37,7 @@ void removeCidade(Cidade cid)
     finalizaLista(city->listaCirculo);
     finalizaLista(city->listaRetangulo);
     finalizaLista(city->listaQuadra);
-    finalizaLista(city->listaHidrante);
+    //finalizaLista(city->listaHidrante);
     finalizaLista(city->listaRadio);
     finalizaLista(city->listaSemaforo);
     finalizaLista(city->listaPredio);
@@ -289,4 +289,10 @@ void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], cha
         percorreListaS(city->listaSemaforo, fx, fy, largura, altura, dx, dy, txt);
         percorreListaR(city->listaRadio, fx, fy, largura, altura, dx, dy, txt);
     }
+}
+
+void resolveIncendios(Cidade cid, double x, double y, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = (cidade *)cid;
+    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
 }

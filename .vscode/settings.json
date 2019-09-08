@@ -2,6 +2,8 @@
     "files.associations": {
         "stdio.h": "c",
         "radio.h": "c",
-        "predio.h": "c"
+        "predio.h": "c",
+        "leitura.h": "c",
+        "cidade.h": "c"
     }
 }
