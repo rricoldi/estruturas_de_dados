@@ -498,16 +498,15 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			{
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
-				imprimeCidade(cidade, nomeDoArquivoSvg);
-				verificador2 ++;
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2 ++;		
 			}
 			fclose(arquivoTxt);
-			resolveIncendios(cidade, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
-			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
-			
+			resolveIncendios(cidade, x, y, distancia, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");	
 		}
 	}
-	if(verificador != 0 && verificador2 == 0)
+	if(verificador != 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);

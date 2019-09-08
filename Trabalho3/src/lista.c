@@ -10,8 +10,8 @@
 typedef struct no
 {
    int ant;
-   Info info;  
-   int prox; 
+   Info info;
+   int prox;
 }No;
 
 
@@ -57,7 +57,7 @@ void finalizaLista(Lista L)
       free(lista->v);
       free(lista);
    }
-   
+
 }
 
 void imprimeCirculos(Lista L, char nomeDoArquivoSvg[])
@@ -225,13 +225,13 @@ void bbrLista(Lista L, char arqout[], char cor[])
 
       imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorP(retangulo), retornaReCorB(retangulo), arqout, retornaReEspessura(retangulo));
     	imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);
-    	
+
       i = lista->v[i].prox;
    }
 
    retangulo = lista->v[i].info;
    imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorP(retangulo), retornaReCorB(retangulo), arqout, retornaReEspessura(retangulo));
-   imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);   	
+   imprimirElipse(arqout, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, cor, 2);
 }
 
 int lenght(Lista L)
@@ -319,7 +319,7 @@ Posic insereLista(Lista L, Info info)
 {
   List* lista = (List*) L; //CASTING LISTA para LIST
   int iLivre = getLivre(L); // semelhante ao malloc
-  
+
   if (iLivre == -1) //verifica se a lista nao esta cheia ao ver se o livre nao e nulo
   {
      printf("A lista esta cheia\n");
@@ -333,11 +333,11 @@ Posic insereLista(Lista L, Info info)
 
       lista->v[iLivre].prox = NULO;
       lista->v[iLivre].ant = lista->ultimo;
-      
+
       if (lista->primeiro == -1) // Se a lista for vazia define o elemento inserido como primeiro
       {
          lista->primeiro = iLivre;
-      } 
+      }
       else  //senao atribui o elemento atual como o proximo do elemento anterior
       {
          lista->v[lista->ultimo].prox = iLivre;
@@ -365,13 +365,13 @@ void removerDaLista(Lista L, Posic pos)
    {
       lista->primeiro = lista->v[pos].ant;
    }
-   
+
    lista->v[lista->v[pos].ant].prox = lista->v[pos].prox; // o proximo
    lista->v[lista->v[pos].prox].ant = lista->v[pos].ant;
 
    lista->v[pos].ant = lista->livre;
    lista->v[pos].prox = lista->v[lista->livre].prox;
-   
+
    lista->v[lista->v[lista->livre].prox].ant = pos;
    lista->v[lista->livre].prox = pos;
 
@@ -392,13 +392,13 @@ int procuraCirculo(Lista L, char id[])
    Info informacao;
    if(lista->primeiro == -1)
       return -1;
-      
+
    while(lista->v[i].prox != -1)
    {
       informacao = lista->v[i].info;
       if(strcmp(retornaCID(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -417,14 +417,14 @@ int procuraRetangulo(Lista L, char id[])
    Info informacao;
    if(lista->primeiro == -1)
       return -1;
-   
+
    while(lista->v[i].prox != -1)
    {
       informacao = lista->v[i].info;
 
       if(strcmp(retornaReID(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -450,7 +450,7 @@ int procuraQuadra(Lista L, char id[])
 
       if(strcmp(retornaQCEP(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
    informacao = lista->v[i].info;
@@ -475,7 +475,7 @@ int procuraHidrante(Lista L, char id[])
 
       if(strcmp(retornaHID(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -501,7 +501,7 @@ int procuraSemaforo(Lista L, char id[])
 
       if(strcmp(retornaSID(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -527,7 +527,7 @@ int procuraRadio(Lista L, char id[])
 
       if(strcmp(retornaRID(informacao), id) == 0)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -553,7 +553,7 @@ int procuraPredio(Lista L, char id[], char face[], double num)
 
       if(strcmp(retornaPCep(informacao), id) == 0 && strcmp(retornaPFace(informacao), face) == 0 && retornaPNumero(informacao) == num)
          return i;
-      
+
       i = lista->v[i].prox;
    }
 
@@ -593,7 +593,7 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
          {
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));            
+            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
             removerDaLista(lista, i);
          }
 
@@ -601,7 +601,7 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
       }
 
       informacao = lista->v[i].info;
-      
+
       if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
       {
          fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
@@ -628,14 +628,14 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-               removerDaLista(lista, i);               
+               removerDaLista(lista, i);
             }
             else if (opcao == 2)
             {
                setQCorB(informacao, cor);
                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
             }
-             
+
          }
          else if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
          {
@@ -643,10 +643,10 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
             setQX(informacao, retornaQX(informacao)+dx);
             setQY(informacao, retornaQY(informacao)+dy);
          }
-         
+
          i = j;
       }
-      
+
       informacao = lista->v[i].info;
       if (informacao != NULL)
       {
@@ -663,15 +663,15 @@ void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char s
             {
                setQCorB(informacao, cor);
                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-            }             
+            }
          }
          if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
          {
             fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
             setQX(informacao, retornaQX(informacao)+dx);
             setQY(informacao, retornaQY(informacao)+dy);
-         } 
-      }      
+         }
+      }
    }
    fclose(arqSvg);
    fclose(arqTxt);
@@ -701,12 +701,12 @@ void percorreListaH(Lista L, double x, double y, double w, double h, double dx, 
          setHX(informacao, retornaHX(informacao)+dx);
          setHY(informacao, retornaHY(informacao)+dy);
       }
-      
+
       i = lista->v[i].prox;
    }
 
    informacao = lista->v[i].info;
-   
+
    if(pontoInternoRetangulo(retornaHX(informacao), retornaHY(informacao), x, y, h, w))
    {
       fprintf(arq, "id: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaHID(informacao), retornaHX(informacao), retornaHY(informacao), retornaHX(informacao)+dx, retornaHY(informacao)+dy);
@@ -740,7 +740,7 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
          setSX(informacao, retornaSX(informacao)+dx);
          setSY(informacao, retornaSY(informacao)+dy);
       }
-      
+
       i = lista->v[i].prox;
    }
 
@@ -778,7 +778,7 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
          setRX(informacao, retornaRX(informacao)+dx);
          setRY(informacao, retornaRY(informacao)+dy);
       }
-      
+
       i = lista->v[i].prox;
    }
 
@@ -795,10 +795,10 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
 void transformaListaEmVetor(Lista L, Info vetor[])
 {
    List* lista = (List*) L;
-   
+
    int i = lista->primeiro;
    int contador = 0;
-   
+
    while(lista->v[i].prox != -1)
    {
       vetor[contador] = lista->v[i].info;
@@ -814,10 +814,14 @@ void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeS
 {
    FILE* arquivoTxt;
    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
-   Info vetor[lenght(L)];
+   List* lista = (List*) L;
+   Info vetor[lista->ultimo+1];
    transformaListaEmVetor(L, vetor);
+
    int inicio = 0;
-   int fim = lenght(L) - 1;
+   int fim = lista->ultimo+1;
+   char corB[] = "red";
+   char corP[] = "none";
 
    quickSortSemaforo(vetor, inicio, fim, xIncendio, yIncendio);
 
@@ -826,10 +830,10 @@ void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeS
    for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
    {
       imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+      imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", "none", nomeDoArquivoSvg, 2);
+      imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
       fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
    }
-
-
 }
 
 void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio)
@@ -844,7 +848,7 @@ void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, doub
       {
          inicio ++;
       }
-      
+
       while(distancia(xIncendio, yIncendio, retornaSX(vetor[fim]), retornaSY(vetor[fim])) > pivo)
       {
          fim --;
@@ -869,4 +873,41 @@ void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, doub
    {
       quickSortSemaforo(vetor, inicio, fimReal, xIncendio, yIncendio);
    }
+}
+
+void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+   FILE* arquivoTxt;
+   arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+   List* lista = (List*) L;
+   int i = lista->primeiro;
+   Info informacao;
+   char corB[] = "red";
+   char corP[] = "none";
+
+   while(lista->v[i].prox != -1)
+   {
+      informacao = lista->v[i].info;
+
+      if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", "none", nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
+      }
+
+      i = lista->v[i].prox;
+   }
+
+   informacao = lista->v[i].info;
+
+   if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", "none", nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
+      }
+   fclose(arquivoTxt);
 }

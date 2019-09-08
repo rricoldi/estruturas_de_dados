@@ -91,4 +91,6 @@ void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeS
 
 void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio);
 
+void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
 #endif

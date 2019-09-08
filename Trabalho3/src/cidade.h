@@ -56,6 +56,6 @@ Predio getPredio(Cidade cid, int i);
 
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 
-void resolveIncendios(Cidade cid, double x, double y, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 #endif

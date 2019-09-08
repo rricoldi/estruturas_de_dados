@@ -277,6 +277,7 @@ Muro getMuro(Cidade cid, int i)
     return get(city->listaMuro, i);
 }
 
+
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy)
 {
     cidade *city = (cidade *)cid;
@@ -291,8 +292,11 @@ void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], cha
     }
 }
 
-void resolveIncendios(Cidade cid, double x, double y, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
 {
     cidade *city = (cidade *)cid;
     resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
+    int id;
+    resolveHidrantes(city->listaSemaforo, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
+    scanf("%d", &id);
 }
