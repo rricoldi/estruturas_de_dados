@@ -9,7 +9,7 @@
 
 typedef void *Semaforo;
 
-Semaforo criaSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
+Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
 
 double retornaSX(Semaforo s);
 

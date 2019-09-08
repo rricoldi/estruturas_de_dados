@@ -10,46 +10,51 @@
 
 typedef void *Cidade;
 
-Cidade criaCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos);
+Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros);
 
 void removeCidade(Cidade cid);
-
-void printaCirculoseRetangulos(Cidade cid, char svg[]);
-
-void printaCidade(Cidade cid, char svg[]);
 
 void boudingBoxCirculos(Cidade cid, char arquivo[]);
 
 void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[]);
 
-Info procuraCidade(Cidade cid, char id[], int *tipo);
+void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[]);
+
+void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
+
+Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 void removeDaCidade(Cidade cid, char id[], char txt[]);
 
-void percorreCidadeLQ(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
+int adicionarCirculo(Cidade cid, Info info);
 
-int addCirculo(Cidade cid, Info info);
+int adicionarRetangulo(Cidade cid, Info info);
+
+int adicionarQuadra(Cidade cid, Info info);
+
+int adicionarHidrante(Cidade cid, Info info);
+
+int adicionarRadioBase(Cidade cid, Info info);
+
+int adicionarSemaforo(Cidade cid, Info info);
+
+int adicionarPredio(Cidade cid, Info info);
 
 Circulo getCirculo(Cidade cid, int i);
 
-int addRetangulo(Cidade cid, Info info);
-
 Retangulo getRetangulo(Cidade cid, int i);
-
-int addQuadra(Cidade cid, Info info);
 
 Quadra getQuadra(Cidade cid, int i);
 
-int addHidrante(Cidade cid, Info info);
-
 Hidrante getHidrante(Cidade cid, int i);
-
-int addRadio(Cidade cid, Info info);
 
 Radio getRadio(Cidade cid, int i);
 
-int addSemaforo(Cidade cid, Info info);
-
 Semaforo getSemaforo(Cidade cid, int i);
+
+Predio getPredio(Cidade cid, int i);
+
+void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
+
 
 #endif

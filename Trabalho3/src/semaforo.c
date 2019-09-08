@@ -10,7 +10,7 @@ typedef struct radio{
     double x, y, espessura;
 }ItemS;
 
-Semaforo criaSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura)
+Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura)
 {
     ItemS *s;
     s = (ItemS*) calloc(1, sizeof(ItemS));

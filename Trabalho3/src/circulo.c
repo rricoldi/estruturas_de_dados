@@ -9,7 +9,7 @@ typedef struct circulo
     double x, y, r, espessura;
 } ItemCirculo;
 
-Circulo criaCirculo(char id[20], char corBorda[20], char corPreenchimento[20], double raio, double x, double y, double espessura)
+Circulo criarCirculo(char id[20], char corBorda[20], char corPreenchimento[20], double raio, double x, double y, double espessura)
 {
     ItemCirculo *c;
     c = (ItemCirculo *)calloc(1, sizeof(ItemCirculo));
@@ -25,6 +25,7 @@ Circulo criaCirculo(char id[20], char corBorda[20], char corPreenchimento[20], d
 
     return c;
 }
+
 
 double retornaCX(Circulo c)
 {

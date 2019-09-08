@@ -6,6 +6,9 @@
 #include "semaforo.h"
 #include "circulo.h"
 #include "retangulo.h"
+#include "predio.h"
+#include "muro.h"
+#include "qry.h"
 
 
 /*
@@ -17,21 +20,22 @@ typedef void *Lista;
 typedef int Posic;
 typedef void *Info;
 
+
 Lista iniciaLista(int capacidade);
 
 void finalizaLista(Lista L);
 
-void printaQuadras(Lista L, char svg[]);
+void imprimeCirculos(Lista L, char nomeDoArquivoSvg[]);
 
-void printaHidrantes(Lista L, char svg[]);
+void imprimeRetangulos(Lista L, char nomeDoArquivoSvg[]);
 
-void printaSemaforos(Lista L, char svg[]);
+void imprimeQuadras(Lista L, char nomeDoArquivoSvg[]);
 
-void printaRadios(Lista L, char svg[]);
+void imprimeHidrantes(Lista L, char nomeDoArquivoSvg[]);
 
-void printaCirculos(Lista L, char svg[]);
+void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[]);
 
-void printaRetangulos(Lista L, char svg[]);
+void imprimeRadios(Lista L, char nomeDoArquivoSvg[]);
 
 void bbcLista(Lista L, char arqout[]);
 
@@ -55,21 +59,23 @@ Posic insertAfter(Lista L, Info info, Posic posicao);
 
 Posic insereLista(Lista L, Info info);
 
-void removeLista(Lista L, Posic pos);
+void removerDaLista(Lista L, Posic pos);
 
 Info get(Lista L, Posic pos);
 
-int procuraListaC(Lista L, char id[]);
+int procuraCirculo(Lista L, char id[]);
 
-int procuraListaRe(Lista L, char id[]);
+int procuraRetangulo(Lista L, char id[]);
 
-int procuraListaQ(Lista L, char id[]);
+int procuraQuadra(Lista L, char id[]);
 
-int procuraListaH(Lista L, char id[]);
+int procuraHidrante(Lista L, char id[]);
 
-int procuraListaS(Lista L, char id[]);
+int procuraSemaforo(Lista L, char id[]);
 
-int procuraListaR(Lista L, char id[]);
+int procuraRadio(Lista L, char id[]);
+
+int procuraPredio(Lista L, char id[], char face[], double num);
 
 void percorreListaQ(Lista L, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int opcao, char cor[], double largura, double altura, double dx, double dy);
 
@@ -79,7 +85,4 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
 
 void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
 
-
-
-
-#endif      
+#endif

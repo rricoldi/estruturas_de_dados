@@ -9,7 +9,7 @@ typedef struct radio{
     double x, y, espessura;
 }ItemR;
 
-Radio criaRadio(char id[20], char corB[20], char corP[20], double x, double y, double espessura)
+Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double y, double espessura)
 {
     ItemR *r;
     r = (ItemR*) calloc(1, sizeof(ItemR));

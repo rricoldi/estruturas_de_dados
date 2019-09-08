@@ -10,7 +10,7 @@ typedef struct retangulo
     double x, y, w, h, espessura;
 }ItemRe;
 
-Retangulo criaRetangulo(char id[20], char corB[20], char corP[20], double largura, double altura, double x, double y, double espessura)
+Retangulo criarRetangulo(char id[20], char corB[20], char corP[20], double largura, double altura, double x, double y, double espessura)
 {
     ItemRe *re;
     re = (ItemRe*) calloc(1, sizeof(ItemRe));

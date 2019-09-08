@@ -8,8 +8,9 @@
 
 #include "cidade.h"
 #include "svg.h"
+#include "qry.h"
 
-Cidade leiaGeo(char arq[], char svg[]);
+Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 
 void leiaQry(char prefixoArq[], char arq[], Cidade cidade);
 

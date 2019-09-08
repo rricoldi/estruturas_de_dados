@@ -9,7 +9,7 @@ typedef struct hidrante
     double x, y, espessura;
 } ItemH;
 
-Hidrante criaHidrante(char id[20], char corB[20], char corP[20], double espessura, double x, double y)
+Hidrante criarHidrante(char id[20], char corB[20], char corP[20], double espessura, double x, double y)
 {
     ItemH *h;
 
