@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "cidade.h"
 
 typedef struct city
@@ -73,6 +74,8 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
     imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
     imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
     imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
+    imprimePredios(city->listaPredio, nomeDoArquivoSvg);
+    imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
 }
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
@@ -295,8 +298,39 @@ void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], cha
 void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
 {
     cidade *city = (cidade *)cid;
-    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
-    int id;
-    resolveHidrantes(city->listaSemaforo, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
-    scanf("%d", &id);
+
+    char comando[] = "fi";
+    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
+    int xa = 1 + 1;
+    resolveHidrantes(city->listaHidrante, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
+        
+}
+
+void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = (cidade*) cid;
+    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
+    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
+    int sinal;
+    if ( numeroDeHidrantes < 0)
+    {
+        sinal = 0;
+    }
+    else
+    {
+        sinal = 1;
+    }
+    
+    
+    resolveFHidrantes(city->listaHidrante, x, y, fabs(numeroDeHidrantes), sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
+}
+
+void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = (cidade*) cid;
+    char comando[] = "fs";
+    double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
+    double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
+
+    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
 }

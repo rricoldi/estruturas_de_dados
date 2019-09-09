@@ -14,7 +14,4 @@ double retornaMY1(Muro r);
 
 double retornaMY2(Muro r);
 
-double retornaPEspessura(Muro r);
-
-
 #endif

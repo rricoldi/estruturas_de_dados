@@ -189,6 +189,44 @@ void imprimeRadios(Lista L, char nomeDoArquivoSvg[])
    imprimirElipse(nomeDoArquivoSvg, retornaRX(radio), retornaRY(radio), 5, 15, retornaSCorP(radio), retornaSCorB(radio), retornaSEspessura(radio));
 }
 
+void imprimePredios(Lista L, char nomeDoArquivoSvg[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Predio predio;
+
+   while(lista->v[i].prox != -1)
+   {
+      predio = lista->v[i].info;  
+      imprimirPredio(nomeDoArquivoSvg, retornaPX(predio), retornaPY(predio), retornaPFrente(predio), retornaPProfundidade(predio), retornaPXCalcada(predio), retornaPYCalcada(predio), retornaPXCalcadaMax(predio), retornaPYCalcadaMax(predio), retornaPNumero(predio), retornaPXNum(predio), retornaPYNum(predio));
+     i = lista->v[i].prox;
+   }
+
+   predio = lista->v[i].info;
+
+   imprimirPredio(nomeDoArquivoSvg, retornaPX(predio), retornaPY(predio), retornaPFrente(predio), retornaPProfundidade(predio), retornaPXCalcada(predio), retornaPYCalcada(predio), retornaPXCalcadaMax(predio), retornaPYCalcadaMax(predio), retornaPNumero(predio), retornaPXNum(predio), retornaPYNum(predio));
+}
+
+void imprimeMuros(Lista L, char nomeDoArquivoSvg[])
+{
+   List* lista = (List*) L;
+
+   int i = lista->primeiro;
+   Muro muro;  
+
+   while(lista->v[i].prox != -1)
+   {
+      muro = lista->v[i].info;  
+      imprimirLinha(retornaMX1(muro), retornaMY1(muro), retornaMX2(muro), retornaMY2(muro), nomeDoArquivoSvg);
+      i = lista->v[i].prox;
+   }
+
+   muro = lista->v[i].info;
+
+   imprimirLinha(retornaMX1(muro), retornaMY1(muro), retornaMX2(muro), retornaMY2(muro), nomeDoArquivoSvg);
+}
+
 void bbcLista(Lista L, char arqout[])
 {
    List* lista = (List*) L;
@@ -792,7 +830,7 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
    fclose(arq);
 }
 
-void transformaListaEmVetor(Lista L, Info vetor[])
+int transformaListaEmVetor(Lista L, Info vetor[])
 {
    List* lista = (List*) L;
 
@@ -806,34 +844,51 @@ void transformaListaEmVetor(Lista L, Info vetor[])
       contador++;
    }
    vetor[contador] = lista->v[i].info;
+
+   return contador;
 }
 
 
 
-void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char comando[])
 {
    FILE* arquivoTxt;
    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
    List* lista = (List*) L;
    Info vetor[lista->ultimo+1];
-   transformaListaEmVetor(L, vetor);
+   int fim = transformaListaEmVetor(L, vetor);
 
    int inicio = 0;
-   int fim = lista->ultimo+1;
    char corB[] = "red";
    char corP[] = "none";
 
    quickSortSemaforo(vetor, inicio, fim, xIncendio, yIncendio);
-
-   imprimirIncendio(xIncendio, yIncendio, nomeDoArquivoSvg);
-   fprintf(arquivoTxt, "fi\n");
-   for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+   if((strcmp("fi", comando)) == 0)
    {
-      imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
-      imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", "none", nomeDoArquivoSvg, 2);
-      imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
-      fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+      imprimirIncendio(xIncendio, yIncendio, nomeDoArquivoSvg);
+      fprintf(arquivoTxt, "%s\n", comando);
+      for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+      }
    }
+   else
+   {
+      fprintf(arquivoTxt, "%s\n", comando);
+      for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+      }
+   }
+   
+
+   fclose(arquivoTxt);
 }
 
 void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio)
@@ -892,7 +947,7 @@ void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, 
       if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
       {
          imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
-         imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", "none", nomeDoArquivoSvg, 2);
+         imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", corP, nomeDoArquivoSvg, 2);
          imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
          fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
       }
@@ -910,4 +965,88 @@ void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, 
          fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
       }
    fclose(arquivoTxt);
+
+   return;
+}
+
+void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int sinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+   FILE* arquivoTxt;
+   arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+   List* lista = (List*) L;
+   Info vetor[lista->ultimo+1];
+   int id;
+   int fim = transformaListaEmVetor(L, vetor);
+   int inicio = 0;
+   char corB[] = "red";
+   char corP[] = "none";
+
+   quickSortHidrante(vetor, inicio, fim, x, y);
+   fprintf(arquivoTxt, "fh\n");
+
+   if(sinal = 0)
+   {
+      for(inicio = 0; inicio<numeroDeHidrantes; inicio++)
+      {
+         imprimirLinha(x, y, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaHID(vetor[inicio]));
+      }
+   }
+   else
+   {
+      for(fim; fim>=numeroDeHidrantes; fim--)
+      {
+         imprimirLinha(x, y, retornaHX(vetor[fim]), retornaHY(vetor[fim]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaHX(vetor[fim]), retornaHY(vetor[fim]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaHX(vetor[fim]), retornaHY(vetor[fim]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaHID(vetor[fim]));
+      }
+   }
+   
+   
+
+   fclose(arquivoTxt);
+}  
+
+void quickSortHidrante(Info vetor[], int inicio, int fim, double x, double y)
+{
+   double pivo = distancia(x, y, retornaHX(vetor[(inicio + fim) / 2]), retornaHY(vetor[(inicio + fim) / 2]));
+   Info aux;
+   int fimReal = fim;
+
+   while(inicio <= fim)
+   {
+      while(distancia(x, y, retornaHX(vetor[inicio]), retornaHY(vetor[inicio])) < pivo)
+      {
+         inicio ++;
+      }
+      
+      while(distancia(x, y, retornaHX(vetor[fim]), retornaHY(vetor[fim])) > pivo)
+      {
+         fim --;
+      }
+
+      if(inicio <= fim)
+      {
+         aux = vetor[inicio];
+         vetor[inicio] = vetor[fim];
+         vetor[fim] = aux;
+         inicio ++;
+         fim --;
+      }
+   }
+
+   if(0 < fim)
+   {      
+      quickSortHidrante(vetor, 0, fim, x, y);
+   }
+
+   if(inicio < fimReal)
+   {
+      quickSortHidrante(vetor, inicio, fimReal, x, y);
+   }
+
+   return;
 }

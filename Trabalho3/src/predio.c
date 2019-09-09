@@ -85,3 +85,39 @@ double retornaPCalcada(Predio p)
     ItemP* item = (ItemP*) p;
     return item->calcada;
 }
+
+double retornaPXCalcada(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->xCalcada;
+}
+
+double retornaPYCalcada(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->yCalcada;
+}
+
+double retornaPXCalcadaMax(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->xCalcadaMax;
+}
+
+double retornaPYCalcadaMax(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->yCalcadaMax;
+}
+
+double retornaPXNum(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->xNum;
+}
+
+double retornaPYNum(Predio p)
+{
+    ItemP* item = (ItemP*) p;
+    return item->yNum;
+}

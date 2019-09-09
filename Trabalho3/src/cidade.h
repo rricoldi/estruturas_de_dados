@@ -54,8 +54,18 @@ Semaforo getSemaforo(Cidade cid, int i);
 
 Predio getPredio(Cidade cid, int i);
 
+int adicionarPredio(Cidade cid, Info info);
+
+Muro getMuro(Cidade cid, int i);
+
+int adicionarMuro(Cidade cid, Info info);
+
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 
 void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
+void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
+void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 #endif

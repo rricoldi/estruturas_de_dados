@@ -226,7 +226,8 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			fscanf(arquivoGeo, "%lf %lf %lf %lf", &x1, &y1, &x2, &y2);
 			if (numeroDeMuros < numeroMaximoDeMuros)
 			{
-				info = criarMuro(x1, y1, x2, y2);
+				info = criarMuro(x1, x2, y1, y2);
+				adicionarMuro(cidade, info);
 				imprimirLinha(x1, y1, x2, y2, nomeDoArquivoSvg);
 				numeroDeMuros++;
 			}
@@ -269,16 +270,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	int verificador = 0;
 	int verificador2 = 0;
 	int numeroDeSemaforos = 0;
+	int numeroDeHidrantes = 0;
 
 	double x, y;
 	double dx, dy;
 	double distancia, largura, altura;
+	double numeroDoPredio;
 
 	char id1[20], id2[20];
 	char metrica[3];
 	char comando[5];
 	char sufixo[30];
 	char cor[30];
+	char cep[20];
+	char face[6];
+
 	
 	Info info1 = 0, info2 = 0;
 
@@ -415,7 +421,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			fscanf(arquivoQry, "%s %s %lf", metrica, id1, &distancia);
 			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
 			verificador++;
-			verificador2 = 0;
 
 			fclose(arquivoTxt);
 
@@ -437,7 +442,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, " %s", &id1);
 			verificador++;
-			verificador2 = 0;
 
 			fclose(arquivoTxt);
 
@@ -449,7 +453,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, "%lf %lf %lf %s", &x, &y, &distancia, cor);
 			verificador++;
-			verificador2 = 0;
 			fprintf(arquivoTxt, "cbq %lf %lf %lf %s\n", x, y, distancia, cor);
 			fclose(arquivoTxt);
 			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 2, cor, 0, 0, 0, 0);
@@ -485,7 +488,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{
 			fscanf(arquivoQry, "%lf %lf %lf %lf %lf %lf", &x, &y, &largura, &altura, &dx, &dy);
 			verificador++;
-			verificador2 = 0;
 			fprintf(arquivoTxt, "trns %lf %lf %lf %lf %lf %lf\n", x, y, largura, altura, dx, dy);
 			fclose(arquivoTxt);
 			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 3, cor, largura, altura, dx, dy);
@@ -499,14 +501,47 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
 				imprimeCidade(cidade, nomeDoArquivoSvg);	
-				verificador2 ++;		
+				verificador2++;
 			}
 			fclose(arquivoTxt);
 			resolveIncendios(cidade, x, y, distancia, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
-			arquivoTxt = fopen(nomeDoArquivoTxt, "a");	
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+			verificador = 0;
+		}
+		else if (strcmp("fh", comando) == 0)
+		{
+			fscanf(arquivoQry, "%d %s %s %lf", &numeroDeHidrantes, cep, face, &numeroDoPredio);
+			if(verificador2 == 0)
+			{
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2++;
+			}
+			info1 = procuraNaCidade(cidade, cep, &tipo1, face, numeroDoPredio);
+			fclose(arquivoTxt);
+			resolveFH(cidade, info1, numeroDeHidrantes, nomeDoArquivoSvg, nomeDoArquivoTxt);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+			verificador2++;
+		}
+		else if (strcmp("fs", comando) == 0)
+		{
+			fscanf(arquivoQry, "%d %s %s %lf", &numeroDeSemaforos, cep, face, &numeroDoPredio);
+			if(verificador2 == 0)
+			{
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2++;
+			}
+			info1 = procuraNaCidade(cidade, cep, &tipo1, face, numeroDoPredio);
+			fclose(arquivoTxt);
+			resolveFS(cidade, info1, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+			verificador2++;
 		}
 	}
-	if(verificador != 0)
+	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 
 	finalizaSvg(nomeDoArquivoSvg);

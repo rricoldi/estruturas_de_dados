@@ -37,6 +37,10 @@ void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[]);
 
 void imprimeRadios(Lista L, char nomeDoArquivoSvg[]);
 
+void imprimePredios(Lista L, char nomeDoArquivoSvg[]);
+
+void imprimeMuros(Lista L, char nomeDoArquivoSvg[]);
+
 void bbcLista(Lista L, char arqout[]);
 
 void bbrLista(Lista L, char arqout[], char cor[]);
@@ -85,12 +89,16 @@ void percorreListaS(Lista L, double x, double y, double w, double h, double dx, 
 
 void percorreListaR(Lista L, double x, double y, double w, double h, double dx, double dy, char txt[]);
 
-void transformaListaEmVetor(Lista L, Info vetor[]);
+int transformaListaEmVetor(Lista L, Info vetor[]);
 
-void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char comando[]);
 
 void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio);
 
 void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
+void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int sinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
+void quickSortHidrante(Info vetor[], int inicio, int fim, double x, double y);
 
 #endif
