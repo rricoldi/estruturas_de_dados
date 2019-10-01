@@ -5,16 +5,45 @@
 #include "cidade.h"
 #include "leitura.h"
 
+
+
+void resolverInterativo(Cidade cidade){
+    int sair  = 0;
+    char *comando;
+    char *argumento1;
+    int argumento2;
+    while(!sair){
+        scanf("%s", comando);
+        if(strcmp(comando, "q")==0){
+            scanf("%s", argumento1);
+            interativoQ(argumento1, cidade);
+        }
+        else if(strcmp(comando, "dmprbt")==0){
+            fscanf("%s %d", argumento1, &argumento2);
+            interativoD(argumento1, argumento2, cidade);
+        }
+        else if(strcmp(comando, "sai")==0){
+            sair = 1;
+        }
+        else if(strcmp(comando, "nav")==0){
+            scanf("%d", &argumento2);
+            interativoN(argumento2, cidade);
+        }
+    }
+}
+
 char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 {
     char *prefixo, caractere;
     int contador, contador2;
     int posicao;
 
-    for(contador = strlen(nomeDoArquivo) - 1; contador >= 0; contador --) {
+    for(contador = strlen(nomeDoArquivo) - 1; contador >= 0; contador --)
+    {
 		caractere = nomeDoArquivo[contador];
         
-        if(caractere == '/') {
+        if(caractere == '/')
+        {
 			posicao = strlen(nomeDoArquivo) - contador;
         	prefixo = (char*) malloc(posicao*sizeof(char));
 
@@ -31,6 +60,7 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 int main(int argc, char *argv[])
 {
     int contador                  = 1;
+    int interativo                = 0;
 
     char *caminhoDoArquivo        = NULL;
     char *caminhoDoArquivoDeSaida = NULL;
@@ -42,6 +72,10 @@ int main(int argc, char *argv[])
     char *arquivoQry              = NULL;
     char *prefixoFinalDoQry       = NULL;
     char *nomeDoArquivoSvg        = NULL;
+    char *nomeDoArquivoEc         = NULL;
+    char *arquivoEc               = NULL;
+    char *nomeDoArquivoPm         = NULL;
+    char *arquivoPm               = NULL;
 
     
     while(contador<argc)
@@ -64,7 +98,8 @@ int main(int argc, char *argv[])
             caminhoDoArquivo = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(caminhoDoArquivo,argv[contador]);
         }
-        else if (strcmp("-q",argv[contador])==0){
+        else if (strcmp("-q",argv[contador])==0)
+        {
             contador++;
             if (argv[contador] == NULL){ 
                 printf("\n!Erro! Sem parametros em -q");
@@ -74,7 +109,8 @@ int main(int argc, char *argv[])
             nomeDoArquivoQry = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoQry,argv[contador]);
         }
-        else if (strcmp("-o",argv[contador])==0){  
+        else if (strcmp("-o",argv[contador])==0)
+        {  
             contador++;
             if (argv[contador] == NULL){    
                 printf("\n!Erro! Sem parametros em -o");
@@ -83,6 +119,32 @@ int main(int argc, char *argv[])
 
             caminhoDoArquivoDeSaida = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(caminhoDoArquivoDeSaida,argv[contador]);
+        }
+        else if (strcmp("-ec", argv[contador]) == 0)
+        {
+            contador++;
+            if (argv[contador] == NULL){    
+                printf("\n!Erro! Sem parametro para -ec");
+                exit(1);
+            }
+
+            nomeDoArquivoEc = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
+            strcpy(nomeDoArquivoEc, argv[contador]);
+        }
+        else if (strcmp("-pm", argv[contador]) == 0)
+        {
+            contador++;
+            if (argv[contador] == NULL){    
+                printf("\n!Erro! Sem parametro para -pm");
+                exit(1);
+            }
+
+            nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
+            strcpy(nomeDoArquivoPm, argv[contador]);
+        }
+        else if (strcmp("-i", argv[contador]) == 0)
+        {
+            interativo = 1;
         }
         contador++;
     }
@@ -140,11 +202,18 @@ int main(int argc, char *argv[])
         leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
         printf("Bloco do Qry finalizado\n");
 
-        free(nomeDoArquivoQry);
-        free(prefixoDoAquivoQry);
-        free(prefixoFinalDoQry);
-        free(arquivoQry);
+        if(!interativo)
+        {
+            free(nomeDoArquivoQry);
+            free(prefixoDoAquivoQry);
+            free(prefixoFinalDoQry);
+            free(arquivoQry);
+        }
     }
+
+    if(interativo)
+        resolverInterativos(cidade);
+
     removeCidade(cidade);
 	printf("Lista desalocada\n");
 
