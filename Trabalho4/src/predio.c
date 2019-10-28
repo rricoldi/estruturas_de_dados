@@ -4,12 +4,13 @@
 #include "predio.h"
 #include "quadra.h"
 #include "lista.h"
-
+#include "geometria.h"
 
 typedef struct predio{
     char cep[20], face[10];
     double numero;
-    double x, y, frente, profundidade, calcada;
+    double frente, profundidade, calcada;
+    Reta sup, esq, dir, inf;
     double xCalcada, yCalcada, xCalcadaMax, yCalcadaMax;
 	double xNum, yNum;
 }ItemP;
@@ -25,8 +26,6 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
     p->frente       = frente;
     p->profundidade = profundidade;
     p->calcada      = calcada;
-    p->x            = x;
-    p->y            = y;
     p->xCalcada     = xCalcada;
     p->xCalcadaMax  = xCalcadaMax;
     p->yCalcada     = yCalcada;
@@ -34,6 +33,10 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
     p->xNum         = xNum;
     p->yNum         = yNum;
     
+    p->sup = criarReta(criarPonto(x, y), criarPonto(x+xNum, y));
+    p->esq = criarReta(criarPonto(x, y), criarPonto(x, y+yNum));
+    p->dir = criarReta(criarPonto(x, y), criarPonto(x+xNum, y+yNum));
+    p->inf = criarReta(criarPonto(x, y+yNum), criarPonto(x+xNum, y+yNum));
 
     return p;
 }
@@ -41,13 +44,13 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
 double retornaPX(Predio p)
 {
     ItemP* item = (ItemP*) p;
-    return item->x;
+    return getPontoX(getRetaA(item->sup));
 }
 
 double retornaPY(Predio p)
 {
     ItemP* item = (ItemP*) p;
-    return item->y;
+    return getPontoY(getRetaA(item->sup));
 }
 
 char *retornaPCep(Predio p)
