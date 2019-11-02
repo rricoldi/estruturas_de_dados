@@ -1,6 +1,7 @@
 #include"hashTable.h"
 #include<stdlib.h>
 #include<stdbool.h>
+#include<string.h>
 
 struct registrado{
     char* key;
@@ -20,7 +21,7 @@ struct tabela{
 int primos[] = {2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37};
 int hashFunction(char* a, int tabSize){
     int sum = 0;
-    for(int i=0;i<11;i++){
+    for(int i=0;i<strlen(a);i++){
         sum += a[i]*primos[i];
     }
     sum = sum%tabSize;
@@ -51,7 +52,7 @@ HashTable criaTabela(int tam){
     return tabela;
 }
 
-int insereRegistro(HashTable tab, char* key, Info info, size_t infoSize){
+int insereRegistro(HashTable tab, char* key, Info info){
     struct tabela *essa = tab;
     int posic = hashFunction(key, essa->tamanho);
     if(existeChave(tab, key)){
@@ -60,8 +61,11 @@ int insereRegistro(HashTable tab, char* key, Info info, size_t infoSize){
             aux = aux->next;
         }
         aux->reg = malloc(sizeof(struct registrado));
+
+        aux->reg->key = malloc(strlen(key));
+
         strcpy(aux->reg->key, key);
-        memcpy(aux->reg->info, info, infoSize);
+        aux->reg->info = info;
         aux->next = NULL;
 
         return posic;
@@ -69,8 +73,10 @@ int insereRegistro(HashTable tab, char* key, Info info, size_t infoSize){
     
     essa->reg->reg = malloc(sizeof(struct registrado));
 
+    essa->reg->reg->key = malloc(strlen(key));
+
     strcpy(essa->reg->reg->key, key);
-    memcpy(essa->reg[posic].reg->info, info, infoSize);
+    essa->reg[posic].reg->info = info;
     return posic;
 }
 
@@ -109,11 +115,11 @@ int removeChave(HashTable tabela, char* key){
 
     struct registros *aux = essa->reg;
     struct registros *aux2 = aux;
-    while(strmp(aux->reg->key) != 0){
+    while(strcmp(aux->reg->key, key) != 0){
         aux2 = aux;
         aux = aux->next;
         if(aux->reg == NULL)
-            return NULL;
+            return -1;
     }
 
     aux2->next = aux->next;
