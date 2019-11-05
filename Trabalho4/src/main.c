@@ -4,10 +4,9 @@
 #include <math.h>
 #include "cidade.h"
 #include "leitura.h"
+#include"hashTable.h";
 
-
-
-void resolverInterativo(Cidade cidade){
+void resolverInterativos(Cidade cidade){
     int sair  = 0;
     char *comando;
     char *argumento1;
@@ -49,7 +48,7 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 
         	for(contador2 = 0; contador2 <= posicao; contador2 ++){
             	prefixo[contador2] = nomeDoArquivo[contador + 1];
-            	contador ++; 
+            	contador ++;
         	}  
 			return strtok(prefixo,".");
         }        
@@ -159,6 +158,14 @@ int main(int argc, char *argv[])
             arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+strlen(caminhoDoArquivo)+2)*sizeof(char));
             sprintf(arquivoQry,"%s/%s",caminhoDoArquivo,nomeDoArquivoQry);
         }
+        if(nomeDoArquivoEc != NULL){
+            arquivoEc = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoEc) + 2));
+            sprintf(arquivoEc, "%s/%s", caminhoDoArquivo, nomeDoArquivoEc);
+        }
+        if(nomeDoArquivoPm != NULL){
+            arquivoPm = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoPm) + 2));
+            sprintf(arquivoPm, "%s/%s", caminhoDoArquivo, nomeDoArquivoPm);
+        }
 	}
     else
     {
@@ -169,9 +176,15 @@ int main(int argc, char *argv[])
         {
             arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+1)*sizeof(char));
     	    strcpy(arquivoQry, nomeDoArquivoQry);
+        }if(nomeDoArquivoEc != NULL){
+            arquivoEc = malloc(sizeof(char)*(strlen(nomeDoArquivoEc) + 1));
+            sprintf(arquivoEc, "%s", nomeDoArquivoEc);
+        }
+        if(nomeDoArquivoPm != NULL){
+            arquivoPm = malloc(sizeof(char)*(strlen(nomeDoArquivoPm) + 1));
+            sprintf(arquivoPm, "%s", nomeDoArquivoPm);
         }
 	}
-
    
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
@@ -191,6 +204,12 @@ int main(int argc, char *argv[])
 	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
     printf("Bloco do Geo finalizado\n");
 
+    if(arquivoEc != NULL){
+        iniciaComercios(cidade);
+    }
+    if(arquivoPm != NULL){
+        iniciaPessoas(cidade);
+    }
 
     if(nomeDoArquivoQry != NULL)
     {

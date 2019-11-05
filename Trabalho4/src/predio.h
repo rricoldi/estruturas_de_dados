@@ -34,4 +34,7 @@ double retornaPXNum(Predio p);
 
 double retornaPYNum(Predio p);
 
+double retornaPWidth(Predio);
+double retornaPHeight(Predio);
+
 #endif

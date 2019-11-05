@@ -124,3 +124,18 @@ double retornaPYNum(Predio p)
     ItemP* item = (ItemP*) p;
     return item->yNum;
 }
+
+double retornaPWidth(Predio p){
+    ItemP* essa = (ItemP*)p;
+    if(essa->face == 'N' || essa->face == 'S')
+        return essa->frente;
+    else
+        return essa->profundidade;
+}
+double retornaPHeight(Predio p){
+    ItemP* essa = (ItemP*)p;
+    if(essa->face == 'N' || essa->face == 'S')
+        return essa->profundidade;
+    else
+        return essa->frente;
+}

@@ -11,6 +11,8 @@
 typedef void *Cidade;
 
 Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros);
+void iniciaComercios(Cidade);
+void iniciaPessoas(Cidade);
 
 void removeCidade(Cidade cid);
 

@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "leitura.h"
+#include"comercioPessoas.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
@@ -540,6 +541,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 			verificador2++;
 		}
+		else if(strcmp("brl", comando)==0){
+			double brlX, brlY;
+			fscanf(arquivoQry, "%d %d ", &brlX, &brlY);
+
+			// <<
+			if(verificador2 == 0){
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2++;
+			}
+			// >>
+
+			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
+		}
 	}
 	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -552,4 +568,35 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	
 
 	fclose(arquivoQry);
+}
+
+void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
+	FILE* ec = fopen(arquivoEc, "r");
+	if(!ec){
+		printf("Não foi possível abrir o arquivo ec: %s", arquivoEc);
+		exit(-1);
+	}
+	
+	char comando;
+	char linha[150];
+	while(!feof(ec)){
+		fgets(linha, 150, ec);
+		sscanf(linha, "%c", &comando);
+
+		if(comando == 't'){
+			char tipo[21], descricao[129];
+			sscanf(linha, "%*c %20s %[^\n]", tipo, descricao);
+			tipo[20] = '\0';
+			descricao[128] = '\0';
+
+			ComercioTipo ct = tipoComercioNovo(tipo, descricao);
+			int reg = insereRegistro(tiposComercio, tipo, ct);
+			if(reg<0){
+				printf("Erro ao inserir o registro\n");
+			}
+		}
+		else if(comando == 'e'){
+
+		}
+	}
 }
