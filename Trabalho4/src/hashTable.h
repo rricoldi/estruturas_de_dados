@@ -16,7 +16,7 @@ int hashFunction(char* a, int tabSize);
 HashTable criaTabela(int n);
 
 //Insere um registro em uma posição determinada por uma função interna (hashFunction)
-//Retorna o índice onde o registro foi inserido, -1 caso já exista registro na posição
+//Retorna o índice onde o registro foi inserido
 int insereRegistro(HashTable, char* chave, Info);
 
 //Retorna o registro referente a 'key'
