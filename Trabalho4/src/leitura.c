@@ -16,22 +16,22 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		exit(1);
 	}
 
-	int tipo = 0;
-	int numeroDeFiguras = 0;
-	int numeroDeQuadras = 0;
-	int numeroDeHidrantes = 0;
-	int numeroDeSemaforos = 0;
-	int numeroDeRadioBases = 0;
-	int numeroDePredios = 0;
-	int numeroDeMuros = 0;
+    int tipo                     = 0;
+    int numeroDeFiguras          = 0;
+    int numeroDeQuadras          = 0;
+    int numeroDeHidrantes        = 0;
+    int numeroDeSemaforos        = 0;
+    int numeroDeRadioBases       = 0;
+    int numeroDePredios          = 0;
+    int numeroDeMuros            = 0;
 
-	int numeroMaximoDeFiguras = 1000;
-	int numeroMaximoDeQuadras = 1000;
-	int numeroMaximoDeHidrantes = 1000;
-	int numeroMaximoDeSemaforos = 1000;
-	int numeroMaximoDeRadioBases = 1000;
-	int numeroMaximoDePredios = 1000;
-	int numeroMaximoDeMuros = 1000;
+    int numeroMaximoDeFiguras    = 1000;
+    int numeroMaximoDeQuadras    = 1000;
+    int numeroMaximoDeHidrantes  = 1000;
+    int numeroMaximoDeSemaforos  = 1000;
+    int numeroMaximoDeRadioBases = 1000;
+    int numeroMaximoDePredios    = 1000;
+    int numeroMaximoDeMuros      = 1000;
 
 	double numeroDoPredio;
 	double x, y, altura, largura, raio;
@@ -41,30 +41,31 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	double tamanhoDaFrente;
 	double tamanhoDoLado;
 	double larguraDaCalcada;
-	double espessuraDosCirculos = 1;
-	double espessuraDosRetangulos = 1;
-	double espessuraDasQuadras = 1;
-	double espessuraDosHidrantes = 1;
-	double espessuraDosSemaforos = 1;
-	double espessuraDasRadioBases = 1;
+    double espessuraDosCirculos   = 1;
+    double espessuraDosRetangulos = 1;
+    double espessuraDasQuadras    = 1;
+    double espessuraDosHidrantes  = 1;
+    double espessuraDosSemaforos  = 1;
+    double espessuraDasRadioBases = 1;
 
 	char *texto;
 	char comando[3];
 	char id[20];
 	char face[6];
-	char corDoPreenchimentoDaFigura[20] = "white";
-	char corDaBordaDaFigura[20] = "black";
-	char corDoPreenchimentoDaQuadra[20] = "orange";
-	char corDaBordaDaQuadra[20] = "blue";
-	char corDoPreenchimentoDoHidrante[20] = "red";
-	char corDaBordaDoHidrante[20] = "black";
-	char corDoPreenchimentoDoSemaforo[20] = "yellow";
-	char corDaBordaDoSemagoro[20] = "green";
-	char corDoPreenchimentoDaRadioBase[20] = "purple";
-	char corDaBordaDaRadioBase[20] = "pink";
+    char corDoPreenchimentoDaFigura[20]    = "white";
+    char corDaBordaDaFigura[20]            = "black";
+    char corDoPreenchimentoDaQuadra[20]    = "orange";
+    char corDaBordaDaQuadra[20]            = "blue";
+    char corDoPreenchimentoDoHidrante[20]  = "red";
+    char corDaBordaDoHidrante[20]          = "black";
+    char corDoPreenchimentoDoSemaforo[20]  = "yellow";
+    char corDaBordaDoSemagoro[20]          = "green";
+    char corDoPreenchimentoDaRadioBase[20] = "purple";
+    char corDaBordaDaRadioBase[20]         = "pink";
 
 	size_t bufsize = 32;
 	Info info;
+
 	iniciaSvg(nomeDoArquivoSvg);
 
 	fscanf(arquivoGeo, "%s", comando);
@@ -72,7 +73,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	{
 		fscanf(arquivoGeo, "%d %d %d %d %d %d %d", &numeroMaximoDeFiguras, &numeroMaximoDeQuadras, &numeroMaximoDeHidrantes, &numeroMaximoDeSemaforos, &numeroMaximoDeRadioBases, &numeroMaximoDePredios, &numeroMaximoDeMuros);
 	}
-	Cidade cidade = criarCidade(numeroMaximoDeFiguras, numeroMaximoDeQuadras, numeroMaximoDeHidrantes, numeroMaximoDeSemaforos, numeroMaximoDeRadioBases, numeroMaximoDePredios, numeroMaximoDeMuros);
+	Cidade cidade = criarCidade();
 	while (1)
 	{
 

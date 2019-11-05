@@ -5,12 +5,10 @@
 #include "cidade.h"
 #include "leitura.h"
 
-
-
 void resolverInterativo(Cidade cidade){
     int sair  = 0;
-    char *comando;
-    char *argumento1;
+    char *comando = NULL;
+    char *argumento1 = NULL;
     int argumento2;
     while(!sair){
         printf("interativo\n");
@@ -20,7 +18,7 @@ void resolverInterativo(Cidade cidade){
             // interativoQ(argumento1, cidade);
         }
         else if(strcmp(comando, "dmprbt")==0){
-            fscanf("%s %d", argumento1, &argumento2);
+            scanf("%s %d", argumento1, &argumento2);
             // interativoD(argumento1, argumento2, cidade);
         }
         else if(strcmp(comando, "sai")==0){
@@ -175,7 +173,9 @@ int main(int argc, char *argv[])
         }
 	}
 
-   
+    if(arquivoPm != NULL){
+        iniciaArquivoPm(arquivoPm);
+    }
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
     prefixoDoArquivoGeo = retornarPrefixoDoArquivo(nomeDoArquivoGeo);
@@ -215,7 +215,13 @@ int main(int argc, char *argv[])
     }
 
     if(interativo)
+    {
         resolverInterativo(cidade);
+        free(nomeDoArquivoQry);
+        free(prefixoDoAquivoQry);
+        free(prefixoFinalDoQry);
+        free(arquivoQry);
+    }
 
     removeCidade(cidade);
 	printf("Lista desalocada\n");

@@ -19,8 +19,8 @@ struct tabela{
     struct registros *reg;
 };
 
-int primos[] = {2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37};
 int hashFunction(char* a, int tabSize){
+    int primos[] = {2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37, 41, 43, 47,53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449};
     int sum = 0;
     for(unsigned int i=0;i<strlen(a);i++){
         sum += a[i]*primos[i];
@@ -103,7 +103,6 @@ Info getRegistro(HashTable tabela, char* key){
         if(aux == NULL || aux->key == NULL)     //
             return NULL;
     }
-    printf("!!pego de %d\n", posic);
 
     return essa->reg[posic].reg->info;
 }
@@ -121,7 +120,6 @@ int removeChave(HashTable tabela, char* key){
         aux2 = aux;
         aux = aux->next;
         if(aux == NULL){
-            printf("acabo mano\n");
             return -1;
         }
     }
@@ -129,7 +127,6 @@ int removeChave(HashTable tabela, char* key){
     aux2->next = aux->next;
     free(aux);
     aux = NULL;
-    printf("!!removido de %d\n", posic);
 
     return posic;
 }

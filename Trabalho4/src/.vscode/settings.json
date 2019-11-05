@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "cidade.h": "c"
+        "cidade.h": "c",
+        "lista.h": "c",
+        "arvore.h": "c",
+        "radio.h": "c"
     }
 }

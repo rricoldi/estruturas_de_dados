@@ -41,3 +41,13 @@ double retornaMY2(Muro m)
     ItemM* item = (ItemM*) m;
     return getPontoY(getRetaB(item->r));
 }
+
+double comparaMuro(Muro m1, Muro m2)
+{
+    ItemM* muro1 = (ItemM*) m1;
+    ItemM* muro2 = (ItemM*) m2;
+
+    if(getPontoX(getRetaA(muro1->r)) != getPontoX(getRetaA(muro2->r)))
+        return getPontoX(getRetaA(muro1->r)) - getPontoX(getRetaA(muro2->r));
+    return getPontoY(getRetaA(muro1->r)) != getPontoY(getRetaA(muro2->r));
+}

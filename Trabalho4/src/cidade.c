@@ -6,6 +6,11 @@
 typedef struct city
 {
     // Tree arvoreCirculo;
+    Tree arvoreMuro;
+    HashTable pessoas;
+    HashTable moradias;
+    HashTable tiposComercio;
+    HashTable comercios;
     Lista listaCirculo;
     Lista listaRetangulo;
     Lista listaQuadra;
@@ -16,20 +21,20 @@ typedef struct city
     Lista listaMuro;
 } cidade;
 
-
-Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros)
+Cidade criarCidade()
 {
     Cidade cid    = calloc(1, sizeof(cidade));
     cidade *city  = (cidade *)  cid;
-    // city->arvoreCirculo = criaArvore();
-    city->listaCirculo   = iniciaLista(numeroDeFiguras);
-    city->listaRetangulo = iniciaLista(numeroDeFiguras);
-    city->listaQuadra    = iniciaLista(numeroDeQuadras);
-    city->listaHidrante  = iniciaLista(numeroDeHidrantes);
-    city->listaRadio     = iniciaLista(numeroDeRadios);
-    city->listaSemaforo  = iniciaLista(numeroDeSemaforos);
-    city->listaPredio    = iniciaLista(numeroDePredios);
-    city->listaMuro      = iniciaLista(numeroDeMuros);
+    
+    city->arvoreMuro = criaArvore(comparaMuro);
+    // city->listaCirculo   = iniciaLista(numeroDeFiguras);
+    // city->listaRetangulo = iniciaLista(numeroDeFiguras);
+    // city->listaQuadra    = iniciaLista(numeroDeQuadras);
+    // city->listaHidrante  = iniciaLista(numeroDeHidrantes);
+    // city->listaRadio     = iniciaLista(numeroDeRadios);
+    // city->listaSemaforo  = iniciaLista(numeroDeSemaforos);
+    // city->listaPredio    = iniciaLista(numeroDePredios);
+    // city->listaMuro      = iniciaLista(numeroDeMuros);
 
     return city;
 }

@@ -1,6 +1,17 @@
 #ifndef __ARVORE_H
 #define __ARVORE_H
 
+#include "quadra.h"
+#include "hidrante.h"
+#include "radio.h"
+#include "semaforo.h"
+#include "circulo.h"
+#include "retangulo.h"
+#include "predio.h"
+#include "muro.h"
+#include "qry.h"
+
+
 typedef void *Info;
 typedef void *Node;
 typedef void *Tree;
