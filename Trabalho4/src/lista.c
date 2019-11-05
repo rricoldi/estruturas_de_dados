@@ -123,7 +123,6 @@ void imprimeQuadras(Lista L, char nomeDoArquivoSvg[])
    imprimirRetangulo(retornaQW(quadra), retornaQH(quadra), retornaQX(quadra), retornaQY(quadra), retornaQCorB(quadra), retornaQCorP(quadra), nomeDoArquivoSvg, retornaQEspessura(quadra));
 }
 
-
 void imprimeHidrantes(Lista L, char nomeDoArquivoSvg[])
 {
    List* lista = (List*) L;
@@ -145,7 +144,6 @@ void imprimeHidrantes(Lista L, char nomeDoArquivoSvg[])
    imprimirCirculo(2, retornaHX(hidrante), retornaHY(hidrante), retornaHCorB(hidrante), retornaHCorP(hidrante), nomeDoArquivoSvg, retornaHEspessura(hidrante));
 }
 
-
 void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[])
 {
    List* lista = (List*) L;
@@ -166,7 +164,6 @@ void imprimeSemaforos(Lista L, char nomeDoArquivoSvg[])
 
    imprimirRetangulo(7, 18, retornaSX(semaforo), retornaSY(semaforo), retornaSCorB(semaforo), retornaSCorP(semaforo), nomeDoArquivoSvg, retornaSEspessura(semaforo));
 }
-
 
 void imprimeRadios(Lista L, char nomeDoArquivoSvg[])
 {
@@ -351,7 +348,6 @@ Posic insertAfter(Lista L, Info info, Posic posicao)
 
    return iLivre;
 }
-
 
 Posic insereLista(Lista L, Info info)
 {
@@ -975,7 +971,6 @@ void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int s
    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
    List* lista = (List*) L;
    Info vetor[lista->ultimo+1];
-   int id;
    int fim = transformaListaEmVetor(L, vetor);
    int inicio = 0;
    char corB[] = "red";
@@ -984,7 +979,7 @@ void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int s
    quickSortHidrante(vetor, inicio, fim, x, y);
    fprintf(arquivoTxt, "fh\n");
 
-   if(sinal = 0)
+   if(sinal == 0)
    {
       for(inicio = 0; inicio<numeroDeHidrantes; inicio++)
       {
@@ -996,7 +991,7 @@ void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int s
    }
    else
    {
-      for(fim; fim>=numeroDeHidrantes; fim--)
+      for(fim = fim; fim>=numeroDeHidrantes; fim--)
       {
          imprimirLinha(x, y, retornaHX(vetor[fim]), retornaHY(vetor[fim]), nomeDoArquivoSvg);
          imprimirCirculo(2.5, retornaHX(vetor[fim]), retornaHY(vetor[fim]), "blue", corP, nomeDoArquivoSvg, 2);

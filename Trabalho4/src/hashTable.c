@@ -12,6 +12,17 @@ struct tabela{
     struct registros *reg;
 };
 
+int primos[] = {2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37};
+
+int hashFunction(char* a, int tabSize){
+    int sum = 0;
+    for(int i=0;i<11;i++){
+        sum += a[i]*primos[i];
+    }
+    sum = sum%tabSize;
+    return sum;
+}
+
 HashTable criaTabela(int tam){
     if(tam<=0){
         return NULL;
@@ -68,14 +79,4 @@ int removeChave(HashTable tabela, char* key){
     essa->reg[posic].key = NULL;
     essa->reg[posic].info = NULL;
     return posic;
-}
-
-int primos[] = {2, 3, 5, 7, 11, 13, 17, 23, 29, 31, 37};
-int hashFunction(char* a, int tabSize){
-    int sum = 0;
-    for(int i=0;i<11;i++){
-        sum += a[i]*primos[i];
-    }
-    sum = sum%tabSize;
-    return sum;
 }

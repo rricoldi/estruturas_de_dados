@@ -8,6 +8,9 @@
 typedef void* HashTable;	//Ponteiro genérico para uma tabela de espalhamento
 typedef void* Info;		//Ponteiro genérico para um dado qualquer desconhecido pela tabela (char, int, void*, struct, etc)
 
+
+int hashFunction(char* a, int tabSize);
+
 //Retorna um ponteiro para a tabela criada, com n registros disponíveis
 //Caso não consiga criar a tabela, retorna NULL
 HashTable criaTabela(int n);

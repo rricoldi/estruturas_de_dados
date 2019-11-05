@@ -13,21 +13,22 @@ void resolverInterativo(Cidade cidade){
     char *argumento1;
     int argumento2;
     while(!sair){
+        printf("interativo\n");
         scanf("%s", comando);
         if(strcmp(comando, "q")==0){
             scanf("%s", argumento1);
-            interativoQ(argumento1, cidade);
+            // interativoQ(argumento1, cidade);
         }
         else if(strcmp(comando, "dmprbt")==0){
             fscanf("%s %d", argumento1, &argumento2);
-            interativoD(argumento1, argumento2, cidade);
+            // interativoD(argumento1, argumento2, cidade);
         }
         else if(strcmp(comando, "sai")==0){
             sair = 1;
         }
         else if(strcmp(comando, "nav")==0){
             scanf("%d", &argumento2);
-            interativoN(argumento2, cidade);
+            // interativoN(argumento2, cidade);
         }
     }
 }
@@ -130,6 +131,7 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoEc = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoEc, argv[contador]);
+            printf("%s\n", nomeDoArquivoEc);
         }
         else if (strcmp("-pm", argv[contador]) == 0)
         {
@@ -141,6 +143,7 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoPm, argv[contador]);
+            printf("%s\n", nomeDoArquivoPm);
         }
         else if (strcmp("-i", argv[contador]) == 0)
         {
@@ -212,7 +215,7 @@ int main(int argc, char *argv[])
     }
 
     if(interativo)
-        resolverInterativos(cidade);
+        resolverInterativo(cidade);
 
     removeCidade(cidade);
 	printf("Lista desalocada\n");

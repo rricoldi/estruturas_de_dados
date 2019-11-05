@@ -5,6 +5,7 @@
 
 typedef struct city
 {
+    // Tree arvoreCirculo;
     Lista listaCirculo;
     Lista listaRetangulo;
     Lista listaQuadra;
@@ -20,6 +21,7 @@ Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrant
 {
     Cidade cid    = calloc(1, sizeof(cidade));
     cidade *city  = (cidade *)  cid;
+    // city->arvoreCirculo = criaArvore();
     city->listaCirculo   = iniciaLista(numeroDeFiguras);
     city->listaRetangulo = iniciaLista(numeroDeFiguras);
     city->listaQuadra    = iniciaLista(numeroDeQuadras);
@@ -74,8 +76,10 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
     imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
     imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
     imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
-    imprimePredios(city->listaPredio, nomeDoArquivoSvg);
-    imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
+    if(lenght(city->listaPredio) > 0)
+        imprimePredios(city->listaPredio, nomeDoArquivoSvg);
+    if(lenght(city->listaMuro) > 0)
+        imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
 }
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
@@ -315,6 +319,7 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
     if ( numeroDeHidrantes < 0)
     {
         sinal = 0;
+        numeroDeHidrantes = -numeroDeHidrantes;
     }
     else
     {
@@ -322,7 +327,7 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
     }
     
     
-    resolveFHidrantes(city->listaHidrante, x, y, fabs(numeroDeHidrantes), sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
+    resolveFHidrantes(city->listaHidrante, x, y, numeroDeHidrantes, sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
 }
 
 void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])

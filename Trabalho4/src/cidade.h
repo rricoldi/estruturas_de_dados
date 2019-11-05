@@ -2,6 +2,7 @@
 #define __CIDADE_H
 
 #include "lista.h"
+#include "arvore.h"
 
 /*  
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
