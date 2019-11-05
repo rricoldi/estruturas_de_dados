@@ -27,4 +27,6 @@ char *retornaSCorP(Semaforo s);
 
 char *retornaSCorB(Semaforo s);
 
+double comparaSemaforo(Semaforo s1, Semaforo s2);
+
 #endif

@@ -26,4 +26,6 @@ char *retornaRCorP(Radio r);
 
 char *retornaRCorB(Radio r);
 
+double comparaRadio(Radio r1, Radio r2);
+
 #endif

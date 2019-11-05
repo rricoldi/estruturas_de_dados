@@ -71,3 +71,13 @@ char *retornaRCorP(Radio r)
     ItemR* item = (ItemR*) r;
     return item->corP;
 }
+
+double comparaRadio(Radio r1, Radio r2)
+{
+    ItemR *radio1 = (ItemR *)r1;
+    ItemR *radio2 = (ItemR *)r2;
+
+    if(radio1->x != radio2->x)
+        return radio1->x - radio2->x;
+    return radio1->y - radio2->y;
+}

@@ -71,3 +71,13 @@ char *retornaSCorP(Semaforo s)
     ItemS* item = (ItemS*) s;
     return item->corP;
 }
+
+double comparaSemaforo(Semaforo s1, Semaforo s2)
+{
+    ItemS *semaforo1 = (ItemS *)s1;
+    ItemS *semaforo2 = (ItemS *)s2;
+
+    if(semaforo1->x != semaforo2->x)
+        return semaforo1->x - semaforo2->x;
+    return semaforo1->y - semaforo2->y;
+}

@@ -34,4 +34,6 @@ double retornaPXNum(Predio p);
 
 double retornaPYNum(Predio p);
 
+double comparaPredio(Predio p1, Predio p2);
+
 #endif

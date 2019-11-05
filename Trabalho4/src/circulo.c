@@ -68,3 +68,13 @@ char *retornaCCorP(Circulo c)
     ItemCirculo *item = (ItemCirculo *)c;
     return item->corPreenchimento;
 }
+
+double comparaCirculo(Circulo c1, Circulo c2)
+{
+    ItemCirculo *circulo1 = (ItemCirculo *)c1;
+    ItemCirculo *circulo2 = (ItemCirculo *)c2;
+
+    if(circulo1->x != circulo2->x)
+        return circulo1->x - circulo2->x;
+    return circulo1->y - circulo2->y;
+}

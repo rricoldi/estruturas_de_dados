@@ -11,6 +11,13 @@ typedef struct city
     HashTable moradias;
     HashTable tiposComercio;
     HashTable comercios;
+    Tree arvoreCirculo;
+    Tree arvoreRetangulo;
+    Tree arvoreQuadra;
+    Tree arvoreHidrante;
+    Tree arvoreRadio;
+    Tree arvoreSemaforo;
+    Tree arvorePredio;
     Lista listaCirculo;
     Lista listaRetangulo;
     Lista listaQuadra;
@@ -26,7 +33,14 @@ Cidade criarCidade()
     Cidade cid    = calloc(1, sizeof(cidade));
     cidade *city  = (cidade *)  cid;
     
+    city->arvoreCirculo = criaArvore(comparaCirculo);
+    city->arvoreRetangulo = criaArvore(comparaRetangulo);
+    city->arvoreQuadra = criaArvore(comparaQuadra);
+    city->arvoreHidrante = criaArvore(comparaHidrante);
+    city->arvoreRadio = criaArvore(comparaRadio);
+    city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
+    city->arvorePredio = criaArvore(comparaPredio);
     // city->listaCirculo   = iniciaLista(numeroDeFiguras);
     // city->listaRetangulo = iniciaLista(numeroDeFiguras);
     // city->listaQuadra    = iniciaLista(numeroDeQuadras);

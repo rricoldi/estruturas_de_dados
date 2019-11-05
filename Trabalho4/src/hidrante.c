@@ -75,3 +75,13 @@ char *retornaHCorP(Hidrante h)
     ItemH *item = (ItemH *)h;
     return item->corP;
 }
+
+double comparaHidrante(Hidrante h1, Hidrante h2)
+{
+    ItemH *hidrante1 = (ItemH *)h1;
+    ItemH *hidrante2 = (ItemH *)h2;
+
+    if(hidrante1->x != hidrante2->x)
+        return hidrante1->x - hidrante2->x;
+    return hidrante1->y - hidrante2->y;
+}

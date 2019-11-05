@@ -23,4 +23,6 @@ char *retornaCCorP(Circulo c);
 
 char *retornaCCorB(Circulo c);
 
+double comparaCirculo(Circulo c1, Circulo c2);
+
 #endif

@@ -10,7 +10,7 @@ typedef struct predio{
     char cep[20], face[10];
     double numero;
     double frente, profundidade, calcada;
-    Reta sup, esq, dir, inf;
+    Reta superior, esquerda, direita, inferior;
     double xCalcada, yCalcada, xCalcadaMax, yCalcadaMax;
 	double xNum, yNum;
 }ItemP;
@@ -33,10 +33,10 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
     p->xNum         = xNum;
     p->yNum         = yNum;
     
-    p->sup = criarReta(criarPonto(x, y), criarPonto(x+xNum, y));
-    p->esq = criarReta(criarPonto(x, y), criarPonto(x, y+yNum));
-    p->dir = criarReta(criarPonto(x, y), criarPonto(x+xNum, y+yNum));
-    p->inf = criarReta(criarPonto(x, y+yNum), criarPonto(x+xNum, y+yNum));
+    p->superior = criarReta(criarPonto(x, y), criarPonto(x+xNum, y));
+    p->esquerda = criarReta(criarPonto(x, y), criarPonto(x, y+yNum));
+    p->direita = criarReta(criarPonto(x, y), criarPonto(x+xNum, y+yNum));
+    p->inferior = criarReta(criarPonto(x, y+yNum), criarPonto(x+xNum, y+yNum));
 
     return p;
 }
@@ -44,13 +44,13 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
 double retornaPX(Predio p)
 {
     ItemP* item = (ItemP*) p;
-    return getPontoX(getRetaA(item->sup));
+    return getPontoX(getRetaA(item->superior));
 }
 
 double retornaPY(Predio p)
 {
     ItemP* item = (ItemP*) p;
-    return getPontoY(getRetaA(item->sup));
+    return getPontoY(getRetaA(item->superior));
 }
 
 char *retornaPCep(Predio p)
@@ -123,4 +123,14 @@ double retornaPYNum(Predio p)
 {
     ItemP* item = (ItemP*) p;
     return item->yNum;
+}
+
+double comparaPredio(Predio p1, Predio p2)
+{
+    ItemP *predio1 = (ItemP *)p1;
+    ItemP *predio2 = (ItemP *)p2;
+
+    if(getPontoX(getRetaA(predio1->superior)) != getPontoX(getRetaA(predio2->superior)))
+        return getPontoX(getRetaA(predio1->superior)) - getPontoX(getRetaA(predio2->superior));
+    return getPontoY(getRetaA(predio1->superior)) != getPontoY(getRetaA(predio2->superior));
 }

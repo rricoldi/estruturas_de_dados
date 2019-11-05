@@ -25,4 +25,6 @@ char *retornaHCorB(Hidrante h);
 
 char *retornaHCorP(Hidrante h);
 
+double comparaHidrante(Hidrante h1, Hidrante h2);
+
 #endif

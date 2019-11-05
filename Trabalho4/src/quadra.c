@@ -94,3 +94,12 @@ char *retornaQCorP(Quadra q)
     return item->corP;
 }
 
+double comparaQuadra(Quadra q1, Quadra q2)
+{
+    ItemQ *quadra1 = (ItemQ *)q1;
+    ItemQ *quadra2 = (ItemQ *)q2;
+
+    if(quadra1->x != quadra2->x)
+        return quadra1->x - quadra2->x;
+    return quadra1->y - quadra2->y;
+}
