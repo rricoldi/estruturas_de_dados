@@ -19,6 +19,7 @@ typedef struct arvore
     No *nil;
     double (*comparaInfo) (Info, Info);
 } Arvore;
+
 Tree criaArvore(double (*comparaInfo) (Info, Info))
 {
     Tree tree = (Arvore*)malloc(sizeof(Arvore));
@@ -153,7 +154,7 @@ void insereNaArvore(Tree** tree, Info info)
     while(raiz != (*arvore)->nil)
     {
         folha = raiz;
-        if((*arvore)->comparaInfo(no->info, info) < 0)
+        if((*arvore)->comparaInfo(no->info, raiz->info) < 0)
             raiz = raiz->esquerda;
         else
             raiz = raiz->direita;
@@ -341,4 +342,40 @@ void deletaDaArvore(Tree tree, Node* node)
     if(corOriginal == PRETA)
         reparaDelecao(arvore, x);
     
+}
+
+void percorreArvorePorNo(No* no, void (*funcao) (Info), No* nil)
+{
+    funcao(no->info);
+    if(no->esquerda != nil)
+        percorreArvorePorNo(no->esquerda, funcao, nil);
+    if(no->direita != nil)
+        percorreArvorePorNo(no->direita, funcao, nil);
+    
+}
+
+void percorreArvore(Tree tree, void (*funcao) (Info))
+{
+    Arvore* arvore = (Arvore*) tree;
+
+    percorreArvorePorNo(arvore->raiz, funcao, arvore->nil);
+
+}
+
+void desalocaNo(No* no, No* nil)
+{
+    if(no->esquerda != nil)
+        desaloca(no->esquerda, nil);
+    if(no->direita != nil)
+        desaloca(no->direita, nil);
+
+    free(no->info);
+    free(no);
+}
+
+void desalocaArvore(Tree tree)
+{
+    Arvore* arvore = (Arvore*) tree;
+
+    desalocaNo(arvore->raiz, arvore->nil);
 }
