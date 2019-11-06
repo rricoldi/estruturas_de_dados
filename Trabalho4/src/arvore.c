@@ -147,10 +147,12 @@ void reparaInsercao(Arvore* arvore, No* no)
 
 void insereNaArvore(Tree** tree, Info info)
 {
+    
     Arvore** arvore = (Arvore**) tree;
     No *no = criaNo(info);
     No *folha = (*arvore)->nil;
     No *raiz = (*arvore)->raiz;
+    (*arvore)->comparaInfo(no->info, no->info);
     while(raiz != (*arvore)->nil)
     {
         folha = raiz;
@@ -365,9 +367,9 @@ void percorreArvore(Tree tree, void (*funcao) (Info))
 void desalocaNo(No* no, No* nil)
 {
     if(no->esquerda != nil)
-        desaloca(no->esquerda, nil);
+        desalocaNo(no->esquerda, nil);
     if(no->direita != nil)
-        desaloca(no->direita, nil);
+        desalocaNo(no->direita, nil);
 
     free(no->info);
     free(no);

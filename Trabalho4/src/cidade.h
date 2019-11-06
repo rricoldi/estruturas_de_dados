@@ -27,19 +27,23 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 void removeDaCidade(Cidade cid, char id[], char txt[]);
 
-int adicionarCirculo(Cidade cid, Info info);
+void adicionarCirculo(Cidade cid, Info info);
 
-int adicionarRetangulo(Cidade cid, Info info);
+void adicionarRetangulo(Cidade cid, Info info);
 
-int adicionarQuadra(Cidade cid, Info info);
+void adicionarQuadra(Cidade cid, Info info);
 
-int adicionarHidrante(Cidade cid, Info info);
+void adicionarHidrante(Cidade cid, Info info);
 
-int adicionarRadioBase(Cidade cid, Info info);
+void adicionarRadioBase(Cidade cid, Info info);
 
-int adicionarSemaforo(Cidade cid, Info info);
+void adicionarSemaforo(Cidade cid, Info info);
 
-int adicionarPredio(Cidade cid, Info info);
+void adicionarPredio(Cidade cid, Info info);
+
+void adicionarPredio(Cidade cid, Info info);
+
+void adicionarMuro(Cidade cid, Info info);
 
 Circulo getCirculo(Cidade cid, int i);
 
@@ -55,11 +59,7 @@ Semaforo getSemaforo(Cidade cid, int i);
 
 Predio getPredio(Cidade cid, int i);
 
-int adicionarPredio(Cidade cid, Info info);
-
 Muro getMuro(Cidade cid, int i);
-
-int adicionarMuro(Cidade cid, Info info);
 
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 

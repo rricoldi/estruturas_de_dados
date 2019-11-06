@@ -41,14 +41,6 @@ Cidade criarCidade()
     city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
     city->arvorePredio = criaArvore(comparaPredio);
-    // city->listaCirculo   = iniciaLista(numeroDeFiguras);
-    // city->listaRetangulo = iniciaLista(numeroDeFiguras);
-    // city->listaQuadra    = iniciaLista(numeroDeQuadras);
-    // city->listaHidrante  = iniciaLista(numeroDeHidrantes);
-    // city->listaRadio     = iniciaLista(numeroDeRadios);
-    // city->listaSemaforo  = iniciaLista(numeroDeSemaforos);
-    // city->listaPredio    = iniciaLista(numeroDePredios);
-    // city->listaMuro      = iniciaLista(numeroDeMuros);
 
     return city;
 }
@@ -56,14 +48,14 @@ Cidade criarCidade()
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;
-    finalizaLista(city->listaCirculo);
-    finalizaLista(city->listaRetangulo);
-    finalizaLista(city->listaQuadra);
-    //finalizaLista(city->listaHidrante);
-    finalizaLista(city->listaRadio);
-    finalizaLista(city->listaSemaforo);
-    finalizaLista(city->listaPredio);
-    finalizaLista(city->listaMuro);
+    desalocaArvore(city->arvoreCirculo);
+    desalocaArvore(city->arvoreRetangulo);
+    desalocaArvore(city->arvoreQuadra);
+    desalocaArvore(city->arvoreHidrante);
+    desalocaArvore(city->arvoreSemaforo);
+    desalocaArvore(city->arvoreRadio);
+    desalocaArvore(city->arvoreMuro);
+    desalocaArvore(city->arvorePredio);
     free(city);
 }
 
@@ -205,10 +197,10 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     return;
 }
 
-int adicionarCirculo(Cidade cid, Info info)
+void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaCirculo, info);
+    return insereNaArvore(&(city->arvoreCirculo), info);
 }
 
 
@@ -218,10 +210,10 @@ Circulo getCirculo(Cidade cid, int i)
     return get(city->listaCirculo, i);
 }
 
-int adicionarRetangulo(Cidade cid, Info info)
+void adicionarRetangulo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaRetangulo, info);
+    return insereNaArvore(&(city->arvoreRetangulo), info);
 }
 
 Retangulo getRetangulo(Cidade cid, int i)
@@ -230,10 +222,10 @@ Retangulo getRetangulo(Cidade cid, int i)
     return get(city->listaRetangulo, i);
 }
 
-int adicionarQuadra(Cidade cid, Info info)
+void adicionarQuadra(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaQuadra, info);
+    return insereNaArvore(&(city->arvoreQuadra), info);
 }
 
 Quadra getQuadra(Cidade cid, int i)
@@ -242,10 +234,10 @@ Quadra getQuadra(Cidade cid, int i)
     return get(city->listaQuadra, i);
 }
 
-int adicionarHidrante(Cidade cid, Info info)
+void adicionarHidrante(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaHidrante, info);
+    return insereNaArvore(&(city->arvoreHidrante), info);
 }
 
 Hidrante getHidrante(Cidade cid, int i)
@@ -254,10 +246,10 @@ Hidrante getHidrante(Cidade cid, int i)
     return get(city->listaHidrante, i);
 }
 
-int adicionarRadioBase(Cidade cid, Info info)
+void adicionarRadioBase(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaRadio, info);
+    return insereNaArvore(&(city->arvoreRadio), info);
 }
 
 Radio getRadio(Cidade cid, int i)
@@ -266,10 +258,10 @@ Radio getRadio(Cidade cid, int i)
     return get(city->listaRadio, i);
 }
 
-int adicionarSemaforo(Cidade cid, Info info)
+void adicionarSemaforo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaSemaforo, info);
+    return insereNaArvore(&(city->arvoreSemaforo), info);
 }
 
 Semaforo getSemaforo(Cidade cid, int i)
@@ -279,10 +271,10 @@ Semaforo getSemaforo(Cidade cid, int i)
 }
 
 
-int adicionarPredio(Cidade cid, Info info)
+void adicionarPredio(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaPredio, info);
+    return insereNaArvore(&(city->arvorePredio), info);
 }
 
 Predio getPredio(Cidade cid, int i)
@@ -291,10 +283,10 @@ Predio getPredio(Cidade cid, int i)
     return get(city->listaPredio, i);
 }
 
-int adicionarMuro(Cidade cid, Info info)
+void adicionarMuro(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereLista(city->listaMuro, info);
+    return insereNaArvore(&(city->arvoreMuro), info);
 }
 
 Muro getMuro(Cidade cid, int i)
