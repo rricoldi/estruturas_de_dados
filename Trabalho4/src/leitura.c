@@ -17,22 +17,22 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 		exit(1);
 	}
 
-	int tipo = 0;
-	int numeroDeFiguras = 0;
-	int numeroDeQuadras = 0;
-	int numeroDeHidrantes = 0;
-	int numeroDeSemaforos = 0;
-	int numeroDeRadioBases = 0;
-	int numeroDePredios = 0;
-	int numeroDeMuros = 0;
+    int tipo                     = 0;
+    int numeroDeFiguras          = 0;
+    int numeroDeQuadras          = 0;
+    int numeroDeHidrantes        = 0;
+    int numeroDeSemaforos        = 0;
+    int numeroDeRadioBases       = 0;
+    int numeroDePredios          = 0;
+    int numeroDeMuros            = 0;
 
-	int numeroMaximoDeFiguras = 1000;
-	int numeroMaximoDeQuadras = 1000;
-	int numeroMaximoDeHidrantes = 1000;
-	int numeroMaximoDeSemaforos = 1000;
-	int numeroMaximoDeRadioBases = 1000;
-	int numeroMaximoDePredios = 1000;
-	int numeroMaximoDeMuros = 1000;
+    int numeroMaximoDeFiguras    = 1000;
+    int numeroMaximoDeQuadras    = 1000;
+    int numeroMaximoDeHidrantes  = 1000;
+    int numeroMaximoDeSemaforos  = 1000;
+    int numeroMaximoDeRadioBases = 1000;
+    int numeroMaximoDePredios    = 1000;
+    int numeroMaximoDeMuros      = 1000;
 
 	double numeroDoPredio;
 	double x, y, altura, largura, raio;
@@ -42,30 +42,31 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	double tamanhoDaFrente;
 	double tamanhoDoLado;
 	double larguraDaCalcada;
-	double espessuraDosCirculos = 1;
-	double espessuraDosRetangulos = 1;
-	double espessuraDasQuadras = 1;
-	double espessuraDosHidrantes = 1;
-	double espessuraDosSemaforos = 1;
-	double espessuraDasRadioBases = 1;
+    double espessuraDosCirculos   = 1;
+    double espessuraDosRetangulos = 1;
+    double espessuraDasQuadras    = 1;
+    double espessuraDosHidrantes  = 1;
+    double espessuraDosSemaforos  = 1;
+    double espessuraDasRadioBases = 1;
 
 	char *texto;
 	char comando[3];
 	char id[20];
 	char face[6];
-	char corDoPreenchimentoDaFigura[20] = "white";
-	char corDaBordaDaFigura[20] = "black";
-	char corDoPreenchimentoDaQuadra[20] = "orange";
-	char corDaBordaDaQuadra[20] = "blue";
-	char corDoPreenchimentoDoHidrante[20] = "red";
-	char corDaBordaDoHidrante[20] = "black";
-	char corDoPreenchimentoDoSemaforo[20] = "yellow";
-	char corDaBordaDoSemagoro[20] = "green";
-	char corDoPreenchimentoDaRadioBase[20] = "purple";
-	char corDaBordaDaRadioBase[20] = "pink";
+    char corDoPreenchimentoDaFigura[20]    = "white";
+    char corDaBordaDaFigura[20]            = "black";
+    char corDoPreenchimentoDaQuadra[20]    = "orange";
+    char corDaBordaDaQuadra[20]            = "blue";
+    char corDoPreenchimentoDoHidrante[20]  = "red";
+    char corDaBordaDoHidrante[20]          = "black";
+    char corDoPreenchimentoDoSemaforo[20]  = "yellow";
+    char corDaBordaDoSemagoro[20]          = "green";
+    char corDoPreenchimentoDaRadioBase[20] = "purple";
+    char corDaBordaDaRadioBase[20]         = "pink";
 
 	size_t bufsize = 32;
 	Info info;
+
 	iniciaSvg(nomeDoArquivoSvg);
 
 	fscanf(arquivoGeo, "%s", comando);
@@ -73,7 +74,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	{
 		fscanf(arquivoGeo, "%d %d %d %d %d %d %d", &numeroMaximoDeFiguras, &numeroMaximoDeQuadras, &numeroMaximoDeHidrantes, &numeroMaximoDeSemaforos, &numeroMaximoDeRadioBases, &numeroMaximoDePredios, &numeroMaximoDeMuros);
 	}
-	Cidade cidade = criarCidade(numeroMaximoDeFiguras, numeroMaximoDeQuadras, numeroMaximoDeHidrantes, numeroMaximoDeSemaforos, numeroMaximoDeRadioBases, numeroMaximoDePredios, numeroMaximoDeMuros);
+	Cidade cidade = criarCidade();
 	while (1)
 	{
 
@@ -585,18 +586,82 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 
 		if(comando == 't'){
 			char tipo[21], descricao[129];
+
 			sscanf(linha, "%*c %20s %[^\n]", tipo, descricao);
-			tipo[20] = '\0';
-			descricao[128] = '\0';
+
+			// tipo[20] = '\0';
+			// descricao[128] = '\0';
 
 			ComercioTipo ct = tipoComercioNovo(tipo, descricao);
 			int reg = insereRegistro(tiposComercio, tipo, ct);
 			if(reg<0){
-				printf("Erro ao inserir o registro\n");
+				printf("Erro ao inserir o tipo de comercio \'%s\'\n", tipo);
 			}
 		}
 		else if(comando == 'e'){
+			char cnpj[19], cpf[15], tipo[21], cep[10], nome[85];
+			char face;
+			int num;
 
+			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cnpj, cpf, cep, &face, &num, nome);
+
+			// cnpj[18] = '\0';
+			// cpf[14] = '\0';
+			// tipo[20] = '\0';
+			// cep[9] = '\0';
+			// nome[84] = '\0';
+
+			if(!existeChave(tiposComercio, tipo)){
+				printf("O tipo de estabelecimento %s não existe\n", tipo);
+				return;
+			}
+
+			EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
+			int reg = insereRegistro(comercios, nome, cnpj);
+			if(reg<0){
+				printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
+			}
+		}
+	}
+}
+
+void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias){
+	FILE* pm = fopen(arquivoPm, "r");
+	if(!pm){
+		printf("Erro ao abrir o arquivo pm \'%s\'\n", arquivoPm);
+		exit(-1);
+	}
+
+	char comando;
+	char linha[150];
+	while(!feof(pm)){
+		fgets(linha, 150, pm);
+		sscanf(linha, "%c", &comando);
+
+		if(comando == 'p'){
+			char cpf[15], nome[50], sobrenome[50], nascimento[11];
+			char sexo;
+
+			sscanf(linha, "%*c %14s %49s %49s %c %10s ", cpf, nome, sobrenome, sexo, nascimento);
+
+			Pessoa pes = pessoaNovo(cpf, nome, sobrenome, nascimento, sexo);
+			int reg = insereRegistro(pessoas, cpf, pes);
+			if(reg<0){
+				printf("Erro ao inserir a pessoa \'%s\'\n", cpf);
+			}
+		}
+		else if(comando == 'm'){
+			char cpf[15], cep[10], complemento[135];
+			char face;
+			int num;
+
+			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cpf, cep, &face, &num, complemento);
+
+			Moradia mor = moradiaNovo(cep, face, num, complemento);
+			int reg = insereRegistro(moradias, cpf, mor);
+			if(reg<0){
+				printf("Erro ao inserir a moradia \'%s, %c, %d\'\n", cep, face, num);
+			}
 		}
 	}
 }

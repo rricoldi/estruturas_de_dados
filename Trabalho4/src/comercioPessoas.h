@@ -20,7 +20,7 @@ char* comercioGetDescricao(ComercioTipo);
 typedef void* EstabelecimentoComercial;
 
 //Cria um novo estabelecimento comercial
-EstabelecimentoComercial estabelecimentoNovo(char* cnpj, char* tipo, char* cep, char face, int num, char* nome);
+EstabelecimentoComercial estabelecimentoNovo(char* cnpj, char* cpf, char* tipo, char* cep, char face, int num, char* nome);
 
 //Getters dos estabelecimentos comerciais
 char* estabelecimentoGetCnpj(EstabelecimentoComercial);
@@ -36,7 +36,7 @@ int estabelecimentoGetNum(EstabelecimentoComercial);
 typedef void* Pessoa;
 
 //Cria uma nova pessoa, e a retorna
-Pessoa pessoaNovo(char cpf[], char* nome, char* sobrenome, char* nascimento, char sexo);
+Pessoa pessoaNovo(char* cpf, char* nome, char* sobrenome, char* nascimento, char sexo);
 
 //Getters dos atributos de Pessoa
 char* pessoaGetCpf(Pessoa);

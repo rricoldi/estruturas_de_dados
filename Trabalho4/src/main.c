@@ -4,29 +4,30 @@
 #include <math.h>
 #include "cidade.h"
 #include "leitura.h"
-#include"hashTable.h";
+#include"hashTable.h"
 
 void resolverInterativos(Cidade cidade){
     int sair  = 0;
-    char *comando;
-    char *argumento1;
+    char *comando = NULL;
+    char *argumento1 = NULL;
     int argumento2;
     while(!sair){
+        printf("interativo\n");
         scanf("%s", comando);
         if(strcmp(comando, "q")==0){
             scanf("%s", argumento1);
-            interativoQ(argumento1, cidade);
+            // interativoQ(argumento1, cidade);
         }
         else if(strcmp(comando, "dmprbt")==0){
-            fscanf("%s %d", argumento1, &argumento2);
-            interativoD(argumento1, argumento2, cidade);
+            scanf("%s %d", argumento1, &argumento2);
+            // interativoD(argumento1, argumento2, cidade);
         }
         else if(strcmp(comando, "sai")==0){
             sair = 1;
         }
         else if(strcmp(comando, "nav")==0){
             scanf("%d", &argumento2);
-            interativoN(argumento2, cidade);
+            // interativoN(argumento2, cidade);
         }
     }
 }
@@ -129,6 +130,7 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoEc = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoEc, argv[contador]);
+            printf("%s\n", nomeDoArquivoEc);
         }
         else if (strcmp("-pm", argv[contador]) == 0)
         {
@@ -140,6 +142,7 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoPm, argv[contador]);
+            printf("%s\n", nomeDoArquivoPm);
         }
         else if (strcmp("-i", argv[contador]) == 0)
         {
@@ -185,7 +188,6 @@ int main(int argc, char *argv[])
             sprintf(arquivoPm, "%s", nomeDoArquivoPm);
         }
 	}
-   
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
     prefixoDoArquivoGeo = retornarPrefixoDoArquivo(nomeDoArquivoGeo);
@@ -202,13 +204,14 @@ int main(int argc, char *argv[])
     //BLOCO QUE RESOLVE O GEO
     printf("Bloco do Geo inicializado\n");
 	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
+    // Cidade cidade = criarCidade();
     printf("Bloco do Geo finalizado\n");
 
     if(arquivoEc != NULL){
-        iniciaComercios(cidade);
+        iniciaComercios(cidade, arquivoEc);
     }
     if(arquivoPm != NULL){
-        iniciaPessoas(cidade);
+        iniciaPessoas(cidade, arquivoPm);
     }
 
     if(nomeDoArquivoQry != NULL)
@@ -231,7 +234,13 @@ int main(int argc, char *argv[])
     }
 
     if(interativo)
+    {
         resolverInterativos(cidade);
+        free(nomeDoArquivoQry);
+        free(prefixoDoAquivoQry);
+        free(prefixoFinalDoQry);
+        free(arquivoQry);
+    }
 
     removeCidade(cidade);
 	printf("Lista desalocada\n");

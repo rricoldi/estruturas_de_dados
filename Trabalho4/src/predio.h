@@ -36,5 +36,6 @@ double retornaPYNum(Predio p);
 
 double retornaPWidth(Predio);
 double retornaPHeight(Predio);
+double comparaPredio(Predio p1, Predio p2);
 
 #endif

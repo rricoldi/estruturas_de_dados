@@ -25,4 +25,6 @@ char *retornaReCorP(Retangulo re);
 
 char *retornaReCorB(Retangulo re);
 
+double comparaRetangulo(Retangulo r1, Retangulo r2);
+
 #endif

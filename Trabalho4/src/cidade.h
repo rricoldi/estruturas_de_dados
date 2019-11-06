@@ -2,7 +2,8 @@
 #define __CIDADE_H
 
 #include "lista.h"
-
+#include "arvore.h"
+#include "hashTable.h"
 /*  
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
     Tambem eh utilizada para resolver alguns problemas do Qry, e para conseguir os valores de uma determinada forma
@@ -10,9 +11,9 @@
 
 typedef void *Cidade;
 
-Cidade criarCidade(int numeroDeFiguras, int numeroDeQuadras, int numeroDeHidrantes, int numeroDeRadios, int numeroDeSemaforos, int numeroDePredios, int numeroDeMuros);
-void iniciaComercios(Cidade);
-void iniciaPessoas(Cidade);
+Cidade criarCidade();
+void iniciaComercios(Cidade, char* arquivoEc);
+void iniciaPessoas(Cidade, char* arquivoPm);
 
 void removeCidade(Cidade cid);
 

@@ -74,3 +74,12 @@ char *retornaReCorP(Retangulo re)
     return item->corP;
 }
 
+double comparaRetangulo(Retangulo r1, Retangulo r2)
+{
+    ItemRe *retangulo1 = (ItemRe *)r1;
+    ItemRe *retangulo2 = (ItemRe *)r2;
+
+    if(retangulo1->x != retangulo2->x)
+        return retangulo1->x - retangulo2->x;
+    return retangulo1->y - retangulo2->y;
+}
