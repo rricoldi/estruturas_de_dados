@@ -21,9 +21,13 @@ Tree criaArvore(double (*comparaInfo) (Info, Info));
 
 void insereNaArvore(Tree** arvore, Info info);
 
-// void imprimeArvore(Tree* arvore);
+void imprimeArvore(Tree tree, void (*print) (Info));
 
 void deletaDaArvore(Tree tree, Node* node);
+
+void percorreArvore(Tree tree, void (*funcao) (Info));
+
+void desalocaArvore(Tree tree);
 
 // Info* buscaNaArvore(Tree* arvore, int numero);
 
