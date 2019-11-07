@@ -189,6 +189,10 @@ int main(int argc, char *argv[])
         }
 	}
 
+    if(arquivoPm != NULL){
+        // iniciaArquivoPm(arquivoPm);
+    }
+
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
     prefixoDoArquivoGeo = retornarPrefixoDoArquivo(nomeDoArquivoGeo);
 

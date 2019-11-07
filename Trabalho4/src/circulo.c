@@ -78,3 +78,9 @@ double comparaCirculo(Circulo c1, Circulo c2)
         return circulo1->x - circulo2->x;
     return circulo1->y - circulo2->y;
 }
+
+void imprime(Circulo c)
+{
+    ItemCirculo *item = (ItemCirculo *)c;
+    printf("\nx = %lf y = %lf r = %lf", item->x, item->y, item->r);
+}

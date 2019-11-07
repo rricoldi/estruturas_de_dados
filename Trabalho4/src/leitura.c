@@ -89,7 +89,6 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			{
 				Info info = criarCirculo(id, corDaBordaDaFigura, corDoPreenchimentoDaFigura, raio, x, y, espessuraDosCirculos);
 				adicionarCirculo(cidade, info);
-
 				imprimirCirculo(raio, x, y, corDaBordaDaFigura, corDoPreenchimentoDaFigura, nomeDoArquivoSvg, espessuraDosCirculos);
 				numeroDeFiguras++;
 			}
