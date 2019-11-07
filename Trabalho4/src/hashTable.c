@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #include<string.h>
+#include<stdio.h>
+#include"comercioPessoas.h"
 
 struct registrado{
     char* key;
@@ -56,28 +58,36 @@ HashTable criaTabela(int tam){
 int insereRegistro(HashTable tab, char* key, Info info){
     struct tabela *essa = tab;
     int posic = hashFunction(key, essa->tamanho);
-    if(existeChave(tab, key)){
-        struct registrado *aux = essa->reg[posic].reg;
-        while(aux->next != NULL){
-            aux = aux->next;
-        }
-        aux->next = malloc(sizeof(struct registrado));
-        aux = aux->next;
+    // if(existeChave(tab, key)){
+    //     struct registrado *aux = essa->reg[posic].reg;
+    //     while(aux->next != NULL){
+    //         aux = aux->next;
+    //     }
+    //     aux->next = malloc(sizeof(struct registrado));
+    //     aux = aux->next;
 
-        aux->key = malloc(strlen(key));
+    //     aux->key = malloc(strlen(key));
 
-        strcpy(aux->key, key);
-        aux->info = info;
-        aux->next = NULL;
-        return posic;
-    }
-    essa->reg[posic].reg = malloc(sizeof(struct registrado));
+    //     strcpy(aux->key, key);
+    //     aux->info = info;
+    //     aux->next = NULL;
+    //     return posic;
+    // }
+    // essa->reg[posic].reg = malloc(sizeof(struct registrado));
 
-    essa->reg[posic].reg->key = malloc(strlen(key));
+    // essa->reg[posic].reg->key = malloc(strlen(key));
 
-    strcpy(essa->reg[posic].reg->key, key);
-    essa->reg[posic].reg->info = info;
-    essa->reg[posic].reg->next = NULL;
+    // strcpy(essa->reg[posic].reg->key, key);
+    // essa->reg[posic].reg->info = info;
+    // essa->reg[posic].reg->next = NULL;
+    // return posic;
+
+    struct registrado* aux = malloc(sizeof(struct registrado));
+    aux->key = malloc(strlen(key));
+    strcpy(aux->key, key);
+    aux->info = info;
+    aux->next = essa->reg[posic].reg;
+    essa->reg[posic].reg = aux;
     return posic;
 }
 
@@ -90,13 +100,12 @@ bool existeChave(HashTable tab, char* key){
     return true;
 }
 
-Info getRegistro(HashTable tabela, char* key){
+Info getPrimeiroRegistro(HashTable tabela, char* key){
     if(!existeChave(tabela, key)){
         return NULL;
     }
     struct tabela *essa = tabela;
     int posic = hashFunction(key, essa->tamanho);
-    
     struct registrado *aux = essa->reg[posic].reg;
     while(strcmp(aux->key, key) != 0){
         aux = aux->next;
@@ -105,6 +114,32 @@ Info getRegistro(HashTable tabela, char* key){
     }
 
     return essa->reg[posic].reg->info;
+}
+Info* getVetorRegistros(HashTable tabela, char* key, int *tamanhoVetor){
+    if(!existeChave(tabela, key)){
+        return NULL;
+    }
+    struct tabela *essa = tabela;
+    int posic = hashFunction(key, essa->tamanho);
+    
+    Info *infoArray = NULL;
+    int listSize=0;
+    struct registrado *aux = essa->reg[posic].reg;
+    while(aux != NULL){
+        listSize++;
+        aux = aux->next;
+    }
+    infoArray = malloc(sizeof(Info)*listSize);
+    aux = essa->reg[posic].reg;
+    *tamanhoVetor = 0;
+    for(int i=0;i<listSize;i++){
+        if(strcmp(aux->key, key)==0){
+            infoArray[*tamanhoVetor] = aux->info;
+            *tamanhoVetor = *tamanhoVetor +1;
+        }
+        aux = aux->next;
+    }
+    return infoArray;
 }
 
 int removeChave(HashTable tabela, char* key){

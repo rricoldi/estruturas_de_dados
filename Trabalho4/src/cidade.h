@@ -71,4 +71,6 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
+void qry_m(FILE* arquivoTxt, char* cep, Cidade);
+
 #endif

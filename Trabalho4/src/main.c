@@ -223,7 +223,9 @@ int main(int argc, char *argv[])
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
+        //Essa função estava passando o arq.qry sem a extensão .qry, então dava erro na hora de abrir
+        // leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
+        leiaQry(prefixoFinalDoQry, arquivoQry, cidade);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)

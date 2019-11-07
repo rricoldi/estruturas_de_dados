@@ -86,13 +86,6 @@ void iniciaPessoas(Cidade cidade, char* arquivoPm){
     essa->moradiaPessoa_cep = criaTabela(97);
     essa->moradias_cpf = criaTabela(97);
     leiaPm(arquivoPm, essa->pessoas_cpf, essa->moradias_cpf, essa->moradiaPessoa_cep);
-    // int i;
-    // Info* registros;
-    // printf("%s\n", getPrimeiroRegistro(essa->moradiaPessoa_cep, "b02.7"));
-    // registros = getVetorRegistros(essa->moradiaPessoa_cep, "b02.7", &i);
-    // for(int j=0;j<i;j++){
-    //     printf("!%s!\n", registros[j]);
-    // }
 }
 
 void removeCidade(Cidade cid)
@@ -408,8 +401,28 @@ void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquiv
     resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
 }
 
-void qry_m(FILE* arquivoTxt, char cep[], Cidade cidade){
-    struct city *essa = (struct city*)cidade;
+void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
+    int tamanhoVetorInfo;
+    Info* vetorCpfs;
+    cidade *city = (cidade*)cid;
 
+    vetorCpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamanhoVetorInfo);
+    fprintf(arquivoTxt, "m? cep: %s\n", cep);
+    for(int i=0;i<tamanhoVetorInfo;i++){
+        fprintf(arquivoTxt, " -cpf: %s\n", vetorCpfs[i]);
+        Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, vetorCpfs[i]);
+        Moradia mor = getPrimeiroRegistro(city->moradias_cpf, vetorCpfs[i]);
 
+        if(pes == NULL){
+            fprintf(arquivoTxt, "  .Pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+        }
+        if(mor == NULL){
+            fprintf(arquivoTxt, "  .Casa da pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+        }
+    }
+    fprintf(arquivoTxt, "\n");
 }
