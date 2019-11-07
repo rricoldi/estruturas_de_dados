@@ -10,10 +10,10 @@ typedef struct city
 {
     // Tree arvoreCirculo;
     Tree arvoreMuro;
-    HashTable pessoas;
-    HashTable moradias;
-    HashTable tiposComercio;
-    HashTable comercios;
+    HashTable pessoas;          //key: CPF da pessoa
+    HashTable moradias;         //key: CPF do morador
+    HashTable tiposComercio;    //key: tipo do comercio
+    HashTable comercios;        //key: CNPJ do estabelecimento
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
     Tree arvoreQuadra;
