@@ -15,6 +15,13 @@ typedef struct city
     HashTable moradias_cpf;         //key: CPF do morador
     HashTable tiposComercio_tipo;   //key: tipo do comercio
     HashTable comercios_cnpj;       //key: CNPJ do estabelecimento
+    HashTable circulo_id;
+    HashTable retangulo_id;
+    HashTable quadra_cep;
+    HashTable hidrante_id;
+    HashTable radio_id;
+    HashTable semaforo_id;
+    HashTable predio_cep;
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
     Tree arvoreQuadra;
@@ -45,6 +52,13 @@ Cidade criarCidade()
     city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
     city->arvorePredio = criaArvore(comparaPredio);
+    city->circulo_id = criaTabela(997);
+    city->retangulo_id = criaTabela(997);
+    city->quadra_cep = criaTabela(997);
+    city->hidrante_id = criaTabela(997);
+    city->radio_id = criaTabela(997);
+    city->semaforo_id = criaTabela(997);
+    city->predio_cep = criaTabela(997);
     city->pessoas_cpf = NULL;
     city->moradiaPessoa_cep = NULL;
     city->moradias_cpf = NULL;
@@ -72,6 +86,13 @@ void iniciaPessoas(Cidade cidade, char* arquivoPm){
     essa->moradiaPessoa_cep = criaTabela(97);
     essa->moradias_cpf = criaTabela(97);
     leiaPm(arquivoPm, essa->pessoas_cpf, essa->moradias_cpf, essa->moradiaPessoa_cep);
+    // int i;
+    // Info* registros;
+    // printf("%s\n", getPrimeiroRegistro(essa->moradiaPessoa_cep, "b02.7"));
+    // registros = getVetorRegistros(essa->moradiaPessoa_cep, "b02.7", &i);
+    // for(int j=0;j<i;j++){
+    //     printf("!%s!\n", registros[j]);
+    // }
 }
 
 void removeCidade(Cidade cid)
@@ -229,6 +250,7 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
 void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->circulo_id, retornaCID(info), info);
     return insereNaArvore(&(city->arvoreCirculo), info);
 }
 
@@ -242,6 +264,7 @@ Circulo getCirculo(Cidade cid, int i)
 void adicionarRetangulo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->retangulo_id, retornaReID(info), info);
     return insereNaArvore(&(city->arvoreRetangulo), info);
 }
 
@@ -254,6 +277,7 @@ Retangulo getRetangulo(Cidade cid, int i)
 void adicionarQuadra(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->quadra_cep, retornaQCEP(info), info);
     return insereNaArvore(&(city->arvoreQuadra), info);
 }
 
@@ -266,6 +290,7 @@ Quadra getQuadra(Cidade cid, int i)
 void adicionarHidrante(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->hidrante_id, retornaHID(info), info);
     return insereNaArvore(&(city->arvoreHidrante), info);
 }
 
@@ -278,6 +303,7 @@ Hidrante getHidrante(Cidade cid, int i)
 void adicionarRadioBase(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->radio_id, retornaCID(info), info);
     return insereNaArvore(&(city->arvoreRadio), info);
 }
 
@@ -290,6 +316,7 @@ Radio getRadio(Cidade cid, int i)
 void adicionarSemaforo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->semaforo_id, retornaSID(info), info);
     return insereNaArvore(&(city->arvoreSemaforo), info);
 }
 
@@ -303,6 +330,7 @@ Semaforo getSemaforo(Cidade cid, int i)
 void adicionarPredio(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->predio_cep, retornaPCep(info), info);
     return insereNaArvore(&(city->arvorePredio), info);
 }
 
@@ -378,4 +406,10 @@ void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquiv
     double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
 
     resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
+}
+
+void qry_m(FILE* arquivoTxt, char cep[], Cidade cidade){
+    struct city *essa = (struct city*)cidade;
+
+
 }
