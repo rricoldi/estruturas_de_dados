@@ -602,7 +602,7 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 			char face;
 			int num;
 
-			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cnpj, cpf, cep, &face, &num, nome);
+			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cnpj, cpf, tipo, cep, &face, &num, nome);
 
 			// cnpj[18] = '\0';
 			// cpf[14] = '\0';
@@ -624,7 +624,7 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 	}
 }
 
-void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias){
+void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable moradiaPessoa){
 	FILE* pm = fopen(arquivoPm, "r");
 	if(!pm){
 		printf("Erro ao abrir o arquivo pm \'%s\'\n", arquivoPm);
@@ -641,7 +641,7 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias){
 			char cpf[15], nome[50], sobrenome[50], nascimento[11];
 			char sexo;
 
-			sscanf(linha, "%*c %14s %49s %49s %c %10s ", cpf, nome, sobrenome, sexo, nascimento);
+			sscanf(linha, "%*c %14s %49s %49s %c %10s ", cpf, nome, sobrenome, &sexo, nascimento);
 
 			Pessoa pes = pessoaNovo(cpf, nome, sobrenome, nascimento, sexo);
 			int reg = insereRegistro(pessoas, cpf, pes);
@@ -654,13 +654,15 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias){
 			char face;
 			int num;
 
-			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cpf, cep, &face, &num, complemento);
+			sscanf(linha, "%*c %14s %9s %c %d %[^\n]", cpf, cep, &face, &num, complemento);
 
 			Moradia mor = moradiaNovo(cep, face, num, complemento);
 			int reg = insereRegistro(moradias, cpf, mor);
 			if(reg<0){
 				printf("Erro ao inserir a moradia \'%s, %c, %d\'\n", cep, face, num);
 			}
+
+			insereRegistro(moradiaPessoa, cep, (Info)cpf);
 		}
 	}
 }

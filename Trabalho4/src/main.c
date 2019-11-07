@@ -130,7 +130,6 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoEc = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoEc, argv[contador]);
-            printf("%s\n", nomeDoArquivoEc);
         }
         else if (strcmp("-pm", argv[contador]) == 0)
         {
@@ -142,7 +141,6 @@ int main(int argc, char *argv[])
 
             nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoPm, argv[contador]);
-            printf("%s\n", nomeDoArquivoPm);
         }
         else if (strcmp("-i", argv[contador]) == 0)
         {
@@ -207,8 +205,8 @@ int main(int argc, char *argv[])
 
     //BLOCO QUE RESOLVE O GEO
     printf("Bloco do Geo inicializado\n");
-	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
-    // Cidade cidade = criarCidade();
+	// Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
+    Cidade cidade = criarCidade();
     printf("Bloco do Geo finalizado\n");
 
     if(arquivoEc != NULL){

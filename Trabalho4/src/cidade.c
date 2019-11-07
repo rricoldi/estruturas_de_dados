@@ -10,10 +10,11 @@ typedef struct city
 {
     // Tree arvoreCirculo;
     Tree arvoreMuro;
-    HashTable pessoas;          //key: CPF da pessoa
-    HashTable moradias;         //key: CPF do morador
-    HashTable tiposComercio;    //key: tipo do comercio
-    HashTable comercios;        //key: CNPJ do estabelecimento
+    HashTable pessoas_cpf;          //key: CPF da pessoa
+    HashTable moradiaPessoa_cep;    //key: CEP da quadra
+    HashTable moradias_cpf;         //key: CPF do morador
+    HashTable tiposComercio_tipo;   //key: tipo do comercio
+    HashTable comercios_cnpj;       //key: CNPJ do estabelecimento
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
     Tree arvoreQuadra;
@@ -44,10 +45,11 @@ Cidade criarCidade()
     city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
     city->arvorePredio = criaArvore(comparaPredio);
-    city->pessoas = NULL;
-    city->moradias = NULL;
-    city->tiposComercio = NULL;
-    city->comercios = NULL;
+    city->pessoas_cpf = NULL;
+    city->moradiaPessoa_cep = NULL;
+    city->moradias_cpf = NULL;
+    city->tiposComercio_tipo = NULL;
+    city->comercios_cnpj = NULL;
 
     return city;
 }
@@ -60,15 +62,16 @@ Cidade criarCidade()
 
 void iniciaComercios(Cidade cidade, char* arquivoEc){
     struct city *essa = (struct city*) cidade;
-    essa->tiposComercio = criaTabela(50);
-    essa->comercios = criaTabela(50);
-    leiaEc(arquivoEc, essa->comercios, essa->tiposComercio);
+    essa->tiposComercio_tipo = criaTabela(97);
+    essa->comercios_cnpj = criaTabela(97);
+    leiaEc(arquivoEc, essa->comercios_cnpj, essa->tiposComercio_tipo);
 }
 void iniciaPessoas(Cidade cidade, char* arquivoPm){
     struct city *essa = (struct city*) cidade;
-    essa->pessoas = criaTabela(50);
-    essa->moradias = criaTabela(50);
-    leiaPm(arquivoPm, essa->pessoas, essa->moradias);
+    essa->pessoas_cpf = criaTabela(97);
+    essa->moradiaPessoa_cep = criaTabela(97);
+    essa->moradias_cpf = criaTabela(97);
+    leiaPm(arquivoPm, essa->pessoas_cpf, essa->moradias_cpf, essa->moradiaPessoa_cep);
 }
 
 void removeCidade(Cidade cid)
