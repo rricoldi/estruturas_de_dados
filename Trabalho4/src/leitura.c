@@ -410,11 +410,9 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 			char *arquivoDeSaida = (char *)(malloc((strlen(prefixoDoArquivoQry) + strlen(sufixo) + 7) * sizeof(char)));
 			sprintf(arquivoDeSaida, "%s-%s.svg", prefixoDoArquivoQry, sufixo);
+			
 			iniciaSvg(arquivoDeSaida);
-
-			boudingBoxCirculos(cidade, arquivoDeSaida );
-			boundingBoxRetangulos(cidade, arquivoDeSaida , cor);
-
+			imprimeBoundingBox(cidade, arquivoDeSaida, cor);
 			finalizaSvg(arquivoDeSaida);
 		}
 		else if (strcmp("dq", comando) == 0)
@@ -543,7 +541,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		}
 		else if(strcmp("brl", comando)==0){
 			double brlX, brlY;
-			fscanf(arquivoQry, "%d %d ", &brlX, &brlY);
+			fscanf(arquivoQry, "%lf %lf ", &brlX, &brlY);
 
 			// <<
 			if(verificador2 == 0){

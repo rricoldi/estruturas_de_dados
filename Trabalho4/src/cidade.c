@@ -60,18 +60,18 @@ Cidade criarCidade()
 //     percorreArvore(city->arvoreCirculo, imprime);
 // }
 
-void iniciaComercios(Cidade cidade, char* arquivoEc){
-    struct city *essa = (struct city*) cidade;
-    essa->tiposComercio_tipo = criaTabela(97);
-    essa->comercios_cnpj = criaTabela(97);
-    leiaEc(arquivoEc, essa->comercios_cnpj, essa->tiposComercio_tipo);
+void iniciaComercios(Cidade cid, char* arquivoEc){
+    cidade *city = (cidade *)cid;
+    city->tiposComercio_tipo = criaTabela(97);
+    city->comercios_cnpj = criaTabela(97);
+    leiaEc(arquivoEc, city->comercios_cnpj, city->tiposComercio_tipo);
 }
-void iniciaPessoas(Cidade cidade, char* arquivoPm){
-    struct city *essa = (struct city*) cidade;
-    essa->pessoas_cpf = criaTabela(97);
-    essa->moradiaPessoa_cep = criaTabela(97);
-    essa->moradias_cpf = criaTabela(97);
-    leiaPm(arquivoPm, essa->pessoas_cpf, essa->moradias_cpf, essa->moradiaPessoa_cep);
+void iniciaPessoas(Cidade cid, char* arquivoPm){
+    cidade *city = (cidade *)cid;
+    city->pessoas_cpf = criaTabela(97);
+    city->moradiaPessoa_cep = criaTabela(97);
+    city->moradias_cpf = criaTabela(97);
+    leiaPm(arquivoPm, city->pessoas_cpf, city->moradias_cpf, city->moradiaPessoa_cep);
 }
 
 void removeCidade(Cidade cid)
@@ -88,24 +88,24 @@ void removeCidade(Cidade cid)
     free(city);
 }
 
-void boudingBoxCirculos(Cidade cid, char arquivo[])
+void imprimeRetangulos(Info info, char nomeDoArquivoSvg[], char cor[])
 {
-    cidade *city = (cidade *)cid;
-    bbcLista(city->listaCirculo, arquivo);
-}
-
-void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[])
-{
-    cidade *city = (cidade *)cid;
-    bbrLista(city->listaRetangulo, arquivo, cor);
+    Retangulo retangulo = info;
+    imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorB(retangulo), retornaReCorP(retangulo), nomeDoArquivoSvg, retornaReEspessura(retangulo));
 }
 
 void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[])
 {
     cidade *city = (cidade *)cid;
-    
-    imprimeCirculos(city->listaCirculo, nomeDoArquivoSvg);
-    imprimeRetangulos(city->listaRetangulo, nomeDoArquivoSvg);
+    imprimeNoSvg(city->arvoreCirculo, imprimeCirculos, nomeDoArquivoSvg, " ");    
+    imprimeNoSvg(city->arvoreRetangulo, imprimeRetangulos, nomeDoArquivoSvg, " ");
+}
+
+void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[])
+{
+    cidade *city = (cidade *)cid;
+    imprimeNoSvg(city->arvoreCirculo, boundingBoxCirculos, nomeDoArquivoSvg, cor);    
+    imprimeNoSvg(city->arvoreRetangulo, boundingBoxRetangulos, nomeDoArquivoSvg, cor);
 }
 
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
@@ -229,99 +229,99 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
 void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreCirculo), info);
+    insereNaArvore(&(city->arvoreCirculo), info);
 }
 
 
 Circulo getCirculo(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaCirculo, i);
+    return;
 }
 
 void adicionarRetangulo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreRetangulo), info);
+    insereNaArvore(&(city->arvoreRetangulo), info);
 }
 
 Retangulo getRetangulo(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaRetangulo, i);
+    return;
 }
 
 void adicionarQuadra(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreQuadra), info);
+    insereNaArvore(&(city->arvoreQuadra), info);
 }
 
 Quadra getQuadra(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaQuadra, i);
+    return;
 }
 
 void adicionarHidrante(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreHidrante), info);
+    insereNaArvore(&(city->arvoreHidrante), info);
 }
 
 Hidrante getHidrante(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaHidrante, i);
+    return; 
 }
 
 void adicionarRadioBase(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreRadio), info);
+    insereNaArvore(&(city->arvoreRadio), info);
 }
 
 Radio getRadio(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaRadio, i);
+    return;
 }
 
 void adicionarSemaforo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreSemaforo), info);
+    insereNaArvore(&(city->arvoreSemaforo), info);
 }
 
 Semaforo getSemaforo(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaSemaforo, i);
+    return;
 }
 
 
 void adicionarPredio(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvorePredio), info);
+    insereNaArvore(&(city->arvorePredio), info);
 }
 
 Predio getPredio(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaPredio, i);
+    return;
 }
 
 void adicionarMuro(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    return insereNaArvore(&(city->arvoreMuro), info);
+    insereNaArvore(&(city->arvoreMuro), info);
 }
 
 Muro getMuro(Cidade cid, int i)
 {
     cidade *city = (cidade *)cid;
-    return get(city->listaMuro, i);
+    return;
 }
 
 

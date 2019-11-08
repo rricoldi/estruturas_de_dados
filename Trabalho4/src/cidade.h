@@ -17,11 +17,9 @@ void iniciaPessoas(Cidade, char* arquivoPm);
 
 void removeCidade(Cidade cid);
 
-void boudingBoxCirculos(Cidade cid, char arquivo[]);
-
-void boundingBoxRetangulos(Cidade cid, char arquivo[], char cor[]);
-
 void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[]);
+
+void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[]);
 
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 

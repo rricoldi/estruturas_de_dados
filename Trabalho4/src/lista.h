@@ -25,10 +25,6 @@ Lista iniciaLista(int capacidade);
 
 void finalizaLista(Lista L);
 
-void imprimeCirculos(Lista L, char nomeDoArquivoSvg[]);
-
-void imprimeRetangulos(Lista L, char nomeDoArquivoSvg[]);
-
 void imprimeQuadras(Lista L, char nomeDoArquivoSvg[]);
 
 void imprimeHidrantes(Lista L, char nomeDoArquivoSvg[]);

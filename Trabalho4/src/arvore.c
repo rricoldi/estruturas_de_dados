@@ -348,6 +348,8 @@ void deletaDaArvore(Tree tree, Node* node)
 
 void percorreArvorePorNo(No* no, void (*funcao) (Info), No* nil)
 {
+    if(no == nil)
+        return;
     funcao(no->info);
     if(no->esquerda != nil)
         percorreArvorePorNo(no->esquerda, funcao, nil);
@@ -362,6 +364,23 @@ void percorreArvore(Tree tree, void (*funcao) (Info))
 
     percorreArvorePorNo(arvore->raiz, funcao, arvore->nil);
 
+}
+
+void imprimeArvorePorNo(No* no, void (*funcao) (Info, char[], char[]), No* nil, char nomeDoArquivoSvg[], char cor[])
+{
+    if(no == nil)
+        return;
+    funcao(no->info, nomeDoArquivoSvg, cor);
+    if(no->esquerda != nil)
+        imprimeArvorePorNo(no->esquerda, funcao, nil, nomeDoArquivoSvg, cor);
+    if(no->direita != nil)
+        imprimeArvorePorNo(no->direita, funcao, nil, nomeDoArquivoSvg, cor);
+}
+
+void imprimeNoSvg(Tree tree, void (*funcao) (Info, char[], char[]), char nomeDoArquivoSvg[], char cor[])
+{
+    Arvore* arvore = (Arvore*) tree;
+    imprimeArvorePorNo(arvore->raiz, funcao, arvore->nil, nomeDoArquivoSvg, cor);
 }
 
 void desalocaNo(No* no, No* nil)

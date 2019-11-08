@@ -27,4 +27,5 @@ double comparaCirculo(Circulo c1, Circulo c2);
 
 void imprime(Circulo c);
 
+void imprimeCirculos(Circulo circulo, char nomeDoArquivoSvg[], char cor[]);
 #endif

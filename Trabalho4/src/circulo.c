@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "circulo.h"
-
+#include "svg.h"
 typedef struct circulo
 {
     char id[20], corPreenchimento[20], corBorda[20];
@@ -83,4 +83,10 @@ void imprime(Circulo c)
 {
     ItemCirculo *item = (ItemCirculo *)c;
     printf("\nx = %lf y = %lf r = %lf", item->x, item->y, item->r);
+}
+
+void imprimeCirculos(Circulo circulo, char nomeDoArquivoSvg[], char cor[])
+{
+    ItemCirculo *item = (ItemCirculo *)circulo;
+    imprimirCirculo(item->r, item->x, item->y, item->corBorda, item->corPreenchimento, nomeDoArquivoSvg, item->espessura);
 }

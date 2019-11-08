@@ -23,6 +23,8 @@ void insereNaArvore(Tree** arvore, Info info);
 
 void imprimeArvore(Tree tree, void (*print) (Info));
 
+void imprimeNoSvg(Tree tree, void (*funcao) (Info, char[], char[]), char nomeDoArquivoSvg[], char cor[]);
+
 void deletaDaArvore(Tree tree, Node* node);
 
 void percorreArvore(Tree tree, void (*funcao) (Info));

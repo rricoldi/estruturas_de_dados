@@ -60,48 +60,6 @@ void finalizaLista(Lista L)
 
 }
 
-void imprimeCirculos(Lista L, char nomeDoArquivoSvg[])
-{
-   List* lista = (List*) L;
-
-   int i = lista->primeiro;
-   Circulo circulo;
-
-   while(lista->v[i].prox != -1)
-   {
-      circulo = lista->v[i].info;
-
-      imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), nomeDoArquivoSvg, retornaCEspessura(circulo));
-
-      i = lista->v[i].prox;
-   }
-
-   circulo = lista->v[i].info;
-
-   imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), nomeDoArquivoSvg, retornaCEspessura(circulo));
-}
-
-void imprimeRetangulos(Lista L, char nomeDoArquivoSvg[])
-{
-   List* lista = (List*) L;
-
-   int i = lista->primeiro;
-   Retangulo retangulo;
-
-   while(lista->v[i].prox != -1)
-   {
-      retangulo = lista->v[i].info;
-
-    	imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorB(retangulo), retornaReCorP(retangulo), nomeDoArquivoSvg, retornaReEspessura(retangulo));
-
-      i = lista->v[i].prox;
-   }
-
-   retangulo = lista->v[i].info;
-
-   imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorB(retangulo), retornaReCorP(retangulo), nomeDoArquivoSvg, retornaReEspessura(retangulo));
-}
-
 void imprimeQuadras(Lista L, char nomeDoArquivoSvg[])
 {
    List* lista = (List*) L;

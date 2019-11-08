@@ -6,6 +6,7 @@
 */
 
 #include <stdbool.h>
+#include "arvore.h"
 
 double max(double n1, double n2);
 
@@ -30,5 +31,9 @@ bool pontoInternoCirculo(float px, float py, float cx, float cy, float r);
 bool pontoInternoRetangulo(float px, float py, float rx, float ry, float h, float w);
 
 double distanciaDaFigura(double x1, double y1, double x2, double y2, char svg[]);
+
+void boundingBoxCirculos(Info circulo, char nomeDoArquivoSvg[], char cor[]);
+
+void boundingBoxRetangulos(Info retangulo, char nomeDoArquivoSvg[], char cor[]);
 
 #endif

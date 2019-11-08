@@ -195,3 +195,15 @@ double distanciaDaFigura(double x1, double y1, double x2, double y2, char svg[])
 
     return dist;
 }
+
+void boundingBoxCirculos(Info circulo, char nomeDoArquivoSvg[], char cor[])
+{
+    imprimirRetangulo((retornaCR(circulo)*2.1), retornaCR(circulo)*2.1, retornaCX(circulo)-retornaCR(circulo)-(retornaCR(circulo)*0.1), retornaCY(circulo)-retornaCR(circulo)-(retornaCR(circulo)*0.1), "black", "none", nomeDoArquivoSvg, 0.5);
+    imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), nomeDoArquivoSvg, retornaCEspessura(circulo));
+}
+
+void boundingBoxRetangulos(Info retangulo, char nomeDoArquivoSvg[], char cor[])
+{
+    imprimirRetangulo(retornaReW(retangulo), retornaReH(retangulo), retornaReX(retangulo), retornaReY(retangulo), retornaReCorB(retangulo), retornaReCorP(retangulo), nomeDoArquivoSvg, retornaReEspessura(retangulo));
+    imprimirElipse(nomeDoArquivoSvg, retornaReX(retangulo)+(retornaReW(retangulo)/2), retornaReY(retangulo)+(retornaReH(retangulo)/2), retornaReW(retangulo)/2, retornaReH(retangulo)/2, cor, "black", 1);
+}

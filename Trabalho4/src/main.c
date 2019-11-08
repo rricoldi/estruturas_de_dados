@@ -205,8 +205,7 @@ int main(int argc, char *argv[])
 
     //BLOCO QUE RESOLVE O GEO
     printf("Bloco do Geo inicializado\n");
-	// Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
-    Cidade cidade = criarCidade();
+	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
     printf("Bloco do Geo finalizado\n");
 
     if(arquivoEc != NULL){
