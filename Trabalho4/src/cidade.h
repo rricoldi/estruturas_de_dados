@@ -46,19 +46,19 @@ void adicionarPredio(Cidade cid, Info info);
 
 void adicionarMuro(Cidade cid, Info info);
 
-Circulo getCirculo(Cidade cid, int i);
+Circulo getCirculo(Cidade cid, char id[]);
 
-Retangulo getRetangulo(Cidade cid, int i);
+Retangulo getRetangulo(Cidade cid, char id[]);
 
-Quadra getQuadra(Cidade cid, int i);
+Quadra getQuadra(Cidade cid, char id[]);
 
-Hidrante getHidrante(Cidade cid, int i);
+Hidrante getHidrante(Cidade cid, char id[]);
 
-Radio getRadio(Cidade cid, int i);
+Radio getRadio(Cidade cid, char id[]);
 
-Semaforo getSemaforo(Cidade cid, int i);
+Semaforo getSemaforo(Cidade cid, char id[]);
 
-Predio getPredio(Cidade cid, int i);
+Predio getPredio(Cidade cid, char id[]);
 
 Muro getMuro(Cidade cid, int i);
 

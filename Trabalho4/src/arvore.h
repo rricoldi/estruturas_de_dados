@@ -9,7 +9,6 @@
 #include "retangulo.h"
 #include "predio.h"
 #include "muro.h"
-#include "qry.h"
 
 
 typedef void *Info;

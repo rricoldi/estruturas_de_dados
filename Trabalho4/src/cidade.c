@@ -139,52 +139,59 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
 {
     cidade *city = (cidade *)cid;
-    int posicao;
-    posicao = procuraCirculo(city->listaCirculo, id);
-    if (posicao != -1)
+    Info info;
+    info = getPrimeiroRegistro(city->circulo_id, id);
+    if (info != NULL)
     {
         *tipo = 1;
-        return get(city->listaCirculo, posicao);
+        return info;
     }
-    posicao = procuraRetangulo(city->listaRetangulo, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->retangulo_id, id);
+    if (info != NULL)
     {
         *tipo = 2;
-        return get(city->listaRetangulo, posicao);
+        return info;
     }
-    posicao = procuraQuadra(city->listaQuadra, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->quadra_cep, id);
+    if (info != NULL)
     {
         *tipo = 3;
-        return get(city->listaQuadra, posicao);
+        return info;
     }
 
-    posicao = procuraHidrante(city->listaHidrante, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->hidrante_id, id);
+    if (info != NULL)
     {
         *tipo = 4;
-        return get(city->listaHidrante, posicao);
+        return info;
     }
 
-    posicao = procuraSemaforo(city->listaSemaforo, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->semaforo_id, id);
+    if (info != NULL)
     {
         *tipo = 5;
-        return get(city->listaSemaforo, posicao);
+        return info;
     }
 
-    posicao = procuraRadio(city->listaRadio, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->radio_id, id);
+    if (info != NULL)
     {
         *tipo = 6;
-        return get(city->listaRadio, posicao);
+        return info;
     }
-
-    posicao = procuraPredio(city->listaPredio, id, face, num);
-    if (posicao != -1)
+    int tamanho;
+    Info *infos = getVetorRegistros(city->predio_cep, id, &tamanho);
+    if (infos[0] != NULL)
     {
-        *tipo = 7;
-        return get(city->listaPredio, posicao);
+        for(int i = 0; i < tamanho; i++)
+        {
+            if (retornaPFace(infos[i]) == face && retornaPNumero(infos[i]) == num)
+            {
+                *tipo = 7;
+                return infos[i];
+            }
+            
+        }
     }
 
     printf("Nao foi possivel achar o elemento na cidade\n");
@@ -197,40 +204,36 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     arqTxt = fopen(txt, "a");
 
     cidade *city = (cidade *)cid;
-    int posicao;
+    Info info;
 
-    posicao = procuraQuadra(city->listaQuadra, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->quadra_cep, id);
+    if (info != NULL)
     {
-        fprintf(arqTxt, "del %s\nquadra -> x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(getQuadra(city, posicao)), retornaQY(getQuadra(city, posicao)), retornaQW(getQuadra(city, posicao)), retornaQH(getQuadra(city, posicao)));
-        removerDaLista(city->listaQuadra, posicao);
+        fprintf(arqTxt, "del %s\nquadra -> x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info));
         fclose(arqTxt);
         return;
     }
 
-    posicao = procuraHidrante(city->listaHidrante, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->quadra_cep, id);
+    if (info != NULL)
     {
-        fprintf(arqTxt, "del %s\nhidrante -> x: %lf y: %lf\n", id, retornaHX(getHidrante(city, posicao)), retornaHY(getHidrante(city, posicao)));
-        removerDaLista(city->listaHidrante, posicao);
+        fprintf(arqTxt, "del %s\nhidrante -> x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
         fclose(arqTxt);
         return;
     }
 
-    posicao = procuraSemaforo(city->listaSemaforo, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->semaforo_id, id);
+    if (info != NULL)
     {
-        fprintf(arqTxt, "del %s\nsemaforo -> x: %lf y: %lf\n", id, retornaSX(getSemaforo(city, posicao)), retornaSY(getSemaforo(city, posicao)));
-        removerDaLista(city->listaHidrante, posicao);
+        fprintf(arqTxt, "del %s\nsemaforo -> x: %lf y: %lf\n", id, retornaSX(info), retornaSY(info));
         fclose(arqTxt);
         return;
     }
 
-    posicao = procuraRadio(city->listaRadio, id);
-    if (posicao != -1)
+    info = getPrimeiroRegistro(city->radio_id, id);
+    if (info != NULL)
     {
-        fprintf(arqTxt, "del %s\nradio base -> x: %lf y: %lf\n", id, retornaRX(getRadio(city, posicao)), retornaRY(getRadio(city, posicao)));
-        removerDaLista(city->listaHidrante, posicao);
+        fprintf(arqTxt, "del %s\nradio base -> x: %lf y: %lf\n", id, retornaRX(info), retornaRY(info));
         fclose(arqTxt);
         return;
     }
@@ -248,10 +251,10 @@ void adicionarCirculo(Cidade cid, Info info)
 }
 
 
-Circulo getCirculo(Cidade cid, int i)
+Circulo getCirculo(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->circulo_id, id);
 }
 
 void adicionarRetangulo(Cidade cid, Info info)
@@ -261,10 +264,10 @@ void adicionarRetangulo(Cidade cid, Info info)
     insereNaArvore(&(city->arvoreRetangulo), info);
 }
 
-Retangulo getRetangulo(Cidade cid, int i)
+Retangulo getRetangulo(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->retangulo_id, id);
 }
 
 void adicionarQuadra(Cidade cid, Info info)
@@ -274,10 +277,10 @@ void adicionarQuadra(Cidade cid, Info info)
     insereNaArvore(&(city->arvoreQuadra), info);
 }
 
-Quadra getQuadra(Cidade cid, int i)
+Quadra getQuadra(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->quadra_cep, id);
 }
 
 void adicionarHidrante(Cidade cid, Info info)
@@ -287,10 +290,10 @@ void adicionarHidrante(Cidade cid, Info info)
     insereNaArvore(&(city->arvoreHidrante), info);
 }
 
-Hidrante getHidrante(Cidade cid, int i)
+Hidrante getHidrante(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return; 
+    return getPrimeiroRegistro(city->hidrante_id, id); 
 }
 
 void adicionarRadioBase(Cidade cid, Info info)
@@ -300,10 +303,10 @@ void adicionarRadioBase(Cidade cid, Info info)
     insereNaArvore(&(city->arvoreRadio), info);
 }
 
-Radio getRadio(Cidade cid, int i)
+Radio getRadio(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->radio_id, id);
 }
 
 void adicionarSemaforo(Cidade cid, Info info)
@@ -313,10 +316,10 @@ void adicionarSemaforo(Cidade cid, Info info)
     insereNaArvore(&(city->arvoreSemaforo), info);
 }
 
-Semaforo getSemaforo(Cidade cid, int i)
+Semaforo getSemaforo(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->semaforo_id, id);
 }
 
 
@@ -327,10 +330,10 @@ void adicionarPredio(Cidade cid, Info info)
     insereNaArvore(&(city->arvorePredio), info);
 }
 
-Predio getPredio(Cidade cid, int i)
+Predio getPredio(Cidade cid, char id[])
 {
     cidade *city = (cidade *)cid;
-    return;
+    return getPrimeiroRegistro(city->predio_cep, id);
 }
 
 void adicionarMuro(Cidade cid, Info info)

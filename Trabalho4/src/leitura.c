@@ -139,7 +139,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			}
 		}
 		else if (strcmp("s", comando) == 0)
-		{
+		{getQuadra(cidade, id);
 			fscanf(arquivoGeo, "%s %lf %lf", id, &x, &y);
 			if (numeroDeSemaforos < numeroMaximoDeSemaforos)
 			{
@@ -168,7 +168,9 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 			if (numeroDePredios < numeroMaximoDePredios)
 			{
 				
-				Info quadra = procuraNaCidade(cidade, id, &tipo, "", 0.0);
+				Info quadra = getQuadra(cidade, id);
+				if (quadra == NULL)
+					continue;
 				
 				if (strcmp("N", face) == 0)
 				{
@@ -301,7 +303,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	sprintf(nomeDoArquivoSvg, "%s.svg", prefixoDoArquivoQry);
 
 	iniciaSvg(nomeDoArquivoSvg);
-	// imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
+	imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
 
 	char *nomeDoArquivoTxt = (char *)malloc((strlen(prefixoDoArquivoQry) + 5) * sizeof(char));
 	sprintf(nomeDoArquivoTxt, "%s.txt", prefixoDoArquivoQry);
@@ -325,8 +327,8 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{ //proximo argumento deve ser numero maximo de circulos e retangulos
 			fscanf(arquivoQry, "%s %s", &id1, &id2);
 			
-			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
-			info2 = procuraNaCidade(cidade, id2, &tipo2, "", 0.0);
+			info1 = getPrimeiroRegistro(cidade, id1);
+			info2 = getPrimeiroRegistro(cidade, id2);
 			fclose(arquivoTxt);
 
 			if (tipo1 == 1 && tipo2 == 2)
