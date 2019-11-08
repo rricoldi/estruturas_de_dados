@@ -98,7 +98,7 @@ void imprimirPredio(char svg[], double x, double y, double tamanhoDaFrente, doub
 
     fprintf(arq, "\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:grey;stroke:black;fill-oppacity:0.5;stroke-oppacity:0.7\" />", x, y, tamanhoDaFrente, tamanhoDoLado);
     fprintf(arq, "\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:red;stroke:black;fill-oppacity:0.9;stroke-oppacity:0.7\" />", xCalcada, yCalcada, xCalcadaMax, yCalcadaMax);
-    fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\">%.0lf</text>", xNum, yNum, numeroDoPredio);
+    fprintf(arq, "\n\t<text x=\"%f\" y=\"%f\" fill=\"black\" font-size=\"8\">%.0lf</text>", xNum, yNum, numeroDoPredio);
 
     fclose(arq);
 }

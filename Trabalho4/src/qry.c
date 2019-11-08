@@ -140,7 +140,7 @@ void colisaoEntreRetangulos(float x1, float y1, float w1, float h1, float x2, fl
         fprintf(arqsvg,"\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill:none;stroke:black;stroke-width:2\" />",x,y,w,h);
     }else{
         fprintf(arq, "o? %s %s\nNAO\n", j, k);
-        fprintf(arqsvg,"\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill=:none;stroke:black;stroke-dasharray:5;stroke-width:2\" />",x,y,w,h);
+        fprintf(arqsvg,"\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" style=\"fill :none;stroke:black;stroke-dasharray:5;stroke-width:2\" />",x,y,w,h);
     }
     fclose(arqsvg);
     fclose(arq);
@@ -198,7 +198,7 @@ double distanciaDaFigura(double x1, double y1, double x2, double y2, char svg[])
 
 void boundingBoxCirculos(Info circulo, char nomeDoArquivoSvg[], char cor[])
 {
-    imprimirRetangulo((retornaCR(circulo)*2.1), retornaCR(circulo)*2.1, retornaCX(circulo)-retornaCR(circulo)-(retornaCR(circulo)*0.1), retornaCY(circulo)-retornaCR(circulo)-(retornaCR(circulo)*0.1), "black", "none", nomeDoArquivoSvg, 0.5);
+    imprimirRetangulo((retornaCR(circulo)*2), retornaCR(circulo)*2, retornaCX(circulo)-retornaCR(circulo), retornaCY(circulo)-retornaCR(circulo), "black", cor, nomeDoArquivoSvg, 0.5);
     imprimirCirculo(retornaCR(circulo), retornaCX(circulo), retornaCY(circulo), retornaCCorB(circulo), retornaCCorP(circulo), nomeDoArquivoSvg, retornaCEspessura(circulo));
 }
 

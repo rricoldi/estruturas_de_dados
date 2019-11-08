@@ -327,8 +327,8 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		{ //proximo argumento deve ser numero maximo de circulos e retangulos
 			fscanf(arquivoQry, "%s %s", &id1, &id2);
 			
-			info1 = getPrimeiroRegistro(cidade, id1);
-			info2 = getPrimeiroRegistro(cidade, id2);
+			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
+			info2 = procuraNaCidade(cidade, id2, &tipo2, "", 0.0);
 			fclose(arquivoTxt);
 
 			if (tipo1 == 1 && tipo2 == 2)
