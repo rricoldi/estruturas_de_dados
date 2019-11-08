@@ -21,7 +21,11 @@ int insereRegistro(HashTable, char* chave, Info);
 
 //Retorna o registro referente a 'key'
 //Retorna NULL caso o registro não exista
-Info getRegistro(HashTable, char* key);
+Info getPrimeiroRegistro(HashTable, char* key);
+
+//Retorna um vetor com todos os registros referentes à 'key'
+//tamanhoDoVetor é a quantidade de registros encontrados
+Info* getVetorRegistros(HashTable, char* key, int* tamanhoDoVetor);
 
 //Exclui a chave 'key' da tabela, e retorna a posição excluída
 //Retorna -1 caso a chave não esteja registrada

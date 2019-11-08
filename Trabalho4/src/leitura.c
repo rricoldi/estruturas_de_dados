@@ -77,7 +77,6 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	Cidade cidade = criarCidade();
 	while (1)
 	{
-
 		if (feof(arquivoGeo))
 		{
 			break;
@@ -302,7 +301,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	sprintf(nomeDoArquivoSvg, "%s.svg", prefixoDoArquivoQry);
 
 	iniciaSvg(nomeDoArquivoSvg);
-	imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
+	// imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
 
 	char *nomeDoArquivoTxt = (char *)malloc((strlen(prefixoDoArquivoQry) + 5) * sizeof(char));
 	sprintf(nomeDoArquivoTxt, "%s.txt", prefixoDoArquivoQry);
@@ -554,6 +553,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
 		}
+		else if(strcmp("m?", comando)==0){
+			char cep[10];
+			fscanf(arquivoQry, "%9s ", cep);
+			qry_m(arquivoTxt, cep, cidade);
+		}
+		else if(strcmp("dm?", comando)==0){
+			char cpf[15];
+			fscanf(arquivoQry, "%14s ", cpf);
+			qry_dm(arquivoTxt, cpf, cidade);
+		}
+		else if(strcmp("de?", comando)==0){
+			char cnpj[20];
+			fscanf(arquivoQry, "%19s ", cnpj);
+			qry_de(arquivoTxt, cnpj, cidade);
+		}
 	}
 	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -614,7 +628,7 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 			}
 
 			EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
-			int reg = insereRegistro(comercios, nome, cnpj);
+			int reg = insereRegistro(comercios, cnpj, com);
 			if(reg<0){
 				printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
 			}
@@ -660,7 +674,9 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 				printf("Erro ao inserir a moradia \'%s, %c, %d\'\n", cep, face, num);
 			}
 
-			insereRegistro(moradiaPessoa, cep, (Info)cpf);
+			char* cpfInfo = malloc(strlen(cpf));
+			strcpy(cpfInfo, cpf);
+			insereRegistro(moradiaPessoa, cep, cpfInfo);
 		}
 	}
 }

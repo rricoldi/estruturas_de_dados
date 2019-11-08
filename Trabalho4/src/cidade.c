@@ -15,6 +15,13 @@ typedef struct city
     HashTable moradias_cpf;         //key: CPF do morador
     HashTable tiposComercio_tipo;   //key: tipo do comercio
     HashTable comercios_cnpj;       //key: CNPJ do estabelecimento
+    HashTable circulo_id;
+    HashTable retangulo_id;
+    HashTable quadra_cep;
+    HashTable hidrante_id;
+    HashTable radio_id;
+    HashTable semaforo_id;
+    HashTable predio_cep;
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
     Tree arvoreQuadra;
@@ -45,6 +52,13 @@ Cidade criarCidade()
     city->arvoreSemaforo = criaArvore(comparaSemaforo);
     city->arvoreMuro = criaArvore(comparaMuro);
     city->arvorePredio = criaArvore(comparaPredio);
+    city->circulo_id = criaTabela(997);
+    city->retangulo_id = criaTabela(997);
+    city->quadra_cep = criaTabela(997);
+    city->hidrante_id = criaTabela(997);
+    city->radio_id = criaTabela(997);
+    city->semaforo_id = criaTabela(997);
+    city->predio_cep = criaTabela(997);
     city->pessoas_cpf = NULL;
     city->moradiaPessoa_cep = NULL;
     city->moradias_cpf = NULL;
@@ -229,6 +243,7 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
 void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->circulo_id, retornaCID(info), info);
     insereNaArvore(&(city->arvoreCirculo), info);
 }
 
@@ -242,6 +257,7 @@ Circulo getCirculo(Cidade cid, int i)
 void adicionarRetangulo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->retangulo_id, retornaReID(info), info);
     insereNaArvore(&(city->arvoreRetangulo), info);
 }
 
@@ -254,6 +270,7 @@ Retangulo getRetangulo(Cidade cid, int i)
 void adicionarQuadra(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->quadra_cep, retornaQCEP(info), info);
     insereNaArvore(&(city->arvoreQuadra), info);
 }
 
@@ -266,6 +283,7 @@ Quadra getQuadra(Cidade cid, int i)
 void adicionarHidrante(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->hidrante_id, retornaHID(info), info);
     insereNaArvore(&(city->arvoreHidrante), info);
 }
 
@@ -278,6 +296,7 @@ Hidrante getHidrante(Cidade cid, int i)
 void adicionarRadioBase(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->radio_id, retornaCID(info), info);
     insereNaArvore(&(city->arvoreRadio), info);
 }
 
@@ -290,6 +309,7 @@ Radio getRadio(Cidade cid, int i)
 void adicionarSemaforo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->semaforo_id, retornaSID(info), info);
     insereNaArvore(&(city->arvoreSemaforo), info);
 }
 
@@ -303,6 +323,7 @@ Semaforo getSemaforo(Cidade cid, int i)
 void adicionarPredio(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
+    insereRegistro(city->predio_cep, retornaPCep(info), info);
     insereNaArvore(&(city->arvorePredio), info);
 }
 
@@ -378,4 +399,77 @@ void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquiv
     double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
 
     resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
+}
+
+void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
+    int tamanhoVetorInfo;
+    Info* vetorCpfs;
+    cidade *city = (cidade*)cid;
+
+    vetorCpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamanhoVetorInfo);
+    fprintf(arquivoTxt, "m? cep: %s\n", cep);
+
+    if(vetorCpfs == NULL){
+        fprintf(arquivoTxt, " -Não há pessoas morando nesse cep");
+        return;
+    }
+
+    for(int i=0;i<tamanhoVetorInfo;i++){
+        fprintf(arquivoTxt, " -cpf: %s\n", (char*)vetorCpfs[i]);
+        Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, vetorCpfs[i]);
+        Moradia mor = getPrimeiroRegistro(city->moradias_cpf, vetorCpfs[i]);
+
+        if(pes == NULL){
+            fprintf(arquivoTxt, "  .Pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+        }
+        if(mor == NULL){
+            fprintf(arquivoTxt, "  .Casa da pessoa não encontrada\n");
+        }else{
+            fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+        }
+    }
+    fprintf(arquivoTxt, "\n");
+}
+void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid){
+    cidade* city = (cidade*)cid;
+    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
+
+    fprintf(arquivoTxt, "dm? cpf: %s\n", cpf);
+
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Pessoa não encontrada\n");
+    }else{
+        fprintf(arquivoTxt, " -%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+    }
+
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
+    if(mor == NULL){
+        fprintf(arquivoTxt, " -Endereço da pessoa não encontrado\n");
+    }else{
+        fprintf(arquivoTxt, " -%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+    }
+    fprintf(arquivoTxt, "\n");
+}
+void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
+    cidade *city = (cidade*)cid;
+    EstabelecimentoComercial ec = getPrimeiroRegistro(city->comercios_cnpj, cnpj);
+    Pessoa pes = NULL;
+
+    fprintf(arquivoTxt, "de? cnpj: %s\n", cnpj);
+    if(ec == NULL){
+        fprintf(arquivoTxt, " -Estabelecimento não encontrado\n");
+    }else{
+        ComercioTipo ct = getPrimeiroRegistro(city->tiposComercio_tipo, estabelecimentoGetTipo(ec));
+        fprintf(arquivoTxt, " -%s, %s, %s, %c, %d\n", estabelecimentoGetNome(ec), comercioGetDescricao(ct), estabelecimentoGetCep(ec),
+                                                        estabelecimentoGetFace(ec), estabelecimentoGetNum(ec));
+        pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
+    }
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Proprietário não encontrado\n");
+    }else{
+        fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
+    }
+    fprintf(arquivoTxt, "\n");
 }
