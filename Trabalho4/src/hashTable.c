@@ -83,7 +83,15 @@ int insereRegistro(HashTable tab, char* key, Info info){
     // return posic;
 
     struct registrado* aux = malloc(sizeof(struct registrado));
-    aux->key = malloc(strlen(key));
+    if(!aux){
+        printf("ERRO AO ALOCAR MEMÓRIA PARA O REGISTRO\n");
+        return -1;
+    }
+    aux->key = malloc(strlen(key)+1);
+    if(!aux->key){
+        printf("ERRO AO ALOCAR MEMÓRIA PARA A CHAVE\n");
+        return -1;
+    }
     strcpy(aux->key, key);
     aux->info = info;
     aux->next = essa->reg[posic].reg;
@@ -164,4 +172,33 @@ int removeChave(HashTable tabela, char* key){
     aux = NULL;
 
     return posic;
+}
+
+void hashtableFinalizar(HashTable tabela){
+    struct tabela *essa = (struct tabela*)tabela;
+    if(essa == NULL){
+        return;
+    }
+    struct registrado *aux, *aux2;
+    int posic;
+    for(posic=0;posic<essa->tamanho;posic++){
+        struct registros registro = essa->reg[posic];
+        if(registro.reg != NULL){
+            aux2 = registro.reg;
+            do{
+                aux = aux2;
+                aux2 = aux->next;
+                if(aux->key)
+                    free(aux->key);
+                if(aux->info)
+                    free(aux->info);
+                free(aux);
+                aux = NULL;
+            }while(aux2 != NULL);
+        }
+    }
+    free(essa->reg);
+    essa->reg = NULL;
+    free(essa);
+    essa = NULL;
 }

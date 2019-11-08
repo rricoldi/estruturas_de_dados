@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "leitura.h"
+#include"cidade.h"
 #include"comercioPessoas.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
@@ -570,6 +571,12 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			fscanf(arquivoQry, "%19s ", cnpj);
 			qry_de(arquivoTxt, cnpj, cidade);
 		}
+		else if(strcmp("mud", comando)==0){
+			char cpf[15], cep[10], face, complemento[135];
+			int num;
+			fscanf(arquivoQry, "%14s %9s %c %d %134[^\n] ", cpf, cep, &face, &num, complemento);
+			qry_mud(arquivoTxt, cpf, cep, face, num, complemento, cidade);
+		}
 	}
 	if(verificador != 0 && verificador2 == 0)
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -594,7 +601,7 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 	char comando;
 	char linha[150];
 	while(!feof(ec)){
-		fgets(linha, 150, ec);
+		fgets(linha, 148, ec);
 		sscanf(linha, "%c", &comando);
 
 		if(comando == 't'){
@@ -626,13 +633,12 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 
 			if(!existeChave(tiposComercio, tipo)){
 				printf("O tipo de estabelecimento %s não existe\n", tipo);
-				return;
-			}
-
-			EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
-			int reg = insereRegistro(comercios, cnpj, com);
-			if(reg<0){
-				printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
+			}else{
+				EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
+				int reg = insereRegistro(comercios, cnpj, com);
+				if(reg<0){
+					printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
+				}
 			}
 		}
 	}
@@ -669,14 +675,14 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 			int num;
 
 			sscanf(linha, "%*c %14s %9s %c %d %[^\n]", cpf, cep, &face, &num, complemento);
-
+			
 			Moradia mor = moradiaNovo(cep, face, num, complemento);
 			int reg = insereRegistro(moradias, cpf, mor);
 			if(reg<0){
 				printf("Erro ao inserir a moradia \'%s, %c, %d\'\n", cep, face, num);
 			}
 
-			char* cpfInfo = malloc(strlen(cpf));
+			char* cpfInfo = malloc(strlen(cpf)+1);
 			strcpy(cpfInfo, cpf);
 			insereRegistro(moradiaPessoa, cep, cpfInfo);
 		}

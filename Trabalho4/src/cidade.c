@@ -118,7 +118,7 @@ void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[])
 void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[])
 {
     cidade *city = (cidade *)cid;
-    imprimeNoSvg(city->arvoreCirculo, boundingBoxCirculos, nomeDoArquivoSvg, cor);    
+    imprimeNoSvg(city->arvoreCirculo, boundingBoxCirculos, nomeDoArquivoSvg, cor);
     imprimeNoSvg(city->arvoreRetangulo, boundingBoxRetangulos, nomeDoArquivoSvg, cor);
 }
 
@@ -470,9 +470,30 @@ void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
         pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
     }
     if(pes == NULL){
-        fprintf(arquivoTxt, " -Proprietário não encontrado\n");
+        fprintf(arquivoTxt, " -Proprietário (cpf %s) não encontrado\n", estabelecimentoGetCpf(ec));
     }else{
         fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
     }
     fprintf(arquivoTxt, "\n");
+}
+void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid){
+    cidade *city = (cidade*)cid;
+    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
+
+    fprintf(arquivoTxt, "mud cpf: %s\n", cpf);
+    if(!pes){
+        fprintf(arquivoTxt, " -Pessoa não encontrada\n\n");
+        return;
+    }
+    
+    fprintf(arquivoTxt, " -%s %s, %s mudou-se\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetNascimento(pes));
+    if(!mor){
+        fprintf(arquivoTxt, "  .de lugar nenhum, aparetemente\n");
+        mor = moradiaNovo(cep, face, num, complemento);
+        insereRegistro(city->moradias_cpf, cpf, mor);
+    }else{
+        fprintf(arquivoTxt, "  .de: %s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+    }
+    fprintf(arquivoTxt, "  .para: %s, %c, %d, %s\n\n", cep, face, num, complemento);
 }
