@@ -4,6 +4,7 @@
 #include "lista.h"
 #include "arvore.h"
 #include "hashTable.h"
+#include<stdio.h>
 /*  
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
     Tambem eh utilizada para resolver alguns problemas do Qry, e para conseguir os valores de uma determinada forma
@@ -72,5 +73,7 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
+void qry_md(FILE* arquivoTxt, char* cpf, Cidade);
+void qry_de(FILE* arquivoTxt, char* cnpj, Cidade);
 
 #endif

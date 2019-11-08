@@ -408,8 +408,14 @@ void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
 
     vetorCpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamanhoVetorInfo);
     fprintf(arquivoTxt, "m? cep: %s\n", cep);
+
+    if(vetorCpfs == NULL){
+        fprintf(arquivoTxt, " -Não há pessoas morando nesse cep");
+        return;
+    }
+
     for(int i=0;i<tamanhoVetorInfo;i++){
-        fprintf(arquivoTxt, " -cpf: %s\n", vetorCpfs[i]);
+        fprintf(arquivoTxt, " -cpf: %s\n", (char*)vetorCpfs[i]);
         Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, vetorCpfs[i]);
         Moradia mor = getPrimeiroRegistro(city->moradias_cpf, vetorCpfs[i]);
 
@@ -423,6 +429,47 @@ void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
         }else{
             fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
         }
+    }
+    fprintf(arquivoTxt, "\n");
+}
+void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid){
+    cidade* city = (cidade*)cid;
+    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
+
+    fprintf(arquivoTxt, "dm? cpf: %s\n", cpf);
+
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Pessoa não encontrada\n");
+    }else{
+        fprintf(arquivoTxt, " -%s %s, %c, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetSexo(pes), pessoaGetNascimento(pes));
+    }
+
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
+    if(mor == NULL){
+        fprintf(arquivoTxt, " -Endereço da pessoa não encontrado\n");
+    }else{
+        fprintf(arquivoTxt, " -%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
+    }
+    fprintf(arquivoTxt, "\n");
+}
+void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
+    cidade *city = (cidade*)cid;
+    EstabelecimentoComercial ec = getPrimeiroRegistro(city->comercios_cnpj, cnpj);
+    Pessoa pes = NULL;
+
+    fprintf(arquivoTxt, "de? cnpj: %s\n", cnpj);
+    if(ec == NULL){
+        fprintf(arquivoTxt, " -Estabelecimento não encontrado\n");
+    }else{
+        ComercioTipo ct = getPrimeiroRegistro(city->tiposComercio_tipo, estabelecimentoGetTipo(ec));
+        fprintf(arquivoTxt, " -%s, %s, %s, %c, %d\n", estabelecimentoGetNome(ec), comercioGetDescricao(ct), estabelecimentoGetCep(ec),
+                                                        estabelecimentoGetFace(ec), estabelecimentoGetNum(ec));
+        pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
+    }
+    if(pes == NULL){
+        fprintf(arquivoTxt, " -Proprietário não encontrado\n");
+    }else{
+        fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
     }
     fprintf(arquivoTxt, "\n");
 }
