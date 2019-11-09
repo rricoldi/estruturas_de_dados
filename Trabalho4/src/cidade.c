@@ -99,6 +99,18 @@ void removeCidade(Cidade cid)
     desalocaArvore(city->arvoreRadio);
     desalocaArvore(city->arvoreMuro);
     desalocaArvore(city->arvorePredio);
+    hashtableFinalizar(city->circulo_id);
+    hashtableFinalizar(city->retangulo_id);
+    hashtableFinalizar(city->quadra_cep);
+    hashtableFinalizar(city->hidrante_id);
+    hashtableFinalizar(city->radio_id);
+    hashtableFinalizar(city->semaforo_id);
+    hashtableFinalizar(city->predio_cep);
+    hashtableFinalizar(city->moradiaPessoa_cep);
+    hashtableFinalizar(city->pessoas_cpf);
+    hashtableFinalizar(city->moradias_cpf);
+    hashtableFinalizar(city->tiposComercio_tipo);
+    hashtableFinalizar(city->comercios_cnpj);
     free(city);
 }
 

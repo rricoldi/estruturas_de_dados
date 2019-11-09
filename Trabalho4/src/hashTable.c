@@ -168,6 +168,8 @@ int removeChave(HashTable tabela, char* key){
     }
 
     aux2->next = aux->next;
+    free(aux->key);
+    aux->key = NULL;
     free(aux);
     aux = NULL;
 
@@ -190,8 +192,8 @@ void hashtableFinalizar(HashTable tabela){
                 aux2 = aux->next;
                 if(aux->key)
                     free(aux->key);
-                if(aux->info)
-                    free(aux->info);
+                // if(aux->info)
+                    // free(aux->info);
                 free(aux);
                 aux = NULL;
             }while(aux2 != NULL);
