@@ -8,6 +8,7 @@
 typedef void *Hidrante;
 
 Hidrante criarHidrante(char id[20], char corB[20], char corP[20], double espessura, double x, double y);
+void* hidranteFinalizar(Hidrante);
 
 double retornaHX(Hidrante h);
 

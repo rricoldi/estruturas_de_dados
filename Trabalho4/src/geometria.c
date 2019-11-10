@@ -90,6 +90,12 @@ void* criarPonto(double x, double y){
     a->y = y;
     return a;
 }
+void* pontoFinalizar(Ponto ponto){
+    struct ponto *p = (struct ponto*) ponto;
+    free(p);
+    p = NULL;
+    return p;
+}
 
 void printPonto(Ponto aa){
     struct ponto *a = aa;
@@ -120,15 +126,19 @@ struct reta *setRetaCoeficientes(struct reta *r, double x1, double y1, double x2
     }
     return r;
 }
-Reta criarReta(Ponto aa, Ponto bb){
-    struct ponto *a = aa;
-    struct ponto *b = bb;
+Reta criarReta(double x1, double y1, double x2, double y2){
     struct reta *r = malloc(sizeof(struct reta));
-    r->A.x = a->x;
-    r->A.y = a->y;
-    r->B.x = b->x;
-    r->B.y = b->y;
-    setRetaCoeficientes(r, a->x, a->y, b->x, b->y);
+    r->A.x = x1;
+    r->A.y = y1;
+    r->B.x = x1;
+    r->B.y = y2;
+    setRetaCoeficientes(r, x1, y1, x2, y2);
+    return r;
+}
+void* retaFinalizar(Reta rr){
+    struct reta* r = (struct reta*) rr;
+    free(r);
+    r = NULL;
     return r;
 }
 

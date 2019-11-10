@@ -176,7 +176,27 @@ int removeChave(HashTable tabela, char* key){
     return posic;
 }
 
-void hashtableFinalizar(HashTable tabela){
+void HshTblMap(HashTable tabela, void (*func) (void*)){
+    struct tabela *essa = (struct tabela*) tabela;
+    if(essa == NULL){
+        return;
+    }
+    struct registrado *aux1, *aux2;
+    int posic;
+    for(posic=0;posic<essa->tamanho;posic++){
+        struct registros registro = essa->reg[posic];
+        if(registro.reg != NULL){
+            aux2 = registro.reg;
+            do{
+                aux1 = aux2;
+                aux2 = aux1->next;
+                if(aux1->info)
+                    (*func)(aux1->info);
+            }while(aux2 != NULL);
+        }
+    }
+}
+void* hashtableFinalizar(HashTable tabela){
     struct tabela *essa = (struct tabela*)tabela;
     if(essa == NULL){
         return;
@@ -192,8 +212,6 @@ void hashtableFinalizar(HashTable tabela){
                 aux2 = aux->next;
                 if(aux->key)
                     free(aux->key);
-                // if(aux->info)
-                    // free(aux->info);
                 free(aux);
                 aux = NULL;
             }while(aux2 != NULL);
@@ -203,4 +221,5 @@ void hashtableFinalizar(HashTable tabela){
     essa->reg = NULL;
     free(essa);
     essa = NULL;
+    return essa;
 }

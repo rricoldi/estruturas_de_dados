@@ -23,6 +23,12 @@ Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double
 
     return r;
 }
+void* radioBaseFinalizar(Radio radioBase){
+    ItemR *rb = (ItemR*)radioBase;
+    free(rb);
+    rb = NULL;
+    return rb;
+}
 
 double retornaRX(Radio r)
 {

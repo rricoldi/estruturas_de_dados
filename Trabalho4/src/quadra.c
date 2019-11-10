@@ -25,6 +25,12 @@ Quadra criarQuadra(char cep[20], char corB[20], char corP[20], double largura, d
 
     return q;
 }
+void* quadraFinalizar(Quadra quadra){
+    ItemQ *q = (ItemQ*)quadra;
+    free(q);
+    q = NULL;
+    return q;
+}
 
 double retornaQX(Quadra q)
 {

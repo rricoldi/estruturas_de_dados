@@ -390,8 +390,9 @@ void desalocaNo(No* no, No* nil)
     if(no->direita != nil)
         desalocaNo(no->direita, nil);
 
-    free(no->info);
+    // free(no->info);
     free(no);
+    no = NULL;
 }
 
 void desalocaArvore(Tree tree)

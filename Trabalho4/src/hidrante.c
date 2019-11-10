@@ -26,6 +26,13 @@ Hidrante criarHidrante(char id[20], char corB[20], char corP[20], double espessu
     return h;
 }
 
+void* hidranteFinalizar(Hidrante hidrante){
+    ItemH *hid = (ItemH*) hidrante;
+    free(hid);
+    hid = NULL;
+    return hid;
+}
+
 double retornaHX(Hidrante h)
 {
     ItemH *h2 = (ItemH *)h;

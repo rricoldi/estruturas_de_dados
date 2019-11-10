@@ -36,5 +36,6 @@ bool existeChave(HashTable, char* key);
 
 //Libera todos os registros da HashTable, além da pŕopria tabela
 //A tabela passada recebe NULL, e fica inutilizável
-void hashtableFinalizar(HashTable);
+void HshTblMap(HashTable, void (*func)(Info));
+void* hashtableFinalizar(HashTable);
 #endif

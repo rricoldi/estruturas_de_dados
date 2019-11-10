@@ -10,6 +10,7 @@
 typedef void *Semaforo;
 
 Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
+void* semaforoFinalizar(Semaforo);
 
 double retornaSX(Semaforo s);
 

@@ -91,6 +91,15 @@ void iniciaPessoas(Cidade cid, char* arquivoPm){
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;
+
+    percorreArvore(city->arvoreCirculo, circuloFinalizar);
+    percorreArvore(city->arvoreHidrante, hidranteFinalizar);
+    percorreArvore(city->arvoreMuro, muroFinalizar);
+    percorreArvore(city->arvorePredio, predioFinalizar);
+    percorreArvore(city->arvoreQuadra, quadraFinalizar);
+    percorreArvore(city->arvoreRadio, radioBaseFinalizar);
+    percorreArvore(city->arvoreRetangulo, retanguloFinalizar);
+    percorreArvore(city->arvoreSemaforo, semaforoFinalizar);
     desalocaArvore(city->arvoreCirculo);
     desalocaArvore(city->arvoreRetangulo);
     desalocaArvore(city->arvoreQuadra);
@@ -99,6 +108,15 @@ void removeCidade(Cidade cid)
     desalocaArvore(city->arvoreRadio);
     desalocaArvore(city->arvoreMuro);
     desalocaArvore(city->arvorePredio);
+    if(city->tiposComercio_tipo){
+        HshTblMap(city->tiposComercio_tipo, comercioFinalizar);
+        HshTblMap(city->comercios_cnpj, estabelecimentoFinalizar);
+    }
+    if(city->pessoas_cpf){
+        HshTblMap(city->pessoas_cpf, pessoaFinalizar);
+        HshTblMap(city->moradias_cpf, moradiaFinalizar);
+        HshTblMap(city->moradiaPessoa_cep, free);
+    }
     hashtableFinalizar(city->circulo_id);
     hashtableFinalizar(city->retangulo_id);
     hashtableFinalizar(city->quadra_cep);
@@ -445,6 +463,7 @@ void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
             fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
         }
     }
+    free(vetorCpfs);
     fprintf(arquivoTxt, "\n");
 }
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid){

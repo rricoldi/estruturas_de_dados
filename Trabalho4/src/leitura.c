@@ -586,7 +586,9 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 		remove(nomeDoArquivoSvg);
 
 	free(nomeDoArquivoSvg);
-	
+	nomeDoArquivoSvg = NULL;
+	free(nomeDoArquivoTxt);
+	nomeDoArquivoTxt = NULL;	
 
 	fclose(arquivoQry);
 }

@@ -28,7 +28,7 @@ char* comercioGetDescricao(ComercioTipo ct){
     return esse->descricao;
 }
 
-void comercioFinalizar(ComercioTipo ct){
+void* comercioFinalizar(ComercioTipo ct){
     struct tipoEstabelecimento* esse = (struct tipoEstabelecimento*)ct;if(esse == NULL){
         return;
     }
@@ -38,6 +38,7 @@ void comercioFinalizar(ComercioTipo ct){
     esse->descricao = NULL;
     free(esse);
     esse = NULL;
+    return esse;
 }
 
 struct estabelecimentoComercial{
@@ -99,7 +100,7 @@ int estabelecimentoGetNum(EstabelecimentoComercial ec){
     return esse->num;
 }
 
-void estabelecimentoFinalizar(EstabelecimentoComercial ec){
+void* estabelecimentoFinalizar(EstabelecimentoComercial ec){
     struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*)ec;
     if(esse == NULL){
         return;
@@ -116,6 +117,7 @@ void estabelecimentoFinalizar(EstabelecimentoComercial ec){
     esse->cep = NULL;
     free(esse);
     esse = NULL;
+    return esse;
 }
 
 struct pessoa{
@@ -164,7 +166,7 @@ char pessoaGetSexo(Pessoa p){
     return essa->sexo;
 }
 
-void pessoaFinalizar(Pessoa p){
+void* pessoaFinalizar(Pessoa p){
     struct pessoa *essa = (struct pessoa*) p;
     if(essa == NULL){
         return;
@@ -180,6 +182,7 @@ void pessoaFinalizar(Pessoa p){
 
     free(essa);
     essa = NULL;
+    return essa;
 }
 
 struct pessoaMoradia{
@@ -244,7 +247,7 @@ void moradiaSetNum(Moradia m, int num){
     essa->num = num;
 }
 
-void moradiaFinalizar(Moradia m){
+void* moradiaFinalizar(Moradia m){
     struct pessoaMoradia *essa = (struct pessoaMoradia*) m;
     if(essa == NULL){
         return;
@@ -257,4 +260,5 @@ void moradiaFinalizar(Moradia m){
 
     free(essa);
     essa = NULL;
+    return essa;
 }
