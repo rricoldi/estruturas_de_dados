@@ -5,6 +5,7 @@
 #include "leitura.h"
 #include"cidade.h"
 #include"comercioPessoas.h"
+#include"geometria.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
@@ -689,4 +690,63 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 			insereRegistro(moradiaPessoa, cep, cpfInfo);
 		}
 	}
+}
+
+Reta* leiaPol(char* nomeArquivoPoligono, int* array_size){
+	FILE* arq = fopen(nomeArquivoPoligono, "r");
+	if(!arq){
+		printf("Não foi possível abrir o arquivo do polígono: %s\n", nomeArquivoPoligono);
+		return NULL;
+	}
+	*array_size = 0;
+	char linha[21];
+
+	//Checa a quantidade de linhas do arquivo
+	while(!feof(arq)){
+		fgets(linha, 20, arq);
+		*array_size = *array_size +1;
+	}
+
+	if(*array_size <=2){
+		printf("Do arquivo '%s', muitos poucos pontos para formar um polígono\n", nomeArquivoPoligono);
+		return NULL;
+	}
+
+	double* arrayPontos = malloc(sizeof(double)*(*array_size)*2);
+	rewind(arq);
+	int i=0;
+	while(!feof(arq)){
+		double x, y;
+		fgets(linha, 20, arq);
+		sscanf(linha, "%lf %lf ", &x, &y);
+		arrayPontos[i] = x;
+		i++;
+		arrayPontos[i]= y;
+		i++;
+	}
+
+	int j=0;
+	int reta=0;
+	Reta* arrayRetas = malloc(sizeof(Reta)*(*array_size));
+	while(j<i){
+		double x1, x2, y1, y2;
+		x1 = arrayPontos[j];
+		j++;
+		y1 = arrayPontos[j];
+		j++;
+		if(j>=i){
+			x2 = arrayPontos[0];
+			y2 = arrayPontos[1];
+		}else{
+			x2 = arrayPontos[j];
+			y2 = arrayPontos[j+1];
+		}
+		printf("x1: %lf, y1: %lf, x2: %lf, y2: %lf\n", x1, y1, x2, y2);
+		arrayRetas[reta] = criarReta(x1, y1, x2, y2);
+		reta++;
+	}
+	
+	fclose(arq);
+	free(arrayPontos);
+	return arrayRetas;
 }

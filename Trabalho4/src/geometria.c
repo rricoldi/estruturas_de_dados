@@ -4,6 +4,8 @@
 #include<stdbool.h>
 #include"geometria.h"
 
+#define SvgXMax 5000
+
 struct ponto{
     double x;
     double y;
@@ -39,45 +41,73 @@ double distanciaPontos(Ponto aa, Ponto bb){
     return sqrt((a->x - b->x)*(a->x - b->x) + (a->y - b->y)*(a->y - b->y));
 }
 
+bool pontosIguais(Ponto aa, Ponto bb){
+    struct ponto *a = aa;
+    struct ponto *b = bb;
+    if(a->x == b->x  && a->y == b->y){
+        return true;
+    }else{
+        return false;
+    }
+}
 struct ponto *interCasoA(struct reta *r, struct reta *s){
     struct ponto *c = malloc(sizeof(struct ponto));     //ponto de intersecção das retas
     c->x = (s->cl - r->cl)/(r->ca - s->ca);
     c->y = (r->cl*s->ca - s->cl*r->ca)/(s->ca - r->ca);
-    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c))
-        return c;
-    else
+    if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
         return NULL;
+    }
+    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
+        return c;
+    }
+    else{
+        return NULL;
+    }
 }
 struct ponto *interCasoB(struct reta *r, struct reta *s){
     struct ponto *c = malloc(sizeof(struct ponto));
     c->x = r->cl;
     c->y = s->ca*r->cl + s->cl;
-    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c))
-        return c;
-    else
+    if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
         return NULL;
+    }
+    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
+        return c;
+    }
+    else{
+        return NULL;
+    }
 }
 Ponto intersecta(Reta rr, Reta ss){
     struct reta *r = rr;
     struct reta *s = ss;
-    if(nearlyEqual(r->ca, s->ca, double_BAIXO))
+    if(nearlyEqual(r->ca, s->ca, double_BAIXO)){
         return NULL;
-    else
-        if(r->ca != INFINITY && s->ca != INFINITY)
+    }
+    else{
+        if(r->ca != INFINITY && s->ca != INFINITY){
             return interCasoA(r, s);
-        else
-            if(r->ca == INFINITY)
+        }
+        else{
+            if(r->ca == INFINITY){
                 return interCasoB(r, s);
-            else
+            }
+            else{
                 return interCasoB(s, r);
+            }
+        }
+    }
 }
 bool estaEntre(Ponto aa, Ponto bb, Ponto cc){
+    if(pontosIguais(aa, bb)){
+        return false;
+    }
     struct ponto *a = aa;
     struct ponto *b = bb;
     struct ponto *c = cc;
-    double distAB = distancia(a, b);
-    double distAC = distancia(a, c);
-    double distBC = distancia(b, c);
+    double distAB = distanciaPontos(a, b);
+    double distAC = distanciaPontos(a, c);
+    double distBC = distanciaPontos(b, c);
     if(nearlyEqual(distAB, distAC+distBC, double_BAIXO))
         return true;
     else
@@ -130,7 +160,7 @@ Reta criarReta(double x1, double y1, double x2, double y2){
     struct reta *r = malloc(sizeof(struct reta));
     r->A.x = x1;
     r->A.y = y1;
-    r->B.x = x1;
+    r->B.x = x2;
     r->B.y = y2;
     setRetaCoeficientes(r, x1, y1, x2, y2);
     return r;
@@ -141,7 +171,10 @@ void* retaFinalizar(Reta rr){
     r = NULL;
     return r;
 }
-
+void retaPrint(Reta rr){
+    struct reta *r = (struct reta*)rr;
+    printf("%lf %lf, %lf %lf\n", r->A.x, r->A.y, r->B.x, r->B.y);
+}
 void setRetaA(Reta rr, double x, double y){
     struct reta *r = rr;
     setRetaCoeficientes(r, x, y, r->B.x, r->B.y);
@@ -162,5 +195,50 @@ Ponto getRetaB(Reta rr){
 }
 double getRetaTamanho(Reta rr){
   struct reta *r = rr;
-  return distancia(&(r->A), &(r->B));
+  return distanciaPontos(&(r->A), &(r->B));
+}
+
+//Para cada reta do poligono, verifica se há interseccao com a reta dada
+bool retaInterPoligono(Reta rr, Reta poligono[], int tamPolig){
+    for(int i=0;i<tamPolig;i++){
+        if(intersecta(rr, poligono[i]) != NULL){
+            return true;
+        }
+    }
+    return false;
+}
+bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int tamPolig){
+    //Se qualquer reta do retangulo intersectar o poligono ao menos uma vez,
+    //isso indica que o retangulo nao esta totalmente contido no poligono
+    for(int i=0;i<4;i++){
+        if(retaInterPoligono(retangulo[i], poligono, tamPolig)){
+            return false;
+        }
+    }
+    //Cria uma reta de um ponto qualquer do retangulo até o "infinito",
+    //e conta quantas vezes ela intersecta o poligono
+    int qtdInterseccoes;
+    for(int j=0;j<4;j++){
+        qtdInterseccoes=0;
+        struct reta *r = (struct reta*)retangulo[j];
+        struct reta *s = criarReta(r->A.x, r->A.y, SvgXMax, r->A.y);
+        for(int i=0;i<tamPolig;i++){
+            if(intersecta(s, poligono[i])){
+                qtdInterseccoes++;
+            }
+        }
+        retaFinalizar(s);
+        if(qtdInterseccoes%2==1)
+            return true;
+    }
+    return false;
+}
+bool retanguloIntersectaPoligono(Reta retangulo[], Reta poligono[], int tamPolig){
+    for(int i=0;i<4;i++){
+        retaPrint(retangulo[i]);
+        if(retaInterPoligono(retangulo[i], poligono, tamPolig)){
+            return true;
+        }
+    }
+    return false;
 }
