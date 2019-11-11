@@ -283,7 +283,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 	char id1[20], id2[20];
 	char metrica[3];
-	char comando[5];
+	char comando[6];
 	char sufixo[30];
 	char cor[30];
 	char cep[20];
@@ -556,6 +556,18 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			// >>
 
 			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
+		}
+		else if(strcmp("mplg?", comando)==0){
+			char arqPol[20];
+			int tamanhoPoligono;
+			fscanf(arquivoQry, "%19s ", arqPol);
+			Reta *poligono = leiaPol(arqPol, &tamanhoPoligono);
+			qry_mplg(poligono, tamanhoPoligono, arquivoTxt, nomeDoArquivoSvg, cidade);
+			
+			for(int i=0;i<tamanhoPoligono;i++){
+				retaFinalizar(poligono[i]);
+			}
+			free(poligono);
 		}
 		else if(strcmp("m?", comando)==0){
 			char cep[10];

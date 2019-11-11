@@ -149,6 +149,15 @@ double retornaPHeight(Predio p){
     else
         return essa->frente;
 }
+Reta* retornaPredioLados(Predio predio){
+    ItemP *p = predio;
+    Reta *lados = malloc(4*sizeof(Reta));
+    lados[0] = p->superior;
+    lados[1] = p->direita;
+    lados[2] = p->inferior;
+    lados[3] = p->esquerda;
+    return lados;
+}
 double comparaPredio(Predio p1, Predio p2)
 {
     ItemP *predio1 = (ItemP *)p1;

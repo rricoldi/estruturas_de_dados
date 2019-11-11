@@ -528,3 +528,7 @@ void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* c
     }
     fprintf(arquivoTxt, "  .para: %s, %c, %d, %s\n\n", cep, face, num, complemento);
 }
+void qry_mplg(Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, Cidade cid){
+    cidade *city = cid;
+    
+}
