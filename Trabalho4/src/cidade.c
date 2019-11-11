@@ -476,3 +476,106 @@ void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
     }
     fprintf(arquivoTxt, "\n");
 }
+
+
+void deletaDaCidade(Cidade cid, Info info, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int opcao, char cor[], double largura, double altura, double dx, double dy)
+{
+   FILE *arqSvg, *arqTxt;
+   arqSvg = fopen(svg,"a");
+   arqTxt = fopen(txt, "a");
+   cidade *city = (cidade*)cid;
+
+    if(opcao == 1)
+        fprintf(arqTxt, "dq %s %s %lf\n", tipo, id, r);
+    
+    Info informacao;
+    if(strcmp(tipo, "L1") == 0)
+    {
+            if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
+            {
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+                removeChave(city->arvoreQuadra, retornaQCEP(informacao));
+                deletaDaArvore()
+            }
+
+            i = j;
+        }
+
+        informacao = lista->v[i].info;
+
+        if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
+        {
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+            removerDaLista(lista, i);
+        }
+    }
+    else
+    {
+        while(lista->v[i].prox != -1)
+        {
+            informacao = lista->v[i].info;
+            if (informacao == NULL)
+            {
+                i = lista->v[i].prox;
+                continue;
+            }
+            j = lista->v[i].prox;
+            if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
+            {
+                if(opcao == 1)
+                {
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+                removerDaLista(lista, i);
+                }
+                else if (opcao == 2)
+                {
+                setQCorB(informacao, cor);
+                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+                }
+
+            }
+            else if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
+            {
+                fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
+                setQX(informacao, retornaQX(informacao)+dx);
+                setQY(informacao, retornaQY(informacao)+dy);
+            }
+
+            i = j;
+        }
+
+        informacao = lista->v[i].info;
+        if (informacao != NULL)
+        {
+            if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
+            {
+                if(opcao == 1)
+                {
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+                removerDaLista(lista, i);
+                }
+                else if (opcao == 2)
+                {
+                setQCorB(informacao, cor);
+                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
+                }
+            }
+            if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
+            {
+                fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
+                setQX(informacao, retornaQX(informacao)+dx);
+                setQY(informacao, retornaQY(informacao)+dy);
+            }
+        }
+    }
+    fclose(arqSvg);
+    fclose(arqTxt);
+    }

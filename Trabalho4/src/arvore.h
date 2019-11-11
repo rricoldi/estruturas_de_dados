@@ -9,6 +9,7 @@
 #include "retangulo.h"
 #include "predio.h"
 #include "muro.h"
+#include "hashTable.h"
 
 
 typedef void *Info;
