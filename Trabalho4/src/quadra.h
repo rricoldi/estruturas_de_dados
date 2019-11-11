@@ -5,6 +5,7 @@
     Aqui temos a quadra, definimos um void pointer para podermos acessar os atributos desta apenas a partir das funcoes retornaQ... e setQ...
     Eh reresentada por um retangulo com as dimensoes passadas    
 */
+#include<stdarg.h>
 
 typedef void *Quadra;
 
@@ -24,6 +25,7 @@ double retornaQW(Quadra q);
 double retornaQH(Quadra q);
 
 double retornaQEspessura(Quadra q);
+
 void setQEspessura(Quadra, double);
 
 char *retornaQCEP(Quadra q);
@@ -35,5 +37,7 @@ void setQCorB(Quadra q, char cor[]);
 char *retornaQCorP(Quadra q);
 
 double comparaQuadra(Quadra q1, Quadra q2);
+
+void imprimirQuadra(Quadra quad, va_list args);
 
 #endif

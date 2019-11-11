@@ -233,7 +233,7 @@ void transplante(Arvore* arvore, No* no, No* no2)
     no2->pai = no->pai;
 }
 
-Node* buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info))
+Node buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info))
 {
     Arvore* arvore = (Arvore*) tree;
     No* no = arvore->raiz;
@@ -360,8 +360,6 @@ void deletaDaArvore(Tree tree, Node* node)
         y->esquerda->pai = y;
         y->cor = z->cor;
     }
-    free(z);
-    printf("\ncor original = %d", corOriginal);
     if(corOriginal == PRETA)
         reparaDelecao(arvore, x);
 }
@@ -384,6 +382,28 @@ void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...)
     va_start(args, funcao);
 
     percorreArvorePorNo(arvore->raiz, funcao, arvore->nil, args);
+    
+    va_end(args);
+}
+
+void percorreArvorePorNo2(No* no, void (*funcao) (Node, Info, va_list), No* nil, va_list args)
+{
+    if(no == nil)
+        return;
+    funcao(no, no->info, args);
+    if(no->esquerda != nil)
+        percorreArvorePorNo2(no->esquerda, funcao, nil, args);
+    if(no->direita != nil)
+        percorreArvorePorNo2(no->direita, funcao, nil, args);
+}
+
+void percorreArvore2(Tree tree, void (*funcao) (Node, Info, va_list), ...)
+{
+    Arvore* arvore = (Arvore*) tree;
+    va_list args;
+    va_start(args, funcao);
+
+    percorreArvorePorNo2(arvore->raiz, funcao, arvore->nil, args);
     
     va_end(args);
 }

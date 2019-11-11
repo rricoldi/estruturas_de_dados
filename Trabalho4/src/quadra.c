@@ -113,3 +113,12 @@ double comparaQuadra(Quadra q1, Quadra q2)
         return quadra1->x - quadra2->x;
     return quadra1->y - quadra2->y;
 }
+
+void imprimirQuadra(Quadra quad, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemQ* quadra = (ItemQ*) quad;
+    imprimirRetangulo(quadra->w, quadra->h, quadra->x, quadra->y, quadra->corB, quadra->corP, nomeDoArquivoSvg, quadra->espessura);
+}

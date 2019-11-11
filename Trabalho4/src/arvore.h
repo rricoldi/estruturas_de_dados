@@ -30,8 +30,10 @@ void deletaDaArvore(Tree tree, Node* node);
 
 void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...);
 
+void percorreArvore2(Tree tree, void (*funcao) (Node, Info, va_list), ...);
+
 void desalocaArvore(Tree tree);
 
-Node* buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info));
+Node buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info));
 
 #endif

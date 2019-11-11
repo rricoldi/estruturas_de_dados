@@ -1,6 +1,5 @@
 #ifndef __CIDADE_H
 #define __CIDADE_H
-
 #include "lista.h"
 #include "arvore.h"
 #include "hashTable.h"

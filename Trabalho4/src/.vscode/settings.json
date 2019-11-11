@@ -3,6 +3,8 @@
         "cidade.h": "c",
         "lista.h": "c",
         "arvore.h": "c",
-        "radio.h": "c"
+        "radio.h": "c",
+        "leitura.h": "c",
+        "comerciopessoas.h": "c"
     }
 }

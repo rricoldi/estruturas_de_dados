@@ -3,6 +3,8 @@ Trabalho2/src/output
 Trabalho2/src/teste
 Trabalho3/src/output
 Trabalho3/src/testes
+Trabalho3/src/*.o
 Trabalho4/src/*.o
 Trabalho4/src/testes
-Trabalho4/src/output
+Trabalho4/src/
+argument/

@@ -155,15 +155,17 @@ void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[])
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
 {
     cidade *city = (cidade *)cid;
+
+    percorreArvore(city->arvoreQuadra, imprimirQuadra, nomeDoArquivoSvg);
  
-    imprimeQuadras(city->listaQuadra, nomeDoArquivoSvg);
-    imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
-    imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
-    imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
-    if(lenght(city->listaPredio) > 0)
-        imprimePredios(city->listaPredio, nomeDoArquivoSvg);
-    if(lenght(city->listaMuro) > 0)
-        imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
+    // imprimeQuadras(city->listaQuadra, nomeDoArquivoSvg);
+    // imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
+    // imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
+    // imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
+    // if(lenght(city->listaPredio) > 0)
+    //     imprimePredios(city->listaPredio, nomeDoArquivoSvg);
+    // if(lenght(city->listaMuro) > 0)
+    //     imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
 }
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
@@ -209,20 +211,20 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
         *tipo = 6;
         return info;
     }
-    int tamanho;
-    Info *infos = getVetorRegistros(city->predio_cep, id, &tamanho);
-    if (infos[0] != NULL)
-    {
-        for(int i = 0; i < tamanho; i++)
-        {
-            if (retornaPFace(infos[i]) == face && retornaPNumero(infos[i]) == num)
-            {
-                *tipo = 7;
-                return infos[i];
-            }
+    // int tamanho;
+    // Info *infos = getVetorRegistros(city->predio_cep, id, &tamanho);
+    // if (infos[0] != NULL)
+    // {
+    //     for(int i = 0; i < tamanho; i++)
+    //     {
+    //         if (retornaPFace(infos[i]) == face && retornaPNumero(infos[i]) == num)
+    //         {
+    //             *tipo = 7;
+    //             return infos[i];
+    //         }
             
-        }
-    }
+    //     }
+    // }
 
     printf("Nao foi possivel achar o elemento na cidade\n");
     return NULL;
@@ -508,7 +510,7 @@ void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
     fprintf(arquivoTxt, "\n");
 }
 
-void qry_dq_no(Info info, va_list args)
+void qry_dq_no(Node no, Info info, va_list args)
 {
     va_list variaveis;
     va_copy(variaveis, args);
@@ -547,34 +549,28 @@ void qry_dq_no(Info info, va_list args)
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
-            Node no = buscaNaArvore(arvore, info, retornaQCEP);
-            printf("\nbuscou\n");
-            if (no == NULL)
-                return;
             deletaDaArvore(city->arvoreQuadra, no);
-            printf("\ndeletou\n");
-            removeChave(city->quadra_cep, retornaQCEP(info));
+            // removeChave(city->quadra_cep, retornaQCEP(info));
         }   
     }
-    else
+    else if(strcmp("L2", metrica) == 0)
     {
         if(retornaDistanciaL2(r, fx, fy, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
         {
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
-            Node no = buscaNaArvore(arvore, info, retornaQCEP);
-            if (no == NULL)
-                return;
             deletaDaArvore(city->arvoreQuadra, no);
-            removeChave(city->quadra_cep, retornaQCEP(info));
+            // removeChave(city->quadra_cep, retornaQCEP(info));
         }     
     }
+    fclose(arqSvg);
+    fclose(arqTxt);
 }
 
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo){
     cidade *city = cid;
-    percorreArvore(city->arvoreQuadra, qry_dq_no, cid, info, r, fx, fy, svg, txt, id, metrica, tipo);
+    percorreArvore2(city->arvoreQuadra, qry_dq_no, cid, r, fx, fy, svg, txt, id, metrica, tipo);
 }
 
 
