@@ -27,8 +27,7 @@ bool estaEntre(Ponto a, Ponto b, Ponto entre);
 
 //  Retorna o endereço do ponto criado
 Ponto criarPonto(double x, double y);
-
-//void printPonto(Ponto);
+void* pontoFinalizar(Ponto);
 
 //  Altera as coordenadas de um ponto
 //  ATENÇÃO: se usado para alterar retas, os coeficientes das mesmas não serão atualizados
@@ -38,8 +37,9 @@ double getPontoX(Ponto a);
 double getPontoY(Ponto a);
 
 //  Retorna o endereço de uma reta criada a partir de dois pontos
-Reta criarReta(Ponto a, Ponto b);
-
+Reta criarReta(double x1, double y1, double x2, double y2);
+void* retaFinalizar(Reta);
+void retaPrint(Reta);
 //  Retorna um ponto (A ou B) de uma reta
 Ponto getRetaA(Reta);
 Ponto getRetaB(Reta);
@@ -49,4 +49,10 @@ void setRetaB(Reta r, double x, double y);
 //Retorna o tamanho da reta
 double getRetaTamanho(Reta r);
 
+//Verifica se um dado retangulo está inteiramente dentro do polígono
+//Retorna true caso esteja, false caso contrário
+bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int qtdRetasDoPoligono);
+
+//Verifica se alguma dos lados do retangulo intersecta o poligno
+bool retanguloIntersectaPoligono(Reta retangulo[], Reta poligono[], int qtdRetasDoPoligono);
 #endif

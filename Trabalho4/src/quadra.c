@@ -25,6 +25,12 @@ Quadra criarQuadra(char cep[20], char corB[20], char corP[20], double largura, d
 
     return q;
 }
+void* quadraFinalizar(Quadra quadra){
+    ItemQ *q = (ItemQ*)quadra;
+    free(q);
+    q = NULL;
+    return q;
+}
 
 double retornaQX(Quadra q)
 {
@@ -66,6 +72,10 @@ double retornaQEspessura(Quadra q)
 {
     ItemQ* item = (ItemQ*) q;
     return item->espessura;
+}
+void setQEspessura(Quadra q, double espessura){
+    ItemQ *quad = q;
+    quad->espessura = espessura;
 }
 
 char *retornaQCEP(Quadra q)

@@ -31,4 +31,8 @@ int removeChave(HashTable, char* key);
 //Retorna TRUE caso a chave esteja registrada, FALSE caso contrário
 bool existeChave(HashTable, char* key);
 
+//Libera todos os registros da HashTable, além da pŕopria tabela
+//A tabela passada recebe NULL, e fica inutilizável
+void HshTblMap(HashTable, void (*func)(Info));
+void* hashtableFinalizar(HashTable);
 #endif

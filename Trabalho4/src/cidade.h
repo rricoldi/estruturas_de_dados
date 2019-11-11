@@ -71,7 +71,9 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
-void qry_md(FILE* arquivoTxt, char* cpf, Cidade);
+void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);
 void qry_de(FILE* arquivoTxt, char* cnpj, Cidade);
+void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade);
+void qry_mplg(Reta poligono[], int tamanhoDoPoligono, FILE* arquivoTxt, char* nomeArquivoSvg, Cidade cidade);
 
 #endif

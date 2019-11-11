@@ -5,6 +5,7 @@
 typedef void *Muro;
 
 Muro criarMuro(double x1, double x2, double y1, double y2);
+void* muroFinalizar(Muro);
 
 double retornaMX1(Muro r);
 

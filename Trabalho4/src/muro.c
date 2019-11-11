@@ -13,8 +13,15 @@ Muro criarMuro(double x1, double x2, double y1, double y2)
 {
     /* arrumar a questão pra impressão do geo*/
     ItemM *m = calloc(1, sizeof(ItemM));
-    m->r = criarReta(criarPonto(x1, y1), criarPonto(x2, y2));
+    m->r = criarReta(x1, y1, x2, y2);
 
+    return m;
+}
+void* muroFinalizar(Muro muro){
+    ItemM *m = (ItemM*)muro;
+    retaFinalizar(m->r);
+    free(m);
+    m = NULL;
     return m;
 }
 

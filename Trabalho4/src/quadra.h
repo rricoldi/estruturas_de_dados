@@ -9,6 +9,7 @@
 typedef void *Quadra;
 
 Quadra criarQuadra(char cep[20], char corB[20], char corP[20], double largura, double altura, double x, double y, double espessura);
+void* quadraFinalizar(Quadra);
 
 double retornaQX(Quadra q);
 
@@ -23,6 +24,7 @@ double retornaQW(Quadra q);
 double retornaQH(Quadra q);
 
 double retornaQEspessura(Quadra q);
+void setQEspessura(Quadra, double);
 
 char *retornaQCEP(Quadra q);
 

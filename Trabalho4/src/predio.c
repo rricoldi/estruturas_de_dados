@@ -33,11 +33,21 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
     p->xNum         = xNum;
     p->yNum         = yNum;
     
-    p->superior = criarReta(criarPonto(x, y), criarPonto(x+xNum, y));
-    p->esquerda = criarReta(criarPonto(x, y), criarPonto(x, y+yNum));
-    p->direita = criarReta(criarPonto(x, y), criarPonto(x+xNum, y+yNum));
-    p->inferior = criarReta(criarPonto(x, y+yNum), criarPonto(x+xNum, y+yNum));
+    p->superior = criarReta(x, y, x+xNum, y);
+    p->esquerda = criarReta(x, y, x, y+yNum);
+    p->direita = criarReta(x+xNum, y, x+xNum, y+yNum);
+    p->inferior = criarReta(x, y+yNum, x+xNum, y+yNum);
 
+    return p;
+}
+void* predioFinalizar(Predio predio){
+    ItemP *p = (ItemP*)predio;
+    retaFinalizar(p->superior);
+    retaFinalizar(p->inferior);
+    retaFinalizar(p->esquerda);
+    retaFinalizar(p->direita);
+    free(p);
+    p = NULL;
     return p;
 }
 
@@ -127,17 +137,26 @@ double retornaPYNum(Predio p)
 
 double retornaPWidth(Predio p){
     ItemP* essa = (ItemP*)p;
-    if(essa->face == 'N' || essa->face == 'S')
+    if(essa->face[0] == 'N' || essa->face[0] == 'S')
         return essa->frente;
     else
         return essa->profundidade;
 }
 double retornaPHeight(Predio p){
     ItemP* essa = (ItemP*)p;
-    if(essa->face == 'N' || essa->face == 'S')
+    if(essa->face[0] == 'N' || essa->face[0] == 'S')
         return essa->profundidade;
     else
         return essa->frente;
+}
+Reta* retornaPredioLados(Predio predio){
+    ItemP *p = predio;
+    Reta *lados = malloc(4*sizeof(Reta));
+    lados[0] = p->superior;
+    lados[1] = p->direita;
+    lados[2] = p->inferior;
+    lados[3] = p->esquerda;
+    return lados;
 }
 double comparaPredio(Predio p1, Predio p2)
 {

@@ -83,7 +83,15 @@ int insereRegistro(HashTable tab, char* key, Info info){
     // return posic;
 
     struct registrado* aux = malloc(sizeof(struct registrado));
-    aux->key = malloc(strlen(key));
+    if(!aux){
+        printf("ERRO AO ALOCAR MEMÓRIA PARA O REGISTRO\n");
+        return -1;
+    }
+    aux->key = malloc(strlen(key)+1);
+    if(!aux->key){
+        printf("ERRO AO ALOCAR MEMÓRIA PARA A CHAVE\n");
+        return -1;
+    }
     strcpy(aux->key, key);
     aux->info = info;
     aux->next = essa->reg[posic].reg;
@@ -160,8 +168,58 @@ int removeChave(HashTable tabela, char* key){
     }
 
     aux2->next = aux->next;
+    free(aux->key);
+    aux->key = NULL;
     free(aux);
     aux = NULL;
 
     return posic;
+}
+
+void HshTblMap(HashTable tabela, void (*func) (void*)){
+    struct tabela *essa = (struct tabela*) tabela;
+    if(essa == NULL){
+        return;
+    }
+    struct registrado *aux1, *aux2;
+    int posic;
+    for(posic=0;posic<essa->tamanho;posic++){
+        struct registros registro = essa->reg[posic];
+        if(registro.reg != NULL){
+            aux2 = registro.reg;
+            do{
+                aux1 = aux2;
+                aux2 = aux1->next;
+                if(aux1->info)
+                    (*func)(aux1->info);
+            }while(aux2 != NULL);
+        }
+    }
+}
+void* hashtableFinalizar(HashTable tabela){
+    struct tabela *essa = (struct tabela*)tabela;
+    if(essa == NULL){
+        return;
+    }
+    struct registrado *aux, *aux2;
+    int posic;
+    for(posic=0;posic<essa->tamanho;posic++){
+        struct registros registro = essa->reg[posic];
+        if(registro.reg != NULL){
+            aux2 = registro.reg;
+            do{
+                aux = aux2;
+                aux2 = aux->next;
+                if(aux->key)
+                    free(aux->key);
+                free(aux);
+                aux = NULL;
+            }while(aux2 != NULL);
+        }
+    }
+    free(essa->reg);
+    essa->reg = NULL;
+    free(essa);
+    essa = NULL;
+    return essa;
 }

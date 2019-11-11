@@ -1,10 +1,12 @@
 #ifndef __PREDIO_H
 #define __PREDIO_H
 
+#include"geometria.h"
 
 typedef void *Predio;
 
 Predio criarPredio(char cep[20], char face[10], double numero, double frente, double profundidade, double calcada, double x, double y, double xCalcada, double xCalcadaMax, double yCalcada, double yCalcadaMax, double xNum, double yNum);
+void* predioFinalizar(Predio);
 
 double retornaPX(Predio p);
 
@@ -36,6 +38,9 @@ double retornaPYNum(Predio p);
 
 double retornaPWidth(Predio);
 double retornaPHeight(Predio);
+//Retorna um vetor com as 4 retas que representam o predio
+//Nota: dar free() no ponteiro retornado
+Reta* retornaPredioLados(Predio);
 double comparaPredio(Predio p1, Predio p2);
 
 #endif

@@ -15,6 +15,9 @@ ComercioTipo tipoComercioNovo(char* tipo, char* descricao);
 char* comercioGetTipo(ComercioTipo);
 char* comercioGetDescricao(ComercioTipo);
 
+//Libera a memória do Tipo de Comércio, e seta o ponteiro para NULL
+void* comercioFinalizar(ComercioTipo);
+
 
 //Tipo abstrato: estabelecimento comercial
 typedef void* EstabelecimentoComercial;
@@ -31,6 +34,9 @@ char* estabelecimentoGetNome(EstabelecimentoComercial);
 char estabelecimentoGetFace(EstabelecimentoComercial);
 int estabelecimentoGetNum(EstabelecimentoComercial);
 
+//Libera a memória do Estabelecimento, e seta o ponteiro para NULL
+void* estabelecimentoFinalizar(EstabelecimentoComercial);
+
 
 //Tipo abstrato: pessoa
 typedef void* Pessoa;
@@ -46,7 +52,7 @@ char* pessoaGetNascimento(Pessoa);
 char pessoaGetSexo(Pessoa);
 
 //Libera toda a memória alocada para a pessoa, e aponta para NULL
-void finalizarPessoa(Pessoa);
+void* pessoaFinalizar(Pessoa);
 
 
 //Tipo abstrato: residência da pessoa identificada pelo cpf
@@ -68,6 +74,6 @@ void moradiaSetFace(Moradia, char face);
 void moradiaSetNum(Moradia, int num);
 
 //Libera toda a memória alocada para a moradia, e aponta para NULL
-void finalizarMoradia(Moradia);
+void* moradiaFinalizar(Moradia);
 
 #endif

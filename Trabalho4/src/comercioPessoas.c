@@ -10,8 +10,8 @@ struct tipoEstabelecimento{
 ComercioTipo tipoComercioNovo(char* tipo, char* descricao){
     struct tipoEstabelecimento *esse = malloc(sizeof(struct tipoEstabelecimento));
 
-    esse->tipo = malloc(strlen(tipo));
-    esse->descricao = malloc(strlen(descricao));
+    esse->tipo = malloc(strlen(tipo)+1);
+    esse->descricao = malloc(strlen(descricao)+1);
 
     strcpy(esse->tipo, tipo);
     strcpy(esse->descricao, descricao);
@@ -28,6 +28,19 @@ char* comercioGetDescricao(ComercioTipo ct){
     return esse->descricao;
 }
 
+void* comercioFinalizar(ComercioTipo ct){
+    struct tipoEstabelecimento* esse = (struct tipoEstabelecimento*)ct;if(esse == NULL){
+        return;
+    }
+    free(esse->tipo);
+    free(esse->descricao);
+    esse->tipo = NULL;
+    esse->descricao = NULL;
+    free(esse);
+    esse = NULL;
+    return esse;
+}
+
 struct estabelecimentoComercial{
     char* cnpj;
     char* cpf;
@@ -41,11 +54,11 @@ struct estabelecimentoComercial{
 EstabelecimentoComercial estabelecimentoNovo(char* cnpj, char* cpf, char* tipo, char* cep, char face, int num, char* nome){
     struct estabelecimentoComercial *esse = malloc(sizeof(struct estabelecimentoComercial));
 
-    esse->cnpj = malloc(strlen(cnpj));
-    esse->cpf = malloc(strlen(cpf));
-    esse->tipo = malloc(strlen(tipo));
-    esse->cep = malloc(strlen(cep));
-    esse->nome = malloc(strlen(nome));
+    esse->cnpj = malloc(strlen(cnpj)+1);
+    esse->cpf = malloc(strlen(cpf)+1);
+    esse->tipo = malloc(strlen(tipo)+1);
+    esse->cep = malloc(strlen(cep)+1);
+    esse->nome = malloc(strlen(nome)+1);
 
     strcpy(esse->cnpj, cnpj);
     strcpy(esse->cpf, cpf);
@@ -87,6 +100,26 @@ int estabelecimentoGetNum(EstabelecimentoComercial ec){
     return esse->num;
 }
 
+void* estabelecimentoFinalizar(EstabelecimentoComercial ec){
+    struct estabelecimentoComercial *esse = (struct estabelecimentoComercial*)ec;
+    if(esse == NULL){
+        return;
+    }
+    free(esse->cnpj);
+    free(esse->cpf);
+    free(esse->nome);
+    free(esse->tipo);
+    free(esse->cep);
+    esse->cnpj = NULL;
+    esse->cpf = NULL;
+    esse->nome = NULL;
+    esse->tipo = NULL;
+    esse->cep = NULL;
+    free(esse);
+    esse = NULL;
+    return esse;
+}
+
 struct pessoa{
     char* cpf;
     char* nome;
@@ -98,10 +131,10 @@ struct pessoa{
 Pessoa pessoaNovo(char* cpf, char* nome, char* sobrenome, char* nascimento, char sexo){
     struct pessoa *essa = malloc(sizeof(struct pessoa));
 
-    essa->cpf = malloc(strlen(cpf));
-    essa->nome = malloc(strlen(nome));
-    essa->sobrenome = malloc(strlen(sobrenome));
-    essa->nascimento = malloc(strlen(nascimento));
+    essa->cpf = malloc(strlen(cpf)+1);
+    essa->nome = malloc(strlen(nome)+1);
+    essa->sobrenome = malloc(strlen(sobrenome)+1);
+    essa->nascimento = malloc(strlen(nascimento)+1);
 
     strcpy(essa->cpf, cpf);
     strcpy(essa->nome, nome);
@@ -133,11 +166,11 @@ char pessoaGetSexo(Pessoa p){
     return essa->sexo;
 }
 
-void finalizarPessoa(Pessoa p){
+void* pessoaFinalizar(Pessoa p){
     struct pessoa *essa = (struct pessoa*) p;
-
-    if(essa == NULL)
+    if(essa == NULL){
         return;
+    }
 
     free(essa->cpf);
     free(essa->nome);
@@ -149,6 +182,7 @@ void finalizarPessoa(Pessoa p){
 
     free(essa);
     essa = NULL;
+    return essa;
 }
 
 struct pessoaMoradia{
@@ -163,8 +197,8 @@ Moradia moradiaNovo(char* cep, char face, int num, char* complemento){
     struct pessoaMoradia *esse = malloc(sizeof(struct pessoaMoradia));
 
     // esse->cpf = malloc(strlen(cpf));
-    esse->cep = malloc(strlen(cep));
-    esse->complemento = malloc(strlen(complemento));
+    esse->cep = malloc(strlen(cep)+1);
+    esse->complemento = malloc(strlen(complemento)+1);
 
     // strcpy(esse->cpf, cpf);
     strcpy(esse->cep, cep);
@@ -213,11 +247,11 @@ void moradiaSetNum(Moradia m, int num){
     essa->num = num;
 }
 
-void finalizarMoradia(Moradia m){
+void* moradiaFinalizar(Moradia m){
     struct pessoaMoradia *essa = (struct pessoaMoradia*) m;
-
-    if(essa == NULL)
+    if(essa == NULL){
         return;
+    }
 
     free(essa->cep);
     free(essa->complemento);
@@ -226,4 +260,5 @@ void finalizarMoradia(Moradia m){
 
     free(essa);
     essa = NULL;
+    return essa;
 }

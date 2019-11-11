@@ -91,6 +91,15 @@ void iniciaPessoas(Cidade cid, char* arquivoPm){
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;
+
+    percorreArvore(city->arvoreCirculo, circuloFinalizar);
+    percorreArvore(city->arvoreHidrante, hidranteFinalizar);
+    percorreArvore(city->arvoreMuro, muroFinalizar);
+    percorreArvore(city->arvorePredio, predioFinalizar);
+    percorreArvore(city->arvoreQuadra, quadraFinalizar);
+    percorreArvore(city->arvoreRadio, radioBaseFinalizar);
+    percorreArvore(city->arvoreRetangulo, retanguloFinalizar);
+    percorreArvore(city->arvoreSemaforo, semaforoFinalizar);
     desalocaArvore(city->arvoreCirculo);
     desalocaArvore(city->arvoreRetangulo);
     desalocaArvore(city->arvoreQuadra);
@@ -99,6 +108,27 @@ void removeCidade(Cidade cid)
     desalocaArvore(city->arvoreRadio);
     desalocaArvore(city->arvoreMuro);
     desalocaArvore(city->arvorePredio);
+    if(city->tiposComercio_tipo){
+        HshTblMap(city->tiposComercio_tipo, comercioFinalizar);
+        HshTblMap(city->comercios_cnpj, estabelecimentoFinalizar);
+    }
+    if(city->pessoas_cpf){
+        HshTblMap(city->pessoas_cpf, pessoaFinalizar);
+        HshTblMap(city->moradias_cpf, moradiaFinalizar);
+        HshTblMap(city->moradiaPessoa_cep, free);
+    }
+    hashtableFinalizar(city->circulo_id);
+    hashtableFinalizar(city->retangulo_id);
+    hashtableFinalizar(city->quadra_cep);
+    hashtableFinalizar(city->hidrante_id);
+    hashtableFinalizar(city->radio_id);
+    hashtableFinalizar(city->semaforo_id);
+    hashtableFinalizar(city->predio_cep);
+    hashtableFinalizar(city->moradiaPessoa_cep);
+    hashtableFinalizar(city->pessoas_cpf);
+    hashtableFinalizar(city->moradias_cpf);
+    hashtableFinalizar(city->tiposComercio_tipo);
+    hashtableFinalizar(city->comercios_cnpj);
     free(city);
 }
 
@@ -118,7 +148,7 @@ void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[])
 void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[])
 {
     cidade *city = (cidade *)cid;
-    imprimeNoSvg(city->arvoreCirculo, boundingBoxCirculos, nomeDoArquivoSvg, cor);    
+    imprimeNoSvg(city->arvoreCirculo, boundingBoxCirculos, nomeDoArquivoSvg, cor);
     imprimeNoSvg(city->arvoreRetangulo, boundingBoxRetangulos, nomeDoArquivoSvg, cor);
 }
 
@@ -433,6 +463,7 @@ void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
             fprintf(arquivoTxt, "  .%s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
         }
     }
+    free(vetorCpfs);
     fprintf(arquivoTxt, "\n");
 }
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade cid){
@@ -470,112 +501,57 @@ void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
         pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(ec));
     }
     if(pes == NULL){
-        fprintf(arquivoTxt, " -Proprietário não encontrado\n");
+        fprintf(arquivoTxt, " -Proprietário (cpf %s) não encontrado\n", estabelecimentoGetCpf(ec));
     }else{
         fprintf(arquivoTxt, " -Propriedade de %s %s, %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetCpf(pes));
     }
     fprintf(arquivoTxt, "\n");
 }
+void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid){
+    cidade *city = (cidade*)cid;
+    Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
 
-
-void deletaDaCidade(Cidade cid, Info info, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int opcao, char cor[], double largura, double altura, double dx, double dy)
-{
-   FILE *arqSvg, *arqTxt;
-   arqSvg = fopen(svg,"a");
-   arqTxt = fopen(txt, "a");
-   cidade *city = (cidade*)cid;
-
-    if(opcao == 1)
-        fprintf(arqTxt, "dq %s %s %lf\n", tipo, id, r);
+    fprintf(arquivoTxt, "mud cpf: %s\n", cpf);
+    if(!pes){
+        fprintf(arquivoTxt, " -Pessoa não encontrada\n\n");
+        return;
+    }
     
-    Info informacao;
-    if(strcmp(tipo, "L1") == 0)
-    {
-            if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
-            {
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-                removeChave(city->arvoreQuadra, retornaQCEP(informacao));
-                deletaDaArvore()
-            }
-
-            i = j;
-        }
-
-        informacao = lista->v[i].info;
-
-        if(retornaDistanciaL1(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)))
-        {
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-            fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-            removerDaLista(lista, i);
-        }
+    fprintf(arquivoTxt, " -%s %s, %s mudou-se\n", pessoaGetNome(pes), pessoaGetSobrenome(pes), pessoaGetNascimento(pes));
+    if(!mor){
+        fprintf(arquivoTxt, "  .de lugar nenhum, aparetemente\n");
+        mor = moradiaNovo(cep, face, num, complemento);
+        insereRegistro(city->moradias_cpf, cpf, mor);
+    }else{
+        fprintf(arquivoTxt, "  .de: %s, %c, %d, %s\n", moradiaGetCep(mor), moradiaGetFace(mor), moradiaGetNum(mor), moradiaGetComplemento(mor));
     }
-    else
-    {
-        while(lista->v[i].prox != -1)
-        {
-            informacao = lista->v[i].info;
-            if (informacao == NULL)
-            {
-                i = lista->v[i].prox;
-                continue;
-            }
-            j = lista->v[i].prox;
-            if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
-            {
-                if(opcao == 1)
-                {
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-                removerDaLista(lista, i);
-                }
-                else if (opcao == 2)
-                {
-                setQCorB(informacao, cor);
-                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-                }
+    fprintf(arquivoTxt, "  .para: %s, %c, %d, %s\n\n", cep, face, num, complemento);
+}
+void qry_mplg_quadra(Info info, va_list args){
+    va_list variaveis;
+    va_copy(variaveis, args);
+    Reta* polig = va_arg(variaveis, void**);
+    int tamPolig = va_arg(variaveis, int);
+    FILE* arquivoTxt = va_arg(variaveis, FILE*);
+    FILE* arquivoSvg = va_arg(variaveis, FILE*);
+    cidade *city = va_arg(variaveis, void*);
 
-            }
-            else if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
-            {
-                fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
-                setQX(informacao, retornaQX(informacao)+dx);
-                setQY(informacao, retornaQY(informacao)+dy);
-            }
-
-            i = j;
-        }
-
-        informacao = lista->v[i].info;
-        if (informacao != NULL)
-        {
-            if(retornaDistanciaL2(r, fx, fy, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao != 3)
-            {
-                if(opcao == 1)
-                {
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
-                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-                removerDaLista(lista, i);
-                }
-                else if (opcao == 2)
-                {
-                setQCorB(informacao, cor);
-                fprintf(arqTxt, "cep: %s\n", retornaQCEP(informacao));
-                }
-            }
-            if (verificaColisao(fx, fy, largura, altura, retornaQX(informacao), retornaQY(informacao), retornaQW(informacao), retornaQH(informacao)) && opcao == 3)
-            {
-                fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(informacao), retornaQX(informacao), retornaQY(informacao), retornaQX(informacao)+dx, retornaQY(informacao)+dy);
-                setQX(informacao, retornaQX(informacao)+dx);
-                setQY(informacao, retornaQY(informacao)+dy);
-            }
-        }
+    double x = retornaQX(info);
+    double y = retornaQY(info);
+    double w = retornaQW(info);
+    double h = retornaQH(info);
+    Reta retangulo[4] = {criarReta(x, y, x+w, y), criarReta(x+w, y, x+w, y+h), criarReta(x+w, y+h, x, y+h), criarReta(x, y+h, x, y)};
+    if(retanguloIntersectaPoligono(retangulo, polig, tamPolig) || retanguloTotalDentroPoligono(retangulo, polig, tamPolig)){
+        setQEspessura(info, retornaQEspessura(info)*2);
     }
-    fclose(arqSvg);
-    fclose(arqTxt);
-    }
+
+    for(int i=0;i<4;i++)
+        retaFinalizar(retangulo[i]);
+    va_end(variaveis);
+}
+void qry_mplg(Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, Cidade cid){
+    cidade *city = cid;
+    FILE* arquivoSvg = fopen(nomeArqSvg, "a");
+    percorreArvore(city->arvoreQuadra, qry_mplg_quadra, poligono, tamPolig, arquivoTxt, arquivoSvg, cid);
+}

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<stdarg.h>
 #include "arvore.h"
 #define PRETA 1
 #define VERMELHA 0
@@ -343,27 +344,28 @@ void deletaDaArvore(Tree tree, Node* node)
     printf("\ncor original = %d", corOriginal);
     if(corOriginal == PRETA)
         reparaDelecao(arvore, x);
-    
 }
 
-void percorreArvorePorNo(No* no, void (*funcao) (Info), No* nil)
+void percorreArvorePorNo(No* no, void (*funcao) (Info, va_list), No* nil, va_list args)
 {
     if(no == nil)
         return;
-    funcao(no->info);
+    funcao(no->info, args);
     if(no->esquerda != nil)
-        percorreArvorePorNo(no->esquerda, funcao, nil);
+        percorreArvorePorNo(no->esquerda, funcao, nil, args);
     if(no->direita != nil)
-        percorreArvorePorNo(no->direita, funcao, nil);
-    
+        percorreArvorePorNo(no->direita, funcao, nil, args);
 }
 
-void percorreArvore(Tree tree, void (*funcao) (Info))
+void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...)
 {
     Arvore* arvore = (Arvore*) tree;
+    va_list args;
+    va_start(args, funcao);
 
-    percorreArvorePorNo(arvore->raiz, funcao, arvore->nil);
-
+    percorreArvorePorNo(arvore->raiz, funcao, arvore->nil, args);
+    
+    va_end(args);
 }
 
 void imprimeArvorePorNo(No* no, void (*funcao) (Info, char[], char[]), No* nil, char nomeDoArquivoSvg[], char cor[])
@@ -390,8 +392,9 @@ void desalocaNo(No* no, No* nil)
     if(no->direita != nil)
         desalocaNo(no->direita, nil);
 
-    free(no->info);
+    // free(no->info);
     free(no);
+    no = NULL;
 }
 
 void desalocaArvore(Tree tree)

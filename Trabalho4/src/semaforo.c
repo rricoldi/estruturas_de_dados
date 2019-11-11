@@ -23,6 +23,12 @@ Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, doub
     
     return s;
 }
+void* semaforoFinalizar(Semaforo semaf){
+    ItemS* s = (ItemS*)semaf;
+    free(s);
+    s = NULL;
+    return s;
+}
 
 double retornaSX(Semaforo s)
 {
