@@ -73,6 +73,10 @@ double retornaQEspessura(Quadra q)
     ItemQ* item = (ItemQ*) q;
     return item->espessura;
 }
+void setQEspessura(Quadra q, double espessura){
+    ItemQ *quad = q;
+    quad->espessura = espessura;
+}
 
 char *retornaQCEP(Quadra q)
 {

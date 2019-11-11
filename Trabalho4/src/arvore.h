@@ -1,6 +1,7 @@
 #ifndef __ARVORE_H
 #define __ARVORE_H
 
+#include<stdarg.h>
 #include "quadra.h"
 #include "hidrante.h"
 #include "radio.h"
@@ -26,7 +27,7 @@ void imprimeNoSvg(Tree tree, void (*funcao) (Info, char[], char[]), char nomeDoA
 
 void deletaDaArvore(Tree tree, Node* node);
 
-void percorreArvore(Tree tree, void (*funcao) (Info));
+void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...);
 
 void desalocaArvore(Tree tree);
 

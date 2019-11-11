@@ -563,7 +563,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			fscanf(arquivoQry, "%19s ", arqPol);
 			Reta *poligono = leiaPol(arqPol, &tamanhoPoligono);
 			qry_mplg(poligono, tamanhoPoligono, arquivoTxt, nomeDoArquivoSvg, cidade);
-			
 			for(int i=0;i<tamanhoPoligono;i++){
 				retaFinalizar(poligono[i]);
 			}
@@ -753,7 +752,6 @@ Reta* leiaPol(char* nomeArquivoPoligono, int* array_size){
 			x2 = arrayPontos[j];
 			y2 = arrayPontos[j+1];
 		}
-		printf("x1: %lf, y1: %lf, x2: %lf, y2: %lf\n", x1, y1, x2, y2);
 		arrayRetas[reta] = criarReta(x1, y1, x2, y2);
 		reta++;
 	}

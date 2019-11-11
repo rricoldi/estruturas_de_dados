@@ -24,6 +24,7 @@ double retornaQW(Quadra q);
 double retornaQH(Quadra q);
 
 double retornaQEspessura(Quadra q);
+void setQEspessura(Quadra, double);
 
 char *retornaQCEP(Quadra q);
 

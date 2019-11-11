@@ -528,7 +528,30 @@ void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* c
     }
     fprintf(arquivoTxt, "  .para: %s, %c, %d, %s\n\n", cep, face, num, complemento);
 }
+void qry_mplg_quadra(Info info, va_list args){
+    va_list variaveis;
+    va_copy(variaveis, args);
+    Reta* polig = va_arg(variaveis, void**);
+    int tamPolig = va_arg(variaveis, int);
+    FILE* arquivoTxt = va_arg(variaveis, FILE*);
+    FILE* arquivoSvg = va_arg(variaveis, FILE*);
+    cidade *city = va_arg(variaveis, void*);
+
+    double x = retornaQX(info);
+    double y = retornaQY(info);
+    double w = retornaQW(info);
+    double h = retornaQH(info);
+    Reta retangulo[4] = {criarReta(x, y, x+w, y), criarReta(x+w, y, x+w, y+h), criarReta(x+w, y+h, x, y+h), criarReta(x, y+h, x, y)};
+    if(retanguloIntersectaPoligono(retangulo, polig, tamPolig) || retanguloTotalDentroPoligono(retangulo, polig, tamPolig)){
+        setQEspessura(info, retornaQEspessura(info)*2);
+    }
+
+    for(int i=0;i<4;i++)
+        retaFinalizar(retangulo[i]);
+    va_end(variaveis);
+}
 void qry_mplg(Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, Cidade cid){
     cidade *city = cid;
-    
+    FILE* arquivoSvg = fopen(nomeArqSvg, "a");
+    percorreArvore(city->arvoreQuadra, qry_mplg_quadra, poligono, tamPolig, arquivoTxt, arquivoSvg, cid);
 }

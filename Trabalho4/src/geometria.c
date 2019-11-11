@@ -55,12 +55,15 @@ struct ponto *interCasoA(struct reta *r, struct reta *s){
     c->x = (s->cl - r->cl)/(r->ca - s->ca);
     c->y = (r->cl*s->ca - s->cl*r->ca)/(s->ca - r->ca);
     if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
+        pontoFinalizar(c);
         return NULL;
     }
     if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
+        pontoFinalizar(c);
         return c;
     }
     else{
+        pontoFinalizar(c);
         return NULL;
     }
 }
@@ -69,12 +72,15 @@ struct ponto *interCasoB(struct reta *r, struct reta *s){
     c->x = r->cl;
     c->y = s->ca*r->cl + s->cl;
     if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
+        pontoFinalizar(c);
         return NULL;
     }
     if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
+        pontoFinalizar(c);
         return c;
     }
     else{
+        pontoFinalizar(c);
         return NULL;
     }
 }
@@ -235,7 +241,6 @@ bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int tamPoli
 }
 bool retanguloIntersectaPoligono(Reta retangulo[], Reta poligono[], int tamPolig){
     for(int i=0;i<4;i++){
-        retaPrint(retangulo[i]);
         if(retaInterPoligono(retangulo[i], poligono, tamPolig)){
             return true;
         }
