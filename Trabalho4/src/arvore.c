@@ -233,6 +233,26 @@ void transplante(Arvore* arvore, No* no, No* no2)
     no2->pai = no->pai;
 }
 
+Node* buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info))
+{
+    Arvore* arvore = (Arvore*) tree;
+    No* no = arvore->raiz;
+
+    while(no != arvore->nil)
+    {
+         if(arvore->comparaInfo(info, no->info) < 0)
+            no = no->esquerda;
+        else if(arvore->comparaInfo(info, no->info) > 0)
+            no = no->direita;
+        else
+        {
+            if(retornaId(info) == retornaId(no->info))
+                return no;
+        }
+    }
+    printf("\nNao foi possivel encontrar um no com esse numero");
+    return NULL;
+}
 
 void reparaDelecao(Arvore* arvore, No* no)
 {

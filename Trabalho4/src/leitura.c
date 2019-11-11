@@ -413,7 +413,6 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 			char *arquivoDeSaida = (char *)(malloc((strlen(prefixoDoArquivoQry) + strlen(sufixo) + 7) * sizeof(char)));
 			sprintf(arquivoDeSaida, "%s-%s.svg", prefixoDoArquivoQry, sufixo);
-			
 			iniciaSvg(arquivoDeSaida);
 			imprimeBoundingBox(cidade, arquivoDeSaida, cor);
 			finalizaSvg(arquivoDeSaida);
@@ -428,15 +427,15 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 
 			if (tipo1 == 4)
 			{
-				percorreCidade(cidade, distancia, retornaHX(info1), retornaHY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+				qry_dq(cidade, info1, distancia, retornaHX(info1), retornaHY(info1), nomeDoArquivoSvg, nomeDoArquivoTxt, id1, metrica, 4);
 			}
 			else if (tipo1 == 5)
 			{
-				percorreCidade(cidade, distancia, retornaSX(info1), retornaSY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+				qry_dq(cidade, info1, distancia, retornaSX(info1), retornaSY(info1), nomeDoArquivoSvg, nomeDoArquivoTxt, id1, metrica, 5);
 			}
 			else if (tipo1 == 6)
 			{
-				percorreCidade(cidade, distancia, retornaRX(info1), retornaRY(info1), metrica, nomeDoArquivoSvg, nomeDoArquivoTxt, id1, 1, "", 0, 0, 0, 0);
+				qry_dq(cidade, info1, distancia, retornaRX(info1), retornaRY(info1), nomeDoArquivoSvg, nomeDoArquivoTxt, id1, metrica, 6);
 			}
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}

@@ -507,6 +507,77 @@ void qry_de(FILE* arquivoTxt, char* cnpj, Cidade cid){
     }
     fprintf(arquivoTxt, "\n");
 }
+
+void qry_dq_no(Info info, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    Cidade cid = va_arg(variaveis, void*);
+    double r = va_arg(variaveis, double);
+    double fx = va_arg(variaveis, double);
+    double fy = va_arg(variaveis, double);
+    char *svg = va_arg(variaveis, char*);
+    char *txt = va_arg(variaveis, char*);
+    char *id = va_arg(variaveis, char*);
+    char *metrica = va_arg(variaveis, char*);
+    int tipo = va_arg(variaveis, int);
+    cidade *city = (cidade*) cid;
+    FILE *arqSvg, *arqTxt;
+    arqSvg = fopen(svg,"a");
+    arqTxt = fopen(txt, "a");
+
+    Tree arvore;
+    if (tipo == 4)
+    {
+        arvore = city->arvoreHidrante;
+    }
+    else if (tipo == 5)
+    {
+        arvore = city->arvoreSemaforo;
+    }
+    else if (tipo == 6)
+    {
+        arvore = city->arvoreRadio;
+    }
+
+    if(strcmp("L1", metrica) == 0)
+    {
+        if(retornaDistanciaL1(r, fx, fy, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
+        {
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
+            Node no = buscaNaArvore(arvore, info, retornaQCEP);
+            printf("\nbuscou\n");
+            if (no == NULL)
+                return;
+            deletaDaArvore(city->arvoreQuadra, no);
+            printf("\ndeletou\n");
+            removeChave(city->quadra_cep, retornaQCEP(info));
+        }   
+    }
+    else
+    {
+        if(retornaDistanciaL2(r, fx, fy, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
+        {
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
+            fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
+            Node no = buscaNaArvore(arvore, info, retornaQCEP);
+            if (no == NULL)
+                return;
+            deletaDaArvore(city->arvoreQuadra, no);
+            removeChave(city->quadra_cep, retornaQCEP(info));
+        }     
+    }
+}
+
+void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo){
+    cidade *city = cid;
+    percorreArvore(city->arvoreQuadra, qry_dq_no, cid, info, r, fx, fy, svg, txt, id, metrica, tipo);
+}
+
+
 void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid){
     cidade *city = (cidade*)cid;
     Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);

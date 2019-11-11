@@ -32,6 +32,6 @@ void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...);
 
 void desalocaArvore(Tree tree);
 
-// Info* buscaNaArvore(Tree* arvore, int numero);
+Node* buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info));
 
 #endif
