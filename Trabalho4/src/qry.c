@@ -55,7 +55,6 @@ bool retornaDistanciaL2(double r, double fx, double fy, double x, double y, doub
     double d2 = sqrt(pow(fabs(fx-(x+w)),2) + pow(fabs(fy-(y+h)),2));
     double d3 = sqrt(pow(fabs(fx-x),2) + pow(fabs(fy-y),2));
     double d4 = sqrt(pow(fabs(fx-x),2) + pow(fabs(fy-(y+h)),2));
-    
     if(d1 <= r)
     {
         if(d2 <= r)

@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
+        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, caminhoDoArquivo, cidade);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)

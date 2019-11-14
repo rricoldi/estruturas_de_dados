@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
+void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDoArquivo[], Cidade cidade)
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -288,7 +288,9 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	char cor[30];
 	char cep[20];
 	char face[6];
-
+	char* tempFileName = "tempFile.txt";
+	FILE* tempFile = fopen(tempFileName, "w");
+	fclose(tempFile);
 	
 	Info info1 = 0, info2 = 0;
 
@@ -532,7 +534,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			{
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
-				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				imprimeCidade(cidade, nomeDoArquivoSvg);
 				verificador2++;
 			}
 			info1 = procuraNaCidade(cidade, cep, &tipo1, face, numeroDoPredio);
@@ -557,15 +559,16 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
 		}
 		else if(strcmp("mplg?", comando)==0){
-			char arqPol[20];
+			char arqPol[51];
 			int tamanhoPoligono;
-			fscanf(arquivoQry, "%19s ", arqPol);
-			Reta *poligono = leiaPol(arqPol, &tamanhoPoligono);
-			qry_mplg(poligono, tamanhoPoligono, arquivoTxt, nomeDoArquivoSvg, cidade);
+			fscanf(arquivoQry, "%50s ", arqPol);
+			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamanhoPoligono);
+			qry_mplg(caminhoDoArquivo, poligono, tamanhoPoligono, arquivoTxt, tempFileName, cidade);
 			for(int i=0;i<tamanhoPoligono;i++){
 				retaFinalizar(poligono[i]);
 			}
 			free(poligono);
+			verificador++;
 		}
 		else if(strcmp("m?", comando)==0){
 			char cep[10];
@@ -589,8 +592,19 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			qry_mud(arquivoTxt, cpf, cep, face, num, complemento, cidade);
 		}
 	}
-	if(verificador != 0 && verificador2 == 0)
+	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
+		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
+		FILE* tempFile = fopen(tempFileName, "r+");
+		while(!feof(tempFile)){
+			char buffer[301];
+			fgets(buffer, 300, tempFile);
+			fputs(buffer, arquivoSvg);
+		}
+		fclose(tempFile);
+		remove(tempFileName);
+		fclose(arquivoSvg);
+	}
 
 	finalizaSvg(nomeDoArquivoSvg);
 	if (verificador == 84)
@@ -702,10 +716,18 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 	}
 }
 
-Reta* leiaPol(char* nomeArquivoPoligono, int* array_size){
-	FILE* arq = fopen(nomeArquivoPoligono, "r");
+Reta* leiaPol(char* caminhoDoArquivo, char* nomeArquivoPoligono, int* array_size){
+	char* nomeArqPol = NULL;
+	if(caminhoDoArquivo){
+		nomeArqPol = malloc((strlen(caminhoDoArquivo)+strlen(nomeArquivoPoligono)+2)*sizeof(char));
+		sprintf(nomeArqPol, "%s/%s", caminhoDoArquivo, nomeArquivoPoligono);
+	}else{
+		nomeArqPol = malloc(strlen(nomeArquivoPoligono)*sizeof(char));
+		strcpy(nomeArqPol, nomeArquivoPoligono);
+	}
+	FILE* arq = fopen(nomeArqPol, "r");
 	if(!arq){
-		printf("Não foi possível abrir o arquivo do polígono: %s\n", nomeArquivoPoligono);
+		printf("Não foi possível abrir o arquivo do polígono: %s\n", nomeArqPol);
 		return NULL;
 	}
 	*array_size = 0;
