@@ -591,6 +591,18 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 			fscanf(arquivoQry, "%14s %9s %c %d %134[^\n] ", cpf, cep, &face, &num, complemento);
 			qry_mud(arquivoTxt, cpf, cep, face, num, complemento, cidade);
 		}
+		else if(strcmp("eplg?", comando)==0){
+			char arqPol[51], tipo[31];
+			int tamPolig=0;
+			fscanf(arquivoQry, "%50s %30s ", arqPol, tipo);
+			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamPolig);
+			qry_eplg(caminhoDoArquivo, poligono, tamPolig, arquivoTxt, tempFileName, tipo, cidade);
+			for(int i=0;i<tamPolig;i++){
+				retaFinalizar(poligono[i]);
+			}
+			free(poligono);
+			verificador++;
+		}
 	}
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -618,7 +630,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 	fclose(arquivoQry);
 }
 
-void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
+void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashTable comercios_cpf){
 	FILE* ec = fopen(arquivoEc, "r");
 	if(!ec){
 		printf("Não foi possível abrir o arquivo ec: %s", arquivoEc);
@@ -663,7 +675,8 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 			}else{
 				EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
 				int reg = insereRegistro(comercios, cnpj, com);
-				if(reg<0){
+				int reg1 = insereRegistro(comercios_cpf, cpf, com);
+				if(reg<0 || reg1<0){
 					printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
 				}
 			}

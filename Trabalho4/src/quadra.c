@@ -103,6 +103,10 @@ char *retornaQCorP(Quadra q)
     ItemQ* item = (ItemQ*) q;
     return item->corP;
 }
+void setQCorP(Quadra quad, char* cor){
+    ItemQ *q = quad;
+    strcpy(q->corP, cor);
+}
 
 double comparaQuadra(Quadra q1, Quadra q2)
 {

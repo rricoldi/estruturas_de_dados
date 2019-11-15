@@ -3,7 +3,6 @@
 #include <math.h>
 #include "cidade.h"
 #include"comercioPessoas.h"
-
 #include"leitura.h"
 
 typedef struct city
@@ -15,6 +14,7 @@ typedef struct city
     HashTable moradias_cpf;         //key: CPF do morador
     HashTable tiposComercio_tipo;   //key: tipo do comercio
     HashTable comercios_cnpj;       //key: CNPJ do estabelecimento
+    HashTable comercios_cpf;
     HashTable circulo_id;
     HashTable retangulo_id;
     HashTable quadra_cep;
@@ -64,6 +64,7 @@ Cidade criarCidade()
     city->moradias_cpf = NULL;
     city->tiposComercio_tipo = NULL;
     city->comercios_cnpj = NULL;
+    city->comercios_cpf = NULL;
 
     return city;
 }
@@ -78,7 +79,8 @@ void iniciaComercios(Cidade cid, char* arquivoEc){
     cidade *city = (cidade *)cid;
     city->tiposComercio_tipo = criaTabela(97);
     city->comercios_cnpj = criaTabela(97);
-    leiaEc(arquivoEc, city->comercios_cnpj, city->tiposComercio_tipo);
+    city->comercios_cpf = criaTabela(97);
+    leiaEc(arquivoEc, city->comercios_cnpj, city->tiposComercio_tipo, city->comercios_cpf);
 }
 void iniciaPessoas(Cidade cid, char* arquivoPm){
     cidade *city = (cidade *)cid;
@@ -601,7 +603,7 @@ int qry_mplg_quadra_predios(Cidade cid, char* cep, Reta* poligono, int tamPolig,
             for(int j=0;j<tamVetCpf;j++){
                 Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpfs[j]);
                 if(moradiaGetFace(mor) == retornaPFace(predios[i])[0] && moradiaGetNum(mor) == (int)retornaPNumero(predios[i])){
-                    fprintf(arquivoTxt, "  ~cpf %s\n", cpfs[j]);
+                    fprintf(arquivoTxt, "  ~cpf %s\n", (char*)cpfs[j]);
                     Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpfs[j]);
                     if(pes == NULL){
                         fprintf(arquivoTxt, "   .Pessoa não encontrada\n");
@@ -649,4 +651,67 @@ void qry_mplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arqui
     percorreArvore(city->arvoreQuadra, qry_mplg_quadra, poligono, tamPolig, arquivoTxt, arquivoSvg, cid);
     fclose(arquivoSvg);
     fprintf(arquivoTxt, "\n");
+}
+
+void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, FILE* arquivoTxt, FILE* arquivoSvg, EstabelecimentoComercial item){
+    Reta* lados = retornaPredioLados(predio);
+    if(retanguloTotalDentroPoligono(lados, poligono, tamPolig)){
+        fprintf(arquivoTxt, " -Estabelecimento: %s\n", estabelecimentoGetNome(item));
+        Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, estabelecimentoGetCpf(item));
+        if(!pes){
+            fprintf(arquivoTxt, "  .proprietário não encontrado\n");
+        }else{
+            fprintf(arquivoTxt, "  .proprietário: %s %s\n", pessoaGetNome(pes), pessoaGetSobrenome(pes));
+        }
+        fprintf(arquivoTxt, "  .localizado em: %s, %c, %d\n", retornaPCep(predio), retornaPFace(predio)[0], (int)retornaPNumero(predio));
+        fprintf(arquivoSvg, "\n\t<circle cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%lf\" fill-oppacity=\"0.5\" stroke-oppacity=\"0.7\" />",
+            retornaPX(predio), retornaPY(predio), 5.0, "magenta", "yellow", 0.5);
+        Quadra quad = getPrimeiroRegistro(city->quadra_cep, retornaPCep(predio));
+        if(quad != NULL){
+            if(strcmp(retornaQCorB(quad), "green")!=0){
+                setQCorP(quad, "green");
+            }else{
+                setQCorP(quad, "blue");
+            }
+        }
+    }
+}
+void qry_elpg_estabelecimentos(Info item, va_list args){
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char* tipo = va_arg(variaveis, char*);
+    Reta* polig = va_arg(variaveis, void**);
+    int tamPolig = va_arg(variaveis, int);
+    FILE* arquivoTxt = va_arg(variaveis, FILE*);
+    FILE* arquivoSvg = va_arg(variaveis, FILE*);
+    Cidade cid = va_arg(variaveis, void*);
+    
+    if(strcmp(tipo, estabelecimentoGetTipo(item))!=0 && tipo[0] != '*'){
+        printf("_%s__%s_\n", tipo, estabelecimentoGetTipo(item));fflush(stdout);
+        return;
+    }
+
+    cidade *city = cid;
+    char* cep = estabelecimentoGetCep(item);
+    char face = estabelecimentoGetFace(item);
+    int num = estabelecimentoGetNum(item);
+    int tamVet=0;
+    Predio* predios = getVetorRegistros(city->predio_cep, cep, &tamVet);
+    for(int i=0;i<tamVet;i++){
+        if(retornaPFace(predios[i])[0] == face && retornaPNumero(predios[i]) == num){
+            qry_eplg_predio(city, predios[i], polig, tamPolig, arquivoTxt, arquivoSvg, item);
+            break;
+        }
+    }
+
+    free(predios);
+    va_end(variaveis);
+}
+void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cid){
+    cidade *city = cid;
+    FILE* arquivoSvg = fopen(nomeArqSvg, "a+");
+    fprintf(arquivoTxt, "eplg? %s\n", tipo);
+    HshTblMap(city->comercios_cpf, qry_elpg_estabelecimentos, tipo, poligono, tamPolig, arquivoTxt, arquivoSvg, cid);
+    fprintf(arquivoTxt, "\n");
+    fclose(arquivoSvg);
 }

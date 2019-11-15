@@ -4,6 +4,7 @@
 //	Funções referentes à Tabela de Espalhamento
 
 #include<stdbool.h>
+#include<stdarg.h>
 
 typedef void* HashTable;	//Ponteiro genérico para uma tabela de espalhamento
 typedef void* Info;		//Ponteiro genérico para um dado qualquer
@@ -33,6 +34,6 @@ bool existeChave(HashTable, char* key);
 
 //Libera todos os registros da HashTable, além da pŕopria tabela
 //A tabela passada recebe NULL, e fica inutilizável
-void HshTblMap(HashTable, void (*func)(Info));
+void HshTblMap(HashTable, void (*func)(Info, va_list), ...);
 void* hashtableFinalizar(HashTable);
 #endif
