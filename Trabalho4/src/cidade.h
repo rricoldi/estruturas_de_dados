@@ -1,8 +1,11 @@
 #ifndef __CIDADE_H
 #define __CIDADE_H
+
 #include "lista.h"
 #include "arvore.h"
 #include "hashTable.h"
+#include "svg.h"
+
 #include<stdio.h>
 /*  
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
@@ -75,5 +78,6 @@ void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);
 void qry_de(FILE* arquivoTxt, char* cnpj, Cidade);
 void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade);
 void qry_mplg(Reta poligono[], int tamanhoDoPoligono, FILE* arquivoTxt, char* nomeArquivoSvg, Cidade cidade);
+void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando);
 
 #endif

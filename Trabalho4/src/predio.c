@@ -167,3 +167,23 @@ double comparaPredio(Predio p1, Predio p2)
         return getPontoX(getRetaA(predio1->superior)) - getPontoX(getRetaA(predio2->superior));
     return getPontoY(getRetaA(predio1->superior)) != getPontoY(getRetaA(predio2->superior));
 }
+
+void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor, int tam)
+{   
+    static int ultimoInfo = 0;
+    ItemP *predio = pred;
+    char corDoSvg[20];
+
+    if(cor == 1)
+        strcpy(corDoSvg,"black");      
+    else if(cor == 0)
+        strcpy(corDoSvg,"red");
+    
+    fprintf(arquivoSVG,"\n\t<circle r='%d' cx='%d' cy='%d' stroke='%s' fill='%s' stroke-width='1.0' fill-opacity='1'/>",15,x,y,corDoSvg,corDoSvg);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>cep = %s</text>",x,y-5,predio->cep);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>x = %f</text>",x,y,getPontoX(getRetaA(predio->superior)));
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>y = %f</text>",x,y+5,getPontoY(getRetaA(predio->superior)));
+
+    if(getPontoX(getRetaA(predio->superior)) < ultimoInfo)
+        ultimoInfo = getPontoX(getRetaA(predio->superior));
+}

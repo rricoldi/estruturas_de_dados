@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
+void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[])
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -281,6 +281,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	double distancia, largura, altura;
 	double numeroDoPredio;
 
+	char arvore;
 	char id1[20], id2[20];
 	char metrica[3];
 	char comando[6];
@@ -288,6 +289,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 	char cor[30];
 	char cep[20];
 	char face[6];
+	char nomeDoArquivoDeArvoreSvg[100];
 
 	
 	Info info1 = 0, info2 = 0;
@@ -587,6 +589,14 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade)
 			int num;
 			fscanf(arquivoQry, "%14s %9s %c %d %134[^\n] ", cpf, cep, &face, &num, complemento);
 			qry_mud(arquivoTxt, cpf, cep, face, num, complemento, cidade);
+		}
+		else if(strcmp("dmprbt", comando)==0)
+		{
+			fscanf(arquivoQry, " %c", &arvore);
+            fscanf(arquivoQry, "%s", nomeDoArquivoDeArvoreSvg);
+			char *nomeFinalDoArquivoSvg = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeDoArquivoDeArvoreSvg)+6)*sizeof(char));
+            sprintf(nomeFinalDoArquivoSvg, "%s/%s", caminhoDoArquivoDeSaida, nomeDoArquivoDeArvoreSvg);
+            qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
 		}
 	}
 	if(verificador != 0 && verificador2 == 0)

@@ -87,3 +87,23 @@ double comparaSemaforo(Semaforo s1, Semaforo s2)
         return semaforo1->x - semaforo2->x;
     return semaforo1->y - semaforo2->y;
 }
+
+void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor, int tam)
+{   
+    static int ultimoInfo = 0;
+    ItemS *semaforo = sem;
+    char corDoSvg[20];
+
+    if(cor == 1)
+        strcpy(corDoSvg,"black");      
+    else if(cor == 0)
+        strcpy(corDoSvg,"red");
+    
+    fprintf(arquivoSVG,"\n\t<circle r='%d' cx='%d' cy='%d' stroke='%s' fill='%s' stroke-width='1.0' fill-opacity='1'/>",15,x,y,corDoSvg,corDoSvg);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>cep = %s</text>",x,y-5,semaforo->id);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>x = %f</text>",x,y,semaforo->x);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>y = %f</text>",x,y+5,semaforo->y);
+
+    if(semaforo->x < ultimoInfo)
+        ultimoInfo = semaforo->x;
+}

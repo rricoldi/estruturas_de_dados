@@ -6,32 +6,6 @@
 #include "leitura.h"
 #include"hashTable.h"
 
-void resolverInterativos(Cidade cidade){
-    int sair  = 0;
-    char *comando = NULL;
-    char *argumento1 = NULL;
-    int argumento2;
-    while(!sair){
-        printf("interativo\n");
-        scanf("%s", comando);
-        if(strcmp(comando, "q")==0){
-            scanf("%s", argumento1);
-            // interativoQ(argumento1, cidade);
-        }
-        else if(strcmp(comando, "dmprbt")==0){
-            scanf("%s %d", argumento1, &argumento2);
-            // interativoD(argumento1, argumento2, cidade);
-        }
-        else if(strcmp(comando, "sai")==0){
-            sair = 1;
-        }
-        else if(strcmp(comando, "nav")==0){
-            scanf("%d", &argumento2);
-            // interativoN(argumento2, cidade);
-        }
-    }
-}
-
 char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 {
     char *prefixo, caractere;
@@ -55,6 +29,48 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
         }        
     }
 	return strtok(nomeDoArquivo,".");
+}
+
+void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo){
+    
+    char comando[9];
+    char nomeDoArquivoQry[100];
+    char nomeDoArquivoSvg[100];
+    char arvore;
+    int argumento;
+    char *prefixoFinalDoArquivoQry = NULL;
+    char *nomeFinalDoArquivoSvg = NULL;
+
+    while(1)
+    {
+        printf("interativo\n");
+        scanf("%s", comando);
+        if(strcmp(comando, "q")==0){
+            scanf("%s", nomeDoArquivoQry);
+
+            // interativoQ(argumento1, cidade);
+            prefixoFinalDoArquivoQry = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6+strlen(retornarPrefixoDoArquivo(nomeDoArquivoQry)))*sizeof(char));
+            sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
+
+            printf("Bloco do Qry inicializado\n");
+            leiaQry(prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
+            printf("Bloco do Qry finalizado\n");
+        }
+        else if(strcmp(comando, "dmprbt")==0){
+            scanf(" %c", &arvore);
+            scanf("%s", nomeDoArquivoSvg);
+            nomeFinalDoArquivoSvg = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeDoArquivoSvg)+6)*sizeof(char));
+            sprintf(nomeFinalDoArquivoSvg, "%s/%s", caminhoDoArquivoDeSaida, nomeDoArquivoSvg);
+            qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
+        }
+        else if(strcmp(comando, "sai")==0){
+            break;
+        }
+        else if(strcmp(comando, "nav")==0){
+            scanf("%d", &argumento);
+            // interativoN(argumento2, cidade);
+        }
+    }
 }
 
 int main(int argc, char *argv[])
@@ -218,11 +234,11 @@ int main(int argc, char *argv[])
     if(nomeDoArquivoQry != NULL)
     {
         //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
-        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));	
+        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade);
+        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)
@@ -236,7 +252,7 @@ int main(int argc, char *argv[])
 
     if(interativo)
     {
-        resolverInterativos(cidade);
+        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
         free(nomeDoArquivoQry);
         free(prefixoDoAquivoQry);
         free(prefixoFinalDoQry);
@@ -244,7 +260,7 @@ int main(int argc, char *argv[])
     }
 
     removeCidade(cidade);
-	printf("Lista desalocada\n");
+	printf("Cidade desalocada\n");
 
 	free(arquivoGeo);
 	free(nomeDoArquivoGeo);

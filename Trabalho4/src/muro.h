@@ -17,4 +17,6 @@ double retornaMY2(Muro r);
 
 double comparaMuro(Muro m1, Muro m2);
 
+void imprimirMuroDaArvore(Muro *mur, FILE *arquivoSVG, int x, int y, char cor, int tam);
+
 #endif

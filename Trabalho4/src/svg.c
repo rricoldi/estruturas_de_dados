@@ -12,7 +12,7 @@ void iniciaSvg(char nomeDoArquivoSvg[])
         exit(1);
     }
     
-    fprintf(arquivoSvg, "<svg width=\"5000\" height=\"5000\">");
+    fprintf(arquivoSvg, "<svg>");
     
     fclose(arquivoSvg);
 }
