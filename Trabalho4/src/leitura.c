@@ -291,6 +291,9 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 	char face[6];
 	char nomeDoArquivoDeArvoreSvg[100];
 
+	char* tempFileName = "tempFile.txt";
+	FILE* tempFile = fopen(tempFileName, "w");
+	fclose(tempFile);
 	
 	Info info1 = 0, info2 = 0;
 
@@ -534,7 +537,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			{
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
-				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				imprimeCidade(cidade, nomeDoArquivoSvg);
 				verificador2++;
 			}
 			info1 = procuraNaCidade(cidade, cep, &tipo1, face, numeroDoPredio);
@@ -559,15 +562,16 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
 		}
 		else if(strcmp("mplg?", comando)==0){
-			char arqPol[20];
+			char arqPol[51];
 			int tamanhoPoligono;
-			fscanf(arquivoQry, "%19s ", arqPol);
-			Reta *poligono = leiaPol(arqPol, &tamanhoPoligono);
-			qry_mplg(poligono, tamanhoPoligono, arquivoTxt, nomeDoArquivoSvg, cidade);
+			fscanf(arquivoQry, "%50s ", arqPol);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeSaida, arqPol, &tamanhoPoligono);
+			qry_mplg(caminhoDoArquivoDeSaida, poligono, tamanhoPoligono, arquivoTxt, tempFileName, cidade);
 			for(int i=0;i<tamanhoPoligono;i++){
 				retaFinalizar(poligono[i]);
 			}
 			free(poligono);
+			verificador++;
 		}
 		else if(strcmp("m?", comando)==0){
 			char cep[10];
@@ -598,9 +602,33 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
             sprintf(nomeFinalDoArquivoSvg, "%s/%s", caminhoDoArquivoDeSaida, nomeDoArquivoDeArvoreSvg);
             qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
 		}
+		else if(strcmp("eplg?", comando)==0)
+		{
+			char arqPol[51], tipo[31];
+			int tamPolig=0;
+			fscanf(arquivoQry, "%50s %30s ", arqPol, tipo);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeSaida, arqPol, &tamPolig);
+			qry_eplg(caminhoDoArquivoDeSaida, poligono, tamPolig, arquivoTxt, tempFileName, tipo, cidade);
+			for(int i=0;i<tamPolig;i++){
+				retaFinalizar(poligono[i]);
+			}
+			free(poligono);
+			verificador++;
+		}
 	}
-	if(verificador != 0 && verificador2 == 0)
+	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
+		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
+		FILE* tempFile = fopen(tempFileName, "r+");
+		while(!feof(tempFile)){
+			char buffer[301];
+			fgets(buffer, 300, tempFile);
+			fputs(buffer, arquivoSvg);
+		}
+		fclose(tempFile);
+		remove(tempFileName);
+		fclose(arquivoSvg);
+	}
 
 	finalizaSvg(nomeDoArquivoSvg);
 	if (verificador == 84)
@@ -614,7 +642,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 	fclose(arquivoQry);
 }
 
-void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
+void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashTable comercios_cpf){
 	FILE* ec = fopen(arquivoEc, "r");
 	if(!ec){
 		printf("Não foi possível abrir o arquivo ec: %s", arquivoEc);
@@ -659,7 +687,8 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio){
 			}else{
 				EstabelecimentoComercial com = estabelecimentoNovo(cnpj, cpf, tipo, cep, face, num, nome);
 				int reg = insereRegistro(comercios, cnpj, com);
-				if(reg<0){
+				int reg1 = insereRegistro(comercios_cpf, cpf, com);
+				if(reg<0 || reg1<0){
 					printf("Erro ao inserir o comercio \'%s\'\n", cnpj);
 				}
 			}
@@ -712,10 +741,18 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 	}
 }
 
-Reta* leiaPol(char* nomeArquivoPoligono, int* array_size){
-	FILE* arq = fopen(nomeArquivoPoligono, "r");
+Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* array_size){
+	char* nomeArqPol = NULL;
+	if(caminhoDoArquivoDeSaida){
+		nomeArqPol = malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeArquivoPoligono)+2)*sizeof(char));
+		sprintf(nomeArqPol, "%s/%s", caminhoDoArquivoDeSaida, nomeArquivoPoligono);
+	}else{
+		nomeArqPol = malloc(strlen(nomeArquivoPoligono)*sizeof(char));
+		strcpy(nomeArqPol, nomeArquivoPoligono);
+	}
+	FILE* arq = fopen(nomeArqPol, "r");
 	if(!arq){
-		printf("Não foi possível abrir o arquivo do polígono: %s\n", nomeArquivoPoligono);
+		printf("Não foi possível abrir o arquivo do polígono: %s\n", nomeArqPol);
 		return NULL;
 	}
 	*array_size = 0;

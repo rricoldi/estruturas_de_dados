@@ -36,6 +36,7 @@ char *retornaQCorB(Quadra q);
 void setQCorB(Quadra q, char cor[]);
 
 char *retornaQCorP(Quadra q);
+void setQcorP(Quadra, char* novaCor);
 
 double comparaQuadra(Quadra q1, Quadra q2);
 

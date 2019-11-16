@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
     char *nomeDoArquivoPm         = NULL;
     char *arquivoPm               = NULL;
 
-    
     while(contador<argc)
     {
         if (strcmp("-f",argv[contador])==0){ 

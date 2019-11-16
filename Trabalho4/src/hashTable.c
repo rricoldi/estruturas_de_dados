@@ -3,6 +3,7 @@
 #include<stdbool.h>
 #include<string.h>
 #include<stdio.h>
+#include<stdarg.h>
 #include"comercioPessoas.h"
 
 struct registrado{
@@ -176,13 +177,15 @@ int removeChave(HashTable tabela, char* key){
     return posic;
 }
 
-void HshTblMap(HashTable tabela, void (*func) (void*)){
+void HshTblMap(HashTable tabela, void (*func) (void*, va_list), ...){
     struct tabela *essa = (struct tabela*) tabela;
     if(essa == NULL){
         return;
     }
     struct registrado *aux1, *aux2;
     int posic;
+    va_list args;
+    va_start(args, func);
     for(posic=0;posic<essa->tamanho;posic++){
         struct registros registro = essa->reg[posic];
         if(registro.reg != NULL){
@@ -191,10 +194,11 @@ void HshTblMap(HashTable tabela, void (*func) (void*)){
                 aux1 = aux2;
                 aux2 = aux1->next;
                 if(aux1->info)
-                    (*func)(aux1->info);
+                    (*func)(aux1->info, args);
             }while(aux2 != NULL);
         }
     }
+    va_end(args);
 }
 void* hashtableFinalizar(HashTable tabela){
     struct tabela *essa = (struct tabela*)tabela;
