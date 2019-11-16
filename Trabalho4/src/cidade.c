@@ -21,6 +21,9 @@ typedef struct city
     HashTable hidrante_id;
     HashTable radio_id;
     HashTable semaforo_id;
+    HashTable hidrante_cep;
+    HashTable radio_cep;
+    HashTable semaforo_cep;
     HashTable predio_cep;
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
@@ -58,6 +61,9 @@ Cidade criarCidade()
     city->hidrante_id = criaTabela(997);
     city->radio_id = criaTabela(997);
     city->semaforo_id = criaTabela(997);
+    city->hidrante_cep = criaTabela(997);
+    city->radio_cep = criaTabela(997);
+    city->semaforo_cep = criaTabela(997);
     city->predio_cep = criaTabela(997);
     city->pessoas_cpf = NULL;
     city->moradiaPessoa_cep = NULL;
@@ -93,7 +99,6 @@ void iniciaPessoas(Cidade cid, char* arquivoPm){
 void removeCidade(Cidade cid)
 {
     cidade *city = (cidade *)cid;
-
     percorreArvore(city->arvoreCirculo, circuloFinalizar);
     percorreArvore(city->arvoreHidrante, hidranteFinalizar);
     percorreArvore(city->arvoreMuro, muroFinalizar);
@@ -125,12 +130,16 @@ void removeCidade(Cidade cid)
     hashtableFinalizar(city->hidrante_id);
     hashtableFinalizar(city->radio_id);
     hashtableFinalizar(city->semaforo_id);
+    hashtableFinalizar(city->hidrante_cep);
+    hashtableFinalizar(city->radio_cep);
+    hashtableFinalizar(city->semaforo_cep);
     hashtableFinalizar(city->predio_cep);
     hashtableFinalizar(city->moradiaPessoa_cep);
     hashtableFinalizar(city->pessoas_cpf);
     hashtableFinalizar(city->moradias_cpf);
     hashtableFinalizar(city->tiposComercio_tipo);
     hashtableFinalizar(city->comercios_cnpj);
+    hashtableFinalizar(city->comercios_cpf);
     free(city);
 }
 
@@ -248,7 +257,7 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
         return;
     }
 
-    info = getPrimeiroRegistro(city->quadra_cep, id);
+    info = getPrimeiroRegistro(city->hidrante_id, id);
     if (info != NULL)
     {
         fprintf(arqTxt, "del %s\nhidrante -> x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
@@ -320,8 +329,13 @@ Quadra getQuadra(Cidade cid, char id[])
 void adicionarHidrante(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    insereRegistro(city->hidrante_id, retornaHID(info), info);
     insereNaArvore(&(city->arvoreHidrante), info);
+    insereRegistro(city->hidrante_id, retornaHID(info), info);
+    char cep[10];
+    char* pointer = strchr(retornaHID(info), 'b');
+    int index = (int)(pointer - retornaHID(info));
+    strncpy(cep, retornaHID(info)+index, 9);
+    insereRegistro(city->hidrante_cep, cep, info);
 }
 
 Hidrante getHidrante(Cidade cid, char id[])
@@ -333,8 +347,11 @@ Hidrante getHidrante(Cidade cid, char id[])
 void adicionarRadioBase(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    insereRegistro(city->radio_id, retornaCID(info), info);
     insereNaArvore(&(city->arvoreRadio), info);
+    insereRegistro(city->radio_id, retornaRID(info), info);
+    char cep[10];
+    strncpy(cep, retornaRID(info)+2, 9);
+    insereRegistro(city->radio_cep, cep, info);
 }
 
 Radio getRadio(Cidade cid, char id[])
@@ -346,8 +363,11 @@ Radio getRadio(Cidade cid, char id[])
 void adicionarSemaforo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
-    insereRegistro(city->semaforo_id, retornaSID(info), info);
     insereNaArvore(&(city->arvoreSemaforo), info);
+    insereRegistro(city->semaforo_id, retornaSID(info), info);
+    char cep[10];
+    strncpy(cep, retornaSID(info)+2, 9);
+    insereRegistro(city->semaforo_cep, cep, info);
 }
 
 Semaforo getSemaforo(Cidade cid, char id[])
@@ -569,7 +589,6 @@ void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], c
     percorreArvore2(city->arvoreQuadra, qry_dq_no, cid, r, fx, fy, svg, txt, id, metrica, tipo);
 }
 
-
 void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* complemento, Cidade cid){
     cidade *city = (cidade*)cid;
     Pessoa pes = getPrimeiroRegistro(city->pessoas_cpf, cpf);
@@ -675,6 +694,7 @@ void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, 
             }
         }
     }
+    free(lados);
 }
 void qry_elpg_estabelecimentos(Info item, va_list args){
     va_list variaveis;
@@ -687,7 +707,6 @@ void qry_elpg_estabelecimentos(Info item, va_list args){
     Cidade cid = va_arg(variaveis, void*);
     
     if(strcmp(tipo, estabelecimentoGetTipo(item))!=0 && tipo[0] != '*'){
-        printf("_%s__%s_\n", tipo, estabelecimentoGetTipo(item));fflush(stdout);
         return;
     }
 
@@ -713,5 +732,134 @@ void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arqui
     fprintf(arquivoTxt, "eplg? %s\n", tipo);
     HshTblMap(city->comercios_cpf, qry_elpg_estabelecimentos, tipo, poligono, tamPolig, arquivoTxt, arquivoSvg, cid);
     fprintf(arquivoTxt, "\n");
+    fclose(arquivoSvg);
+}
+
+// typedef double (*getX)(Info info);
+// typedef double (*getY)(Info info);
+// typedef char* (*getIdentifier)(Info info);
+// typedef void (*finalizaItem)(Info info);
+
+// void qry_catac_ponto(Node node, Info info, va_list args){
+//     va_list variaveis;
+//     va_copy(variaveis, args);
+
+
+//     va_end(variaveis);
+// }
+void qry_catac_quadra(Node node, Info info, va_list args){
+    va_list variaveis;
+    va_copy(variaveis, args);
+    FILE* arquivoTxt = va_arg(variaveis, FILE*);
+    FILE* arquivoSvg = va_arg(variaveis, FILE*);
+    Reta* polig = va_arg(variaveis, void*);
+    int tamPolig = va_arg(variaveis, int);
+    cidade *city = va_arg(variaveis, void*);
+    Node* nodeArray = va_arg(variaveis, Node*);
+    int *nodeArraySize = va_arg(variaveis, int*);
+
+    {
+        double x = retornaQX(info);
+        double y = retornaQY(info);
+        double w = retornaQW(info);
+        double h = retornaQH(info);
+        Reta retangulo[4] = {criarReta(x, y, x+w, y), criarReta(x+w, y, x+w, y+h), criarReta(x+w, y+h, x, y+h), criarReta(x, y+h, x, y)};
+        if(!retanguloTotalDentroPoligono(retangulo, polig, tamPolig)){
+            for(int i=0;i<4;i++)
+                retaFinalizar(retangulo[i]);
+            return;
+        }
+        for(int i=0;i<4;i++)
+            retaFinalizar(retangulo[i]);
+    }
+
+    char* cep = retornaQCEP(info);
+
+    fprintf(arquivoTxt, " -cep: %s\n  .hidrantes:\n", cep);
+    {
+        int tamVetHid=0;
+        Hidrante* hidrantes = getVetorRegistros(city->hidrante_cep, cep, &tamVetHid);
+        for(int i=0;i<tamVetHid;i++){
+            fprintf(arquivoTxt, "   ~%s\n", retornaHID(hidrantes[i]));
+            removeChave(city->hidrante_id, retornaHID(hidrantes[i]));
+            removeChave(city->hidrante_cep, cep);
+            Node hid = buscaNaArvore(city->arvoreHidrante, hidrantes[i], retornaHID);
+            deletaDaArvore(city->arvoreHidrante, hid);
+            hidranteFinalizar(hidrantes[i]);
+        }
+      free(hidrantes);
+    }
+    fprintf(arquivoTxt, "  .semaforo:\n");
+    {
+        int tamVet=0;
+        Semaforo* itens = getVetorRegistros(city->semaforo_cep, cep, &tamVet);
+        for(int i=0;i<tamVet;i++){
+            fprintf(arquivoTxt, "   ~%s\n", retornaSID(itens[i]));
+            removeChave(city->semaforo_cep, cep);
+            removeChave(city->semaforo_id, retornaSID(itens[i]));
+            Node item = buscaNaArvore(city->arvoreSemaforo, itens[i], retornaSID);
+            deletaDaArvore(city->arvoreSemaforo, item);
+            semaforoFinalizar(itens[i]);
+        }
+      free(itens);
+    }
+    fprintf(arquivoTxt, "  .radio:\n");
+    {
+        int tamVet=0;
+        Radio* itens = getVetorRegistros(city->radio_cep, cep, &tamVet);
+        for(int i=0;i<tamVet;i++){
+            fprintf(arquivoTxt, "   ~%s\n", retornaRID(itens[i]));
+            removeChave(city->radio_cep, cep);
+            removeChave(city->radio_id, retornaRID(itens[i]));
+            Node item = buscaNaArvore(city->arvoreRadio, itens[i], retornaRID);
+            deletaDaArvore(city->arvoreRadio, item);
+            semaforoFinalizar(itens[i]);
+        }
+      free(itens);
+    }
+    fprintf(arquivoTxt, "  .predios:\n");
+    {
+        int tamVet=0, tamVetCpf=0;
+        Predio* itens = getVetorRegistros(city->predio_cep, cep, &tamVet);
+        Info* cpfs = getVetorRegistros(city->moradiaPessoa_cep, cep, &tamVetCpf);
+        for(int i=0;i<tamVet;i++){
+            fprintf(arquivoTxt, "   ~%c, %d\n", retornaPFace(itens[i])[0], (int)retornaPNumero(itens[i]));
+            double x = retornaPX(itens[i]), y = retornaPY(itens[i]), w = retornaPWidth(itens[i]), h = retornaPHeight(itens[i]);
+            fprintf(arquivoSvg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\"/>", x, y, x+w, y+h);
+            fprintf(arquivoSvg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\"/>", x, y+h, x+w, y);
+            int qtdPessoas=0;
+            for(int j=0;j<tamVetCpf;j++){
+                Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpfs[j]);
+                if(moradiaGetFace(mor) == retornaPFace(itens[i])[0] && moradiaGetNum(mor) == (int)retornaPNumero(itens[i]))
+                    qtdPessoas++;
+            }
+            fprintf(arquivoSvg, "<text x=\"%lf\" y=\"%lf\" >%d</text>", x+w, y+h, qtdPessoas);
+            removeChave(city->predio_cep, cep);
+            Node item = buscaNaArvore(city->arvorePredio, itens[i], retornaPCep);
+            deletaDaArvore(city->arvorePredio, item);
+            predioFinalizar(itens[i]);
+        }
+        free(cpfs);
+        free(itens);
+    }
+    nodeArray[*nodeArraySize] = node;
+    *nodeArraySize = *nodeArraySize +1;
+
+    va_end(variaveis);
+}
+void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig, Cidade cid){
+    cidade *city = cid;
+    FILE* arquivoSvg = fopen(nomeArquivoSvg, "a+");
+    fprintf(arquivoTxt, "catac\n");
+
+    Node* nodeArray = malloc(arvoreGetQtdNodes(city->arvoreQuadra)*sizeof(Node));
+    int nodeArraySize=0;
+    percorreArvore2(city->arvoreQuadra, qry_catac_quadra, arquivoTxt, arquivoSvg, polig, tamPolig, cid, nodeArray, &nodeArraySize);
+    for(int i=0;i<nodeArraySize;i++){
+        deletaDaArvore(city->arvoreQuadra, nodeArray[i]);
+    }
+
+    fprintf(arquivoTxt, "\n");
+    free(nodeArray);
     fclose(arquivoSvg);
 }

@@ -288,6 +288,10 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 	char cor[30];
 	char cep[20];
 	char face[6];
+
+	//	Cria um arquivo temporário para quaisquer elementos que precisem
+	//acima da cidade no Svg, isso se aplica aos comandos de incêncio,
+	//ver quantidade de pessoas na quadra, procurar estabelecimentos, etc
 	char* tempFileName = "tempFile.txt";
 	FILE* tempFile = fopen(tempFileName, "w");
 	fclose(tempFile);
@@ -603,6 +607,19 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 			free(poligono);
 			verificador++;
 		}
+		else if(strcmp("catac", comando)==0){
+			char arqPol[51];
+			int tamPolig=0;
+			fscanf(arquivoQry, "%50s ", arqPol);
+			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamPolig);
+			qry_catac(arquivoTxt, tempFileName, poligono, tamPolig, cidade);
+
+			for(int i=0;i<tamPolig;i++){
+				retaFinalizar(poligono[i]);
+			}
+			free(poligono);
+			verificador++;
+		}
 	}
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
@@ -791,6 +808,7 @@ Reta* leiaPol(char* caminhoDoArquivo, char* nomeArquivoPoligono, int* array_size
 	}
 	
 	fclose(arq);
+	free(nomeArqPol);
 	free(arrayPontos);
 	return arrayRetas;
 }
