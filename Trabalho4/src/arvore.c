@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include<stdarg.h>
 #include "arvore.h"
+#include <math.h>
+
 #define PRETA 1
 #define VERMELHA 0
 
@@ -388,6 +390,46 @@ void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...)
     percorreArvorePorNo(arvore->raiz, funcao, arvore->nil, args);
     
     va_end(args);
+}
+
+int profundidadeMaxima(Arvore* arvore, No* no)  
+{
+   if (no==arvore->nil)  
+       return 0;
+   else
+   {
+       int tamanhoDaEsquerda = profundidadeMaxima(arvore, no->esquerda);
+       int tamanhoDaDireita = profundidadeMaxima(arvore, no->direita);
+ 
+       /* use the larger one */
+       if (tamanhoDaEsquerda > tamanhoDaDireita)  
+           return(tamanhoDaEsquerda+1);
+       else return(tamanhoDaDireita+1);
+   }
+}  
+
+
+void imprimeNodeNoSvg(Node *node, Tree *tree,void (*imprimeSvg)(void*,FILE*,int,int,char,int),FILE *arquivoSVG,int tamanho,int y,int x)
+{
+    No *no = (No *)node;
+    Arvore *arvore = (Arvore* )tree;
+    
+    if (no == arvore->nil){
+        fprintf(arquivoSVG, "\n\t<polygon points=\"%d,%d %d,%d %d,%d\" style=\"fill:black;stroke:black;stroke-width:1\" />", x, y, x-10, y+20, x+10, y+20);
+        return;
+    }
+    fprintf(arquivoSVG,"\n\t<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='2' fill='black' stroke='black'/>",x,y,x-tamanho/2,y+30);
+    imprimeNodeNoSvg(no->esquerda,arvore,imprimeSvg,arquivoSVG,tamanho/2,y+30,x-tamanho/2);
+    fprintf(arquivoSVG,"\n\t<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='2' fill='black' stroke='black'/>",x,y,x+tamanho/2,y+30);
+    imprimeNodeNoSvg(no->direita,arvore,imprimeSvg,arquivoSVG,tamanho/2,y+30,x+tamanho/2);
+    imprimeSvg(no->info,arquivoSVG,x,y,no->cor,tamanho);
+}
+
+void percorreArvoreParaImpressaoNoSvg(Tree *tree,void (*imprimeSvg)(void*,void*,FILE*,int,int,char,int),FILE *arquivoSVG)
+{
+    Arvore *arvore = (Arvore *)tree;
+    int tamanho = pow(2,profundidadeMaxima(arvore, arvore->raiz))*20;
+    imprimeNodeNoSvg(arvore->raiz, arvore, imprimeSvg, arquivoSVG, tamanho/2, 30, tamanho - (tamanho/2.3));
 }
 
 void percorreArvorePorNo2(No* no, void (*funcao) (Node, Info, va_list), No* nil, va_list args)

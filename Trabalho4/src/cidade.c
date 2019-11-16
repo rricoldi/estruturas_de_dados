@@ -8,7 +8,6 @@
 typedef struct city
 {
     // Tree arvoreCirculo;
-    Tree arvoreMuro;
     HashTable pessoas_cpf;          //key: CPF da pessoa
     HashTable moradiaPessoa_cep;    //key: CEP da quadra
     HashTable moradias_cpf;         //key: CPF do morador
@@ -32,6 +31,7 @@ typedef struct city
     Tree arvoreRadio;
     Tree arvoreSemaforo;
     Tree arvorePredio;
+    Tree arvoreMuro;
     Lista listaCirculo;
     Lista listaRetangulo;
     Lista listaQuadra;
@@ -862,4 +862,29 @@ void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig
     fprintf(arquivoTxt, "\n");
     free(nodeArray);
     fclose(arquivoSvg);
+}
+//Tree *tree,void (*imprimeSvg)(void*,void*,FILE*,int,int,char,int),FILE *arquivoSVG
+
+void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando)
+{
+    cidade* city = (cidade*) cid;
+    iniciaSvg(nomeDoArquivoSvg);
+    FILE* arquivoSvg;
+    arquivoSvg = fopen(nomeDoArquivoSvg, "a+");
+
+    if(comando == 'q')
+        percorreArvoreParaImpressaoNoSvg(city->arvoreQuadra, imprimirQuadraDaArvore, arquivoSvg);
+    else if(comando == 'h')
+        percorreArvoreParaImpressaoNoSvg(city->arvoreHidrante, imprimirHidranteDaArvore, arquivoSvg);
+    else if(comando == 's')
+        percorreArvoreParaImpressaoNoSvg(city->arvoreSemaforo, imprimirSemaforoDaArvore, arquivoSvg);
+    else if(comando == 't')
+        percorreArvoreParaImpressaoNoSvg(city->arvoreRadio, imprimirRadioDaArvore, arquivoSvg);
+    else if(comando == 'p')
+        percorreArvoreParaImpressaoNoSvg(city->arvorePredio, imprimirPredioDaArvore, arquivoSvg);
+    else if(comando == 'm')
+        percorreArvoreParaImpressaoNoSvg(city->arvoreMuro, imprimirMuroDaArvore,arquivoSvg);
+
+    fclose(arquivoSvg);
+    finalizaSvg(nomeDoArquivoSvg);
 }

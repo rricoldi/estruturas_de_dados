@@ -92,3 +92,23 @@ double comparaHidrante(Hidrante h1, Hidrante h2)
         return hidrante1->x - hidrante2->x;
     return hidrante1->y - hidrante2->y;
 }
+
+void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor, int tam)
+{   
+    static int ultimoInfo = 0;
+    ItemH *hidrante = hid;
+    char corDoSvg[20];
+
+    if(cor == 1)
+        strcpy(corDoSvg,"black");      
+    else if(cor == 0)
+        strcpy(corDoSvg,"red");
+    
+    fprintf(arquivoSVG,"\n\t<circle r='%d' cx='%d' cy='%d' stroke='%s' fill='%s' stroke-width='1.0' fill-opacity='1'/>",15,x,y,corDoSvg,corDoSvg);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>cep = %s</text>",x,y-5,hidrante->id);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>x = %f</text>",x,y,hidrante->x);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>y = %f</text>",x,y+5,hidrante->y);
+
+    if(hidrante->x < ultimoInfo)
+        ultimoInfo = hidrante->x;
+}

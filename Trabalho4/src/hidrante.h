@@ -28,4 +28,6 @@ char *retornaHCorP(Hidrante h);
 
 double comparaHidrante(Hidrante h1, Hidrante h2);
 
+void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor, int tam);
+
 #endif

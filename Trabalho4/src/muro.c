@@ -58,3 +58,22 @@ double comparaMuro(Muro m1, Muro m2)
         return getPontoX(getRetaA(muro1->r)) - getPontoX(getRetaA(muro2->r));
     return getPontoY(getRetaA(muro1->r)) != getPontoY(getRetaA(muro2->r));
 }
+
+void imprimirMuroDaArvore(Muro *mur, FILE *arquivoSVG, int x, int y, char cor, int tam)
+{   
+    static int ultimoInfo = 0;
+    ItemM *muro = mur;
+    char corDoSvg[20];
+
+    if(cor == 1)
+        strcpy(corDoSvg,"black");      
+    else if(cor == 0)
+        strcpy(corDoSvg,"red");
+    
+    fprintf(arquivoSVG,"\n\t<circle r='%d' cx='%d' cy='%d' stroke='%s' fill='%s' stroke-width='1.0' fill-opacity='1'/>",15,x,y,corDoSvg,corDoSvg);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>x = %f</text>",x,y,getPontoX(getRetaA(muro->r)));
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>y = %f</text>",x,y+5,getPontoY(getRetaA(muro->r)));
+
+    if(getPontoX(getRetaA(muro->r)) < ultimoInfo)
+        ultimoInfo = getPontoX(getRetaA(muro->r));
+}

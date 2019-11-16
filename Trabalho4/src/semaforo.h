@@ -30,4 +30,6 @@ char *retornaSCorB(Semaforo s);
 
 double comparaSemaforo(Semaforo s1, Semaforo s2);
 
+void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor, int tam);
+
 #endif

@@ -29,4 +29,6 @@ char *retornaRCorB(Radio r);
 
 double comparaRadio(Radio r1, Radio r2);
 
+void imprimirRadioDaArvore(Radio *rad, FILE *arquivoSVG, int x, int y, char cor, int tam);
+
 #endif

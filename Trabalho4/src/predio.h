@@ -41,6 +41,9 @@ double retornaPHeight(Predio);
 //Retorna um vetor com as 4 retas que representam o predio
 //Nota: dar free() no ponteiro retornado
 Reta* retornaPredioLados(Predio);
+
 double comparaPredio(Predio p1, Predio p2);
+
+void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor, int tam);
 
 #endif

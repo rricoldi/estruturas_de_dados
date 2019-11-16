@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDoArquivo[], Cidade cidade)
+void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[])
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -281,6 +281,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 	double distancia, largura, altura;
 	double numeroDoPredio;
 
+	char arvore;
 	char id1[20], id2[20];
 	char metrica[3];
 	char comando[6];
@@ -292,6 +293,8 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 	//	Cria um arquivo temporário para quaisquer elementos que precisem
 	//acima da cidade no Svg, isso se aplica aos comandos de incêncio,
 	//ver quantidade de pessoas na quadra, procurar estabelecimentos, etc
+	char nomeDoArquivoDeArvoreSvg[100];
+
 	char* tempFileName = "tempFile.txt";
 	FILE* tempFile = fopen(tempFileName, "w");
 	fclose(tempFile);
@@ -566,8 +569,8 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 			char arqPol[51];
 			int tamanhoPoligono;
 			fscanf(arquivoQry, "%50s ", arqPol);
-			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamanhoPoligono);
-			qry_mplg(caminhoDoArquivo, poligono, tamanhoPoligono, arquivoTxt, tempFileName, cidade);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamanhoPoligono);
+			qry_mplg(caminhoDoArquivoDeSaida, poligono, tamanhoPoligono, arquivoTxt, tempFileName, cidade);
 			for(int i=0;i<tamanhoPoligono;i++){
 				retaFinalizar(poligono[i]);
 			}
@@ -595,12 +598,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 			fscanf(arquivoQry, "%14s %9s %c %d %134[^\n] ", cpf, cep, &face, &num, complemento);
 			qry_mud(arquivoTxt, cpf, cep, face, num, complemento, cidade);
 		}
-		else if(strcmp("eplg?", comando)==0){
+		else if(strcmp("dmprbt", comando)==0)
+		{
+			fscanf(arquivoQry, " %c", &arvore);
+            fscanf(arquivoQry, "%s", nomeDoArquivoDeArvoreSvg);
+			char *nomeFinalDoArquivoSvg = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeDoArquivoDeArvoreSvg)+6)*sizeof(char));
+            sprintf(nomeFinalDoArquivoSvg, "%s/%s", caminhoDoArquivoDeSaida, nomeDoArquivoDeArvoreSvg);
+            qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
+		}
+		else if(strcmp("eplg?", comando)==0)
+		{
 			char arqPol[51], tipo[31];
 			int tamPolig=0;
 			fscanf(arquivoQry, "%50s %30s ", arqPol, tipo);
-			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamPolig);
-			qry_eplg(caminhoDoArquivo, poligono, tamPolig, arquivoTxt, tempFileName, tipo, cidade);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamPolig);
+			qry_eplg(caminhoDoArquivoDeSaida, poligono, tamPolig, arquivoTxt, tempFileName, tipo, cidade);
 			for(int i=0;i<tamPolig;i++){
 				retaFinalizar(poligono[i]);
 			}
@@ -611,7 +623,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], char caminhoDo
 			char arqPol[51];
 			int tamPolig=0;
 			fscanf(arquivoQry, "%50s ", arqPol);
-			Reta *poligono = leiaPol(caminhoDoArquivo, arqPol, &tamPolig);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamPolig);
 			qry_catac(arquivoTxt, tempFileName, poligono, tamPolig, cidade);
 
 			for(int i=0;i<tamPolig;i++){
@@ -746,11 +758,11 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 	}
 }
 
-Reta* leiaPol(char* caminhoDoArquivo, char* nomeArquivoPoligono, int* array_size){
+Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* array_size){
 	char* nomeArqPol = NULL;
-	if(caminhoDoArquivo){
-		nomeArqPol = malloc((strlen(caminhoDoArquivo)+strlen(nomeArquivoPoligono)+2)*sizeof(char));
-		sprintf(nomeArqPol, "%s/%s", caminhoDoArquivo, nomeArquivoPoligono);
+	if(caminhoDoArquivoDeSaida){
+		nomeArqPol = malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeArquivoPoligono)+2)*sizeof(char));
+		sprintf(nomeArqPol, "%s/%s", caminhoDoArquivoDeSaida, nomeArquivoPoligono);
 	}else{
 		nomeArqPol = malloc(strlen(nomeArquivoPoligono)*sizeof(char));
 		strcpy(nomeArqPol, nomeArquivoPoligono);

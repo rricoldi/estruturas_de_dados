@@ -14,7 +14,7 @@
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 
-void leiaQry(char prefixoArq[], char arq[], char caminhoDoArquivo[], Cidade cidade);
+void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[]);
 
 void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashTable comercios_cpf);
 void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable moradiaPessoa);

@@ -126,3 +126,24 @@ void imprimirQuadra(Quadra quad, va_list args)
     ItemQ* quadra = (ItemQ*) quad;
     imprimirRetangulo(quadra->w, quadra->h, quadra->x, quadra->y, quadra->corB, quadra->corP, nomeDoArquivoSvg, quadra->espessura);
 }
+
+
+void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor, int tam)
+{   
+    static int ultimoInfo = 0;
+    ItemQ *quadra1 = quarter;
+    char corDoSvg[20];
+
+    if(cor == 1)
+        strcpy(corDoSvg,"black");      
+    else if(cor == 0)
+        strcpy(corDoSvg,"red");
+    
+    fprintf(arquivoSVG,"\n\t<circle r='%d' cx='%d' cy='%d' stroke='%s' fill='%s' stroke-width='1.0' fill-opacity='1'/>",15,x,y,corDoSvg,corDoSvg);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>cep = %s</text>",x,y-5,quadra1->cep);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>x = %f</text>",x,y,quadra1->x);
+    fprintf(arquivoSVG,"\n\t<text x='%d' y='%d' fill=\"white\" text-anchor='middle' fill-opacity='1' font-size='4px'>y = %f</text>",x,y+5,quadra1->y);
+
+    if(quadra1->x < ultimoInfo)
+        ultimoInfo = quadra1->x;
+}

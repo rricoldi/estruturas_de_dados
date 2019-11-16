@@ -2,6 +2,8 @@
 #define __ARVORE_H
 
 #include<stdarg.h>
+#include <stdio.h>
+
 #include "quadra.h"
 #include "hidrante.h"
 #include "radio.h"
@@ -11,6 +13,7 @@
 #include "predio.h"
 #include "muro.h"
 #include "hashTable.h"
+
 
 
 typedef void *Info;
@@ -29,6 +32,8 @@ void imprimeNoSvg(Tree tree, void (*funcao) (Info, char[], char[]), char nomeDoA
 void deletaDaArvore(Tree tree, Node* node);
 
 void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...);
+
+void percorreArvoreParaImpressaoNoSvg(Tree *tree, void (*imprimeSvg)(void*, void*, FILE*, int, int, char, int), FILE *arquivoSVG);
 
 void percorreArvore2(Tree tree, void (*funcao) (Node, Info, va_list), ...);
 

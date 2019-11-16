@@ -5,7 +5,8 @@
     Aqui temos a quadra, definimos um void pointer para podermos acessar os atributos desta apenas a partir das funcoes retornaQ... e setQ...
     Eh reresentada por um retangulo com as dimensoes passadas    
 */
-#include<stdarg.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 typedef void *Quadra;
 
@@ -40,5 +41,7 @@ void setQcorP(Quadra, char* novaCor);
 double comparaQuadra(Quadra q1, Quadra q2);
 
 void imprimirQuadra(Quadra quad, va_list args);
+
+void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor, int tam);
 
 #endif
