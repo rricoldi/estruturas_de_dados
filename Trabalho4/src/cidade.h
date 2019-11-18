@@ -74,6 +74,9 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
+//Executa os comandos do .qry de mesmo nome;
+//Pré-requisito: todos os parâmetros devem existir (caminho do arquivo é opcional);
+//Pós condição: comandos executados;
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo);
 void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeDoArquivoTxt[]);
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);

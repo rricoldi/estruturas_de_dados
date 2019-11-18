@@ -475,7 +475,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			fscanf(arquivoQry, " %s", id1);
 			fprintf(arquivoTxt, "crd? %s\n", id1);
 			fclose(arquivoTxt);
-			qry_crd(cidade, id1, nomeDoArquivoTxt);
+			qry_crd(cidade, id1, nomeDoArquivoTxt); 
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
 		else if (strcmp("trns", comando) == 0)
@@ -621,15 +621,17 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
-		FILE* tempFile = fopen(tempFileName, "r+");
-		while(!feof(tempFile)){
-			char buffer[301];
-			fgets(buffer, 300, tempFile);
-			fputs(buffer, arquivoSvg);
+		if(arquivoSvg != NULL){
+			FILE* tempFile = fopen(tempFileName, "r+");
+			while(!feof(tempFile)){
+				char buffer[301];
+				fgets(buffer, 300, tempFile);
+				fputs(buffer, arquivoSvg);
+			}
+			fclose(tempFile);
+			remove(tempFileName);
+			fclose(arquivoSvg);
 		}
-		fclose(tempFile);
-		remove(tempFileName);
-		fclose(arquivoSvg);
 	}
 
 	finalizaSvg(nomeDoArquivoSvg);

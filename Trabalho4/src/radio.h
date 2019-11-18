@@ -9,6 +9,8 @@
 #include <stdarg.h>
 typedef void *Radio;
 
+//Todas as funções de objetos são analogas às funções em circulo.h
+
 Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
 void radioBaseFinalizar(Radio);
 

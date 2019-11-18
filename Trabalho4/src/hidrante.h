@@ -5,6 +5,8 @@
     Aqui temos o hidrante, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaH... e setH...
 */
 
+//Todas as funções de objetos são analogas às funções em circulo.h
+
 #include <stdarg.h>
 typedef void *Hidrante;
 

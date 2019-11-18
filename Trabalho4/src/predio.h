@@ -5,6 +5,8 @@
 #include"geometria.h"
 #include "svg.h"
 
+//Todas as funções de objetos são analogas às funções em circulo.h
+
 typedef void *Predio;
 
 Predio criarPredio(char cep[20], char face[10], double numero, double frente, double profundidade, double calcada, double x, double y, double xCalcada, double xCalcadaMax, double yCalcada, double yCalcadaMax, double xNum, double yNum);

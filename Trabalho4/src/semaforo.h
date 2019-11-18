@@ -9,6 +9,8 @@
 #include <stdarg.h>
 typedef void *Semaforo;
 
+//Todas as funções de objetos são analogas às funções em circulo.h
+
 Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
 void semaforoFinalizar(Semaforo);
 

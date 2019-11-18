@@ -8,14 +8,21 @@
 #include <stdbool.h>
 #include "arvore.h"
 
+//Verifica qual dos números é o maior;
+//Pré-requisito: -;
+//Pós condição: maior número é retornado;
 double max(double n1, double n2);
-
+//Função analoga à 'max()', porém para o menor número
 double min(double n1, double n2);
 
+//Calcula a distância L2 (como definido no trabalho);
+//Pré-requisito: -;
+//Pós condição: retorna a distância calculada.
 bool retornaDistanciaL2(double r, double fx, double fy, double x, double y, double w, double h);
-
+//Função analoga à 'retornaDistanciaL1()', porém para a distância L1;
 bool retornaDistanciaL1(double r, double fx, double fy, double x, double y, double w, double h);
 
+//Verifica se um círculo e um retângulo colidem;
 void colisaoEntreCirculosERetangulos(float cx, float cy, float r, float rx, float ry, float w, float h, char j[], char k[], char txt[], char svg[]);
 
 void colisaoEntreCirculos(int x1, int y1, float r1, int x2, int y2, float r2, char j[], char k[], char txt[], char svg[]);
