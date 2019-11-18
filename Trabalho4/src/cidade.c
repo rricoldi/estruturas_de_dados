@@ -229,6 +229,8 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     if (info != NULL)
     {
         fprintf(arqTxt, "del %s\nquadra -> x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info));
+        deletaDaArvore(city->arvoreQuadra, buscaNaArvore(city->arvoreQuadra, info, retornaQCEP));
+        removeChave(city->quadra_cep, retornaQCEP(info));
         fclose(arqTxt);
         return;
     }
@@ -237,6 +239,8 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     if (info != NULL)
     {
         fprintf(arqTxt, "del %s\nhidrante -> x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
+        deletaDaArvore(city->arvoreHidrante, buscaNaArvore(city->arvoreHidrante, info, retornaHID));
+        removeChave(city->hidrante_id, retornaHID(info));
         fclose(arqTxt);
         return;
     }
@@ -245,6 +249,8 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     if (info != NULL)
     {
         fprintf(arqTxt, "del %s\nsemaforo -> x: %lf y: %lf\n", id, retornaSX(info), retornaSY(info));
+        deletaDaArvore(city->arvoreSemaforo, buscaNaArvore(city->arvoreSemaforo, info, retornaSID));
+        removeChave(city->semaforo_id, retornaSID(info));
         fclose(arqTxt);
         return;
     }
@@ -253,6 +259,8 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     if (info != NULL)
     {
         fprintf(arqTxt, "del %s\nradio base -> x: %lf y: %lf\n", id, retornaRX(info), retornaRY(info));
+        deletaDaArvore(city->arvoreRadio, buscaNaArvore(city->arvoreRadio, info, retornaRID));
+        removeChave(city->radio_id, retornaRID(info));
         fclose(arqTxt);
         return;
     }
