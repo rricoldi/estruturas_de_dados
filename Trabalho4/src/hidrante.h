@@ -5,10 +5,11 @@
     Aqui temos o hidrante, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaH... e setH...
 */
 
+#include <stdarg.h>
 typedef void *Hidrante;
 
 Hidrante criarHidrante(char id[20], char corB[20], char corP[20], double espessura, double x, double y);
-void* hidranteFinalizar(Hidrante);
+void hidranteFinalizar(Hidrante);
 
 double retornaHX(Hidrante h);
 
@@ -28,6 +29,10 @@ char *retornaHCorP(Hidrante h);
 
 double comparaHidrante(Hidrante h1, Hidrante h2);
 
-void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor, int tam);
+void imprimirHidrante(Hidrante hid, va_list args);
+
+void navegaHidrante(Hidrante hid);
+
+void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor);
 
 #endif

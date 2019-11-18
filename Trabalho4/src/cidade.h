@@ -73,6 +73,7 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo);
+void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeDoArquivoTxt[]);
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);
 void qry_de(FILE* arquivoTxt, char* cnpj, Cidade);
@@ -80,5 +81,6 @@ void qry_mud(FILE* arquivoTxt, char* cpf, char* cep, char face, int num, char* c
 void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando);
 void qry_mplg(char caminhoDoArquivo[], Reta poligono[], int tamanhoDoPoligono, FILE* arquivoTxt, char* nomeArquivoSvg, Cidade cidade);
 void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cidade);
+void qry_nav(Cidade cid, char arvore);
 
 #endif

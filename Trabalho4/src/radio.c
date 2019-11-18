@@ -23,11 +23,10 @@ Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double
 
     return r;
 }
-void* radioBaseFinalizar(Radio radioBase){
+void radioBaseFinalizar(Radio radioBase){
     ItemR *rb = (ItemR*)radioBase;
     free(rb);
     rb = NULL;
-    return rb;
 }
 
 double retornaRX(Radio r)
@@ -88,7 +87,13 @@ double comparaRadio(Radio r1, Radio r2)
     return radio1->y - radio2->y;
 }
 
-void imprimirRadioDaArvore(Radio *rad, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void navegaRadio(Radio rad)
+{
+    ItemR* radio = (ItemR*) rad;
+    printf("\nid = %s cor da borda = %s cor do preenchimento = %s x = %lf y = %lf espessura = %lf", radio->id, radio->corB, radio->corP, radio->x, radio->y, radio->espessura);
+}
+
+void imprimirRadioDaArvore(Radio *rad, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemR *radio = rad;

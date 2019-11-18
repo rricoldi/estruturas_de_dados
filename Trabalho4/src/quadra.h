@@ -11,7 +11,7 @@
 typedef void *Quadra;
 
 Quadra criarQuadra(char cep[20], char corB[20], char corP[20], double largura, double altura, double x, double y, double espessura);
-void* quadraFinalizar(Quadra);
+void quadraFinalizar(Quadra);
 
 double retornaQX(Quadra q);
 
@@ -36,12 +36,15 @@ char *retornaQCorB(Quadra q);
 void setQCorB(Quadra q, char cor[]);
 
 char *retornaQCorP(Quadra q);
-void setQcorP(Quadra, char* novaCor);
+
+void setQcorP(Quadra, char cor[]);
 
 double comparaQuadra(Quadra q1, Quadra q2);
 
 void imprimirQuadra(Quadra quad, va_list args);
 
-void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor, int tam);
+void navegaQuadra(Quadra quad);
+
+void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor);
 
 #endif

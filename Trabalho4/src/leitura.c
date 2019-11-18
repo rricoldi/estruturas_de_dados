@@ -461,7 +461,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			verificador++;
 			fprintf(arquivoTxt, "cbq %lf %lf %lf %s\n", x, y, distancia, cor);
 			fclose(arquivoTxt);
-			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 2, cor, 0, 0, 0, 0);
+			qry_cbq(cidade, distancia, x, y, cor, nomeDoArquivoTxt);
 
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
@@ -601,6 +601,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			char *nomeFinalDoArquivoSvg = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(nomeDoArquivoDeArvoreSvg)+6)*sizeof(char));
             sprintf(nomeFinalDoArquivoSvg, "%s/%s", caminhoDoArquivoDeSaida, nomeDoArquivoDeArvoreSvg);
             qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
+			free(nomeFinalDoArquivoSvg);
 		}
 		else if(strcmp("eplg?", comando)==0)
 		{

@@ -40,7 +40,7 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
 
     return p;
 }
-void* predioFinalizar(Predio predio){
+void predioFinalizar(Predio predio){
     ItemP *p = (ItemP*)predio;
     retaFinalizar(p->superior);
     retaFinalizar(p->inferior);
@@ -48,7 +48,6 @@ void* predioFinalizar(Predio predio){
     retaFinalizar(p->direita);
     free(p);
     p = NULL;
-    return p;
 }
 
 double retornaPX(Predio p)
@@ -168,7 +167,13 @@ double comparaPredio(Predio p1, Predio p2)
     return getPontoY(getRetaA(predio1->superior)) != getPontoY(getRetaA(predio2->superior));
 }
 
-void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void navegaPredio(Predio pred)
+{
+    ItemP* predio = (ItemP*) pred;
+    printf("\ncep = %s face = %s numero = %lf frente = %lf profundidade = %lf calcada = %lf", predio->cep, predio->face, predio->numero, predio->frente, predio->profundidade, predio->calcada);
+}
+
+void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemP *predio = pred;

@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include "cidade.h"
-#include"comercioPessoas.h"
-#include"leitura.h"
-
+#include "comercioPessoas.h"
+#include "leitura.h"
+#include "quadra.h"
 typedef struct city
 {
     // Tree arvoreCirculo;
@@ -159,6 +159,7 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
     cidade *city = (cidade *)cid;
 
     percorreArvore(city->arvoreQuadra, imprimirQuadra, nomeDoArquivoSvg);
+    percorreArvore(city->arvoreHidrante, imprimirHidrante, nomeDoArquivoSvg);
  
     // imprimeQuadras(city->listaQuadra, nomeDoArquivoSvg);
     // imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
@@ -564,9 +565,36 @@ void qry_dq_no(Node no, Info info, va_list args)
     va_end(variaveis);
 }
 
-void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo){
+void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo)
+{
     cidade *city = cid;
     percorreArvore2(city->arvoreQuadra, qry_dq_no, cid, r, fx, fy, svg, txt, id, metrica, tipo);
+}
+
+void qry_cbq_no(Info info, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    double x = va_arg(variaveis, double);
+    double y = va_arg(variaveis, double);
+    double r = va_arg(variaveis, double);
+    char *cor = va_arg(variaveis, char*);
+    char *txt = va_arg(variaveis, char*);
+    FILE *arqTxt;
+    arqTxt = fopen(txt, "a");
+    if(retornaDistanciaL2(r, x, y, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
+    {
+        setQCorB(info, cor);   
+        fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
+    }
+    fclose(arqTxt);
+    va_end(variaveis);
+}
+
+void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeDoArquivoTxt[])
+{
+    cidade *city = cid;
+    percorreArvore(city->arvoreQuadra, qry_cbq_no, x, y, raio, cor, nomeDoArquivoTxt);
 }
 
 
@@ -669,9 +697,9 @@ void qry_eplg_predio(cidade *city, Predio predio, Reta* poligono, int tamPolig, 
         Quadra quad = getPrimeiroRegistro(city->quadra_cep, retornaPCep(predio));
         if(quad != NULL){
             if(strcmp(retornaQCorB(quad), "green")!=0){
-                setQCorP(quad, "green");
+                // setQcorP(quad, "green");
             }else{
-                setQCorP(quad, "blue");
+                // setQcorP(quad, "blue");
             }
         }
     }
@@ -739,4 +767,21 @@ void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando)
 
     fclose(arquivoSvg);
     finalizaSvg(nomeDoArquivoSvg);
+}
+
+void qry_nav(Cidade cid, char arvore)
+{
+    cidade* city = (cidade*) cid;
+    if(arvore == 'q')
+        imprimeArvore(city->arvoreQuadra, navegaQuadra);
+    else if(arvore == 'h')
+        imprimeArvore(city->arvoreHidrante, navegaHidrante);
+    else if(arvore == 's')
+        imprimeArvore(city->arvoreSemaforo, navegaSemaforo);
+    else if(arvore == 't')
+        imprimeArvore(city->arvoreRadio, navegaRadio);
+    else if(arvore == 'p')
+        imprimeArvore(city->arvorePredio, navegaPredio);
+    else if(arvore == 'm')
+        imprimeArvore(city->arvoreMuro, navegaMuro);
 }

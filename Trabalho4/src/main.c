@@ -37,7 +37,6 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
     char nomeDoArquivoQry[100];
     char nomeDoArquivoSvg[100];
     char arvore;
-    int argumento;
     char *prefixoFinalDoArquivoQry = NULL;
     char *nomeFinalDoArquivoSvg = NULL;
 
@@ -64,11 +63,13 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
             qry_dmprbt(cidade, nomeFinalDoArquivoSvg, arvore);
         }
         else if(strcmp(comando, "sai")==0){
+            free(prefixoFinalDoArquivoQry);
+            free(nomeFinalDoArquivoSvg);
             break;
         }
         else if(strcmp(comando, "nav")==0){
-            scanf("%d", &argumento);
-            // interativoN(argumento2, cidade);
+            scanf(" %c", &arvore);
+            qry_nav(cidade, arvore);
         }
     }
 }

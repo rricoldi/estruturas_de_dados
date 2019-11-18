@@ -5,7 +5,7 @@
 
 
 
-typedef struct radio{
+typedef struct semaforo{
     char id[20], corP[20], corB[20];
     double x, y, espessura;
 }ItemS;
@@ -23,11 +23,10 @@ Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, doub
     
     return s;
 }
-void* semaforoFinalizar(Semaforo semaf){
+void semaforoFinalizar(Semaforo semaf){
     ItemS* s = (ItemS*)semaf;
     free(s);
     s = NULL;
-    return s;
 }
 
 double retornaSX(Semaforo s)
@@ -88,7 +87,14 @@ double comparaSemaforo(Semaforo s1, Semaforo s2)
     return semaforo1->y - semaforo2->y;
 }
 
-void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void navegaSemaforo(Semaforo sem)
+{
+    ItemS* semaforo = (ItemS*) sem;
+    printf("\nid = %s cor da borda = %s cor do preenchimento = %s x = %lf y = %lf espessura = %lf", semaforo->id, semaforo->corB, semaforo->corP, semaforo->x, semaforo->y, semaforo->espessura);
+}
+
+
+void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemS *semaforo = sem;

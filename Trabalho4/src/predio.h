@@ -6,7 +6,7 @@
 typedef void *Predio;
 
 Predio criarPredio(char cep[20], char face[10], double numero, double frente, double profundidade, double calcada, double x, double y, double xCalcada, double xCalcadaMax, double yCalcada, double yCalcadaMax, double xNum, double yNum);
-void* predioFinalizar(Predio);
+void predioFinalizar(Predio);
 
 double retornaPX(Predio p);
 
@@ -44,6 +44,8 @@ Reta* retornaPredioLados(Predio);
 
 double comparaPredio(Predio p1, Predio p2);
 
-void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor, int tam);
+void navegaPredio(Predio pred);
+
+void imprimirPredioDaArvore(Predio *pred, FILE *arquivoSVG, int x, int y, char cor);
 
 #endif

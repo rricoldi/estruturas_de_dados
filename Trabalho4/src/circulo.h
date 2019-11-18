@@ -8,7 +8,7 @@
 typedef void *Circulo;
 
 Circulo criarCirculo(char id[20], char corBorda[20], char corPreenchimento[20], double raio, double x, double y, double espessura);
-void* circuloFinalizar(Circulo);
+void circuloFinalizar(Circulo);
 
 double retornaCX(Circulo c);
 

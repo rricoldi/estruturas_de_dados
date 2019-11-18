@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "quadra.h"
+#include "svg.h"
 
 
 typedef struct quadra
@@ -25,11 +26,10 @@ Quadra criarQuadra(char cep[20], char corB[20], char corP[20], double largura, d
 
     return q;
 }
-void* quadraFinalizar(Quadra quadra){
+void quadraFinalizar(Quadra quadra){
     ItemQ *q = (ItemQ*)quadra;
     free(q);
     q = NULL;
-    return q;
 }
 
 double retornaQX(Quadra q)
@@ -103,7 +103,7 @@ char *retornaQCorP(Quadra q)
     ItemQ* item = (ItemQ*) q;
     return item->corP;
 }
-void setQCorP(Quadra quad, char* cor){
+void setQCorP(Quadra quad, char cor[]){
     ItemQ *q = quad;
     strcpy(q->corP, cor);
 }
@@ -128,7 +128,13 @@ void imprimirQuadra(Quadra quad, va_list args)
 }
 
 
-void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void navegaQuadra(Quadra quad)
+{
+    ItemQ* quadra = (ItemQ*) quad;
+    printf("\ncep = %s cor da borda = %s cor do preenchimento = %s x = %lf y = %lf largura = %lf altura = %lf espessura = %lf", quadra->cep, quadra->corB, quadra->corP, quadra->x, quadra->y, quadra->w, quadra->h, quadra->espessura);
+}
+
+void imprimirQuadraDaArvore(Quadra *quarter, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemQ *quadra1 = quarter;

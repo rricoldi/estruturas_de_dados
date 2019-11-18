@@ -17,12 +17,11 @@ Muro criarMuro(double x1, double x2, double y1, double y2)
 
     return m;
 }
-void* muroFinalizar(Muro muro){
+void muroFinalizar(Muro muro){
     ItemM *m = (ItemM*)muro;
     retaFinalizar(m->r);
     free(m);
     m = NULL;
-    return m;
 }
 
 double retornaMX1(Muro m)
@@ -59,7 +58,13 @@ double comparaMuro(Muro m1, Muro m2)
     return getPontoY(getRetaA(muro1->r)) != getPontoY(getRetaA(muro2->r));
 }
 
-void imprimirMuroDaArvore(Muro *mur, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void navegaMuro(Muro mur)
+{
+    printf("\nx1 = %lf x2 = %lf y1 = %lf y2 = %lf", retornaMX1(mur), retornaMX2(mur), retornaMY1(mur), retornaMY2(mur));
+}
+
+
+void imprimirMuroDaArvore(Muro *mur, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemM *muro = mur;

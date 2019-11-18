@@ -9,7 +9,7 @@
 typedef void *Radio;
 
 Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
-void* radioBaseFinalizar(Radio);
+void radioBaseFinalizar(Radio);
 
 double retornaRX(Radio r);
 
@@ -29,6 +29,8 @@ char *retornaRCorB(Radio r);
 
 double comparaRadio(Radio r1, Radio r2);
 
-void imprimirRadioDaArvore(Radio *rad, FILE *arquivoSVG, int x, int y, char cor, int tam);
+void navegaRadio(Radio rad);
+
+void imprimirRadioDaArvore(Radio *rad, FILE *arquivoSVG, int x, int y, char cor);
 
 #endif

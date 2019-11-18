@@ -9,11 +9,10 @@ typedef struct circulo
     double x, y, r, espessura;
 } ItemCirculo;
 
-void* circuloFinalizar(Circulo circulo){
+void circuloFinalizar(Circulo circulo){
     ItemCirculo *cir = (ItemCirculo*)circulo;
     free(cir);
     cir = NULL;
-    return cir;
 }
 
 Circulo criarCirculo(char id[20], char corBorda[20], char corPreenchimento[20], double raio, double x, double y, double espessura)

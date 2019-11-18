@@ -33,7 +33,7 @@ void deletaDaArvore(Tree tree, Node* node);
 
 void percorreArvore(Tree tree, void (*funcao) (Info, va_list), ...);
 
-void percorreArvoreParaImpressaoNoSvg(Tree *tree, void (*imprimeSvg)(void*, void*, FILE*, int, int, char, int), FILE *arquivoSVG);
+void percorreArvoreParaImpressaoNoSvg(Tree *tree, void (*imprimeSvg)(void*, FILE*, int, int, char, int), FILE *arquivoSVG);
 
 void percorreArvore2(Tree tree, void (*funcao) (Node, Info, va_list), ...);
 

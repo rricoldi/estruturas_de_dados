@@ -182,32 +182,44 @@ void imprimeArvore(Tree tree, void (*print) (Info))
 {
     Arvore* arvore = (Arvore*) tree;
     No* no = arvore->raiz;
-  /* Essa função imprime os elementos de forma recursiva */
-  int op;
-  int tamanho = 1;
-  while(no != arvore->nil) /* se a árvore não for vazia... */
-  {
-    /* Mostra os elementos em pré-ordem */
-    print(no->info);
-    printf("cor = %d posicao = %d\nEsquerda(1) Direita(2) Pai(0)\n",  no->cor, tamanho); /* mostra a raiz */
-    scanf("%d", &op);
+    /* Essa função imprime os elementos de forma recursiva */
+    char op = 'a';
 
-    if (op == 1)
+    while(op != 'x') /* se a árvore não for vazia... */
     {
-      no = no->esquerda;
-      tamanho++;
+        if (no != arvore->nil)
+            print(no->info);
+        else
+            printf("Folha nil");
+        /* Mostra os elementos em pré-ordem */
+        
+        if(no->cor == 1)
+            printf(" cor = Preta\n"); /* mostra a raiz */
+        else
+            printf(" cor = Vermelha\n"); /* mostra a raiz */
+        scanf(" %c", &op);
+        if (op == 'e')
+        {
+            if(no->esquerda == arvore->nil && no != arvore->nil)
+                arvore->nil->pai = no;
+            no = no->esquerda;
+        }
+        else if (op == 'd')
+        {
+            if(no->direita == arvore->nil && no != arvore->nil)
+                arvore->nil->pai = no;
+            no = no->direita;
+        }
+        else if (op == 'p')
+        {
+            if(no->pai != arvore->nil)
+            {
+                no = no->pai;
+            }
+            if(no != arvore->nil)
+                printf("\nRaiz ");
+        }
     }
-    else if (op == 2)
-    {
-      no = no->direita;
-      tamanho++;
-    }
-    else if (op == 0)
-    {
-      no = no->pai;
-      tamanho--;
-    }
-  }
 }
 
 No* minimoDaArvore(Arvore* arvore, No* no)
@@ -421,7 +433,7 @@ void imprimeNodeNoSvg(Node *node, Tree *tree,void (*imprimeSvg)(void*,FILE*,int,
     imprimeSvg(no->info,arquivoSVG,x,y,no->cor,tamanho);
 }
 
-void percorreArvoreParaImpressaoNoSvg(Tree *tree,void (*imprimeSvg)(void*,void*,FILE*,int,int,char,int),FILE *arquivoSVG)
+void percorreArvoreParaImpressaoNoSvg(Tree *tree,void (*imprimeSvg)(void*,FILE*,int,int,char,int),FILE *arquivoSVG)
 {
     Arvore *arvore = (Arvore *)tree;
     int tamanho = pow(2,profundidadeMaxima(arvore, arvore->raiz))*20;

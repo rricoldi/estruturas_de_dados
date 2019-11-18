@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hidrante.h"
+#include "svg.h"
+
 
 typedef struct hidrante
 {
@@ -26,11 +28,10 @@ Hidrante criarHidrante(char id[20], char corB[20], char corP[20], double espessu
     return h;
 }
 
-void* hidranteFinalizar(Hidrante hidrante){
+void hidranteFinalizar(Hidrante hidrante){
     ItemH *hid = (ItemH*) hidrante;
     free(hid);
     hid = NULL;
-    return hid;
 }
 
 double retornaHX(Hidrante h)
@@ -93,7 +94,24 @@ double comparaHidrante(Hidrante h1, Hidrante h2)
     return hidrante1->y - hidrante2->y;
 }
 
-void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor, int tam)
+void imprimirHidrante(Hidrante hid, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemH* hidrante = (ItemH*) hid;
+    imprimirCirculo(2, hidrante->x, hidrante->y, hidrante->corB, hidrante->corP, nomeDoArquivoSvg, hidrante->espessura);
+
+}
+
+
+void navegaHidrante(Hidrante hid)
+{
+    ItemH* hidrante = (ItemH*) hid;
+    printf("\nid = %s cor da borda = %s cor do preenchimento = %s x = %lf y = %lf espessura = %lf", hidrante->id, hidrante->corB, hidrante->corP, hidrante->x, hidrante->y, hidrante->espessura);
+}
+
+void imprimirHidranteDaArvore(Hidrante *hid, FILE *arquivoSVG, int x, int y, char cor)
 {   
     static int ultimoInfo = 0;
     ItemH *hidrante = hid;

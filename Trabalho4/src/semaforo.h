@@ -10,7 +10,7 @@
 typedef void *Semaforo;
 
 Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
-void* semaforoFinalizar(Semaforo);
+void semaforoFinalizar(Semaforo);
 
 double retornaSX(Semaforo s);
 
@@ -30,6 +30,8 @@ char *retornaSCorB(Semaforo s);
 
 double comparaSemaforo(Semaforo s1, Semaforo s2);
 
-void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor, int tam);
+void navegaSemaforo(Semaforo sem);
+
+void imprimirSemaforoDaArvore(Semaforo *sem, FILE *arquivoSVG, int x, int y, char cor);
 
 #endif

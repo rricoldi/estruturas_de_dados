@@ -25,11 +25,10 @@ Retangulo criarRetangulo(char id[20], char corB[20], char corP[20], double largu
 
     return re;
 }
-void* retanguloFinalizar(Retangulo retang){
+void retanguloFinalizar(Retangulo retang){
     ItemRe *r = (ItemRe*) retang;
     free(r);
     r = NULL;
-    return r;
 }
 
 double retornaReX(Retangulo re)
