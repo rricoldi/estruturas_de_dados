@@ -5,7 +5,8 @@
     Aqui temos a radio base, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaR... e setR...
     Eh reresentada por uma elipse comprida    
 */
-
+#include "svg.h"
+#include <stdarg.h>
 typedef void *Radio;
 
 Radio criarRadioBase(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
@@ -28,6 +29,8 @@ char *retornaRCorP(Radio r);
 char *retornaRCorB(Radio r);
 
 double comparaRadio(Radio r1, Radio r2);
+
+void imprimirRadio(Radio rad, va_list args);
 
 void navegaRadio(Radio rad);
 

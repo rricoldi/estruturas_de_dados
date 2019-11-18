@@ -75,12 +75,6 @@ Cidade criarCidade()
     return city;
 }
 
-// void imprimeCity(Cidade cid)
-// {
-//     cidade *city = (cidade *)cid;
-//     percorreArvore(city->arvoreCirculo, imprime);
-// }
-
 void iniciaComercios(Cidade cid, char* arquivoEc){
     cidade *city = (cidade *)cid;
     city->tiposComercio_tipo = criaTabela(97);
@@ -169,15 +163,10 @@ void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[])
 
     percorreArvore(city->arvoreQuadra, imprimirQuadra, nomeDoArquivoSvg);
     percorreArvore(city->arvoreHidrante, imprimirHidrante, nomeDoArquivoSvg);
- 
-    // imprimeQuadras(city->listaQuadra, nomeDoArquivoSvg);
-    // imprimeHidrantes(city->listaHidrante, nomeDoArquivoSvg);
-    // imprimeSemaforos(city->listaSemaforo, nomeDoArquivoSvg);
-    // imprimeRadios(city->listaRadio, nomeDoArquivoSvg);
-    // if(lenght(city->listaPredio) > 0)
-    //     imprimePredios(city->listaPredio, nomeDoArquivoSvg);
-    // if(lenght(city->listaMuro) > 0)
-    //     imprimeMuros(city->listaMuro, nomeDoArquivoSvg);
+    percorreArvore(city->arvoreSemaforo, imprimirSemaforo, nomeDoArquivoSvg);
+    percorreArvore(city->arvoreRadio, imprimirRadio, nomeDoArquivoSvg);
+    percorreArvore(city->arvorePredio, imprimirPredio2, nomeDoArquivoSvg);
+    percorreArvore(city->arvoreMuro, imprimirMuro, nomeDoArquivoSvg);
 }
 
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
@@ -223,20 +212,6 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
         *tipo = 6;
         return info;
     }
-    // int tamanho;
-    // Info *infos = getVetorRegistros(city->predio_cep, id, &tamanho);
-    // if (infos[0] != NULL)
-    // {
-    //     for(int i = 0; i < tamanho; i++)
-    //     {
-    //         if (retornaPFace(infos[i]) == face && retornaPNumero(infos[i]) == num)
-    //         {
-    //             *tipo = 7;
-    //             return infos[i];
-    //         }
-            
-    //     }
-    // }
 
     printf("Nao foi possivel achar o elemento na cidade\n");
     return NULL;

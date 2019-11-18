@@ -5,8 +5,8 @@
     Aqui temos o semaforo, definimos um void pointer para podermos acessar os atributos deste equipamento urbano apenas a partir das funcoes retornaS... e setS...
     Eh reresentada por um retangulo comprido    
 */
-
-
+#include "svg.h"
+#include <stdarg.h>
 typedef void *Semaforo;
 
 Semaforo criarSemaforo(char id[20], char corB[20], char corP[20], double x, double y, double espessura);
@@ -29,6 +29,8 @@ char *retornaSCorP(Semaforo s);
 char *retornaSCorB(Semaforo s);
 
 double comparaSemaforo(Semaforo s1, Semaforo s2);
+
+void imprimirSemaforo(Semaforo sem, va_list args);
 
 void navegaSemaforo(Semaforo sem);
 

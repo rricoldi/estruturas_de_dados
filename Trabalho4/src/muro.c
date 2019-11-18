@@ -58,6 +58,16 @@ double comparaMuro(Muro m1, Muro m2)
     return getPontoY(getRetaA(muro1->r)) != getPontoY(getRetaA(muro2->r));
 }
 
+void imprimirMuro(Muro mur, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemM* muro = (ItemM*) mur;
+    imprimirLinha(retornaMX1(muro), retornaMY1(muro), retornaMX2(muro), retornaMY2(muro), nomeDoArquivoSvg);
+}
+
+
 void navegaMuro(Muro mur)
 {
     printf("\nx1 = %lf x2 = %lf y1 = %lf y2 = %lf", retornaMX1(mur), retornaMX2(mur), retornaMY1(mur), retornaMY2(mur));

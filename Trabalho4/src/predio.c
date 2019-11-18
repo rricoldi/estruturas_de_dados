@@ -167,6 +167,17 @@ double comparaPredio(Predio p1, Predio p2)
     return getPontoY(getRetaA(predio1->superior)) != getPontoY(getRetaA(predio2->superior));
 }
 
+//imprimirPredio(nomeDoArquivoSvg, x, y, tamanhoDaFrente, tamanhoDoLado, xCalcada, yCalcada, xCalcadaMax, yCalcadaMax, numeroDoPredio, xNum, yNum);
+void imprimirPredio2(Predio pred, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemP* predio = (ItemP*) pred;
+    imprimirPredio(nomeDoArquivoSvg, getPontoX(getRetaA(predio->superior)), getPontoY(getRetaA(predio->superior)), predio->frente, predio->profundidade, predio->xCalcada, predio->yCalcada, predio->xCalcadaMax, predio->yCalcadaMax, predio->numero, predio->xNum,  predio->yNum);
+}
+
+
 void navegaPredio(Predio pred)
 {
     ItemP* predio = (ItemP*) pred;

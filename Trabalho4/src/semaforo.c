@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "semaforo.h"
-
+#include "svg.h"
 
 
 typedef struct semaforo{
@@ -86,6 +86,17 @@ double comparaSemaforo(Semaforo s1, Semaforo s2)
         return semaforo1->x - semaforo2->x;
     return semaforo1->y - semaforo2->y;
 }
+
+void imprimirSemaforo(Semaforo sem, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemS* semaforo = (ItemS*) sem;
+    imprimirRetangulo(7, 18, semaforo->x, semaforo->y, semaforo->corB, semaforo->corP, nomeDoArquivoSvg, semaforo->espessura);
+    
+}
+
 
 void navegaSemaforo(Semaforo sem)
 {

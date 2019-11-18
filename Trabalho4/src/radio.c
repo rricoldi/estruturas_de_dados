@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "radio.h"
 
 
@@ -85,6 +86,16 @@ double comparaRadio(Radio r1, Radio r2)
     if(radio1->x != radio2->x)
         return radio1->x - radio2->x;
     return radio1->y - radio2->y;
+}
+
+void imprimirRadio(Radio rad, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    ItemR* radio = (ItemR*) rad;
+
+    imprimirElipse(nomeDoArquivoSvg, radio->x, radio->y, 5, 15, radio->corP, radio->corB, radio->espessura);
 }
 
 void navegaRadio(Radio rad)

@@ -1,7 +1,9 @@
 #ifndef __PREDIO_H
 #define __PREDIO_H
 
+#include <stdarg.h>
 #include"geometria.h"
+#include "svg.h"
 
 typedef void *Predio;
 
@@ -43,6 +45,8 @@ double retornaPHeight(Predio);
 Reta* retornaPredioLados(Predio);
 
 double comparaPredio(Predio p1, Predio p2);
+
+void imprimirPredio2(Predio pred, va_list args);
 
 void navegaPredio(Predio pred);
 
