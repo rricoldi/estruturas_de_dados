@@ -30,6 +30,8 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 void removeDaCidade(Cidade cid, char id[], char txt[]);
 
+void qry_crd(Cidade cid, char id[], char txt[]);
+
 void adicionarCirculo(Cidade cid, Info info);
 
 void adicionarRetangulo(Cidade cid, Info info);

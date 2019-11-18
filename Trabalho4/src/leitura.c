@@ -474,25 +474,9 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			verificador += 84;
 			fscanf(arquivoQry, " %s", id1);
 			fprintf(arquivoTxt, "crd? %s\n", id1);
-			info1 = procuraNaCidade(cidade, id1, &tipo1, "", 0.0);
-			if(info1 == NULL)
-				continue;
-			if (tipo1 == 3)
-			{
-				fprintf(arquivoTxt, "quadra -> cep: %s x: %lf y: %lf w: %lf h: %lf\n", id1, retornaQX(info1), retornaQY(info1), retornaQW(info1), retornaQH(info1));
-			}
-			else if (tipo1 == 4)
-			{
-				fprintf(arquivoTxt, "hidrante -> id: %s x: %lf y: %lf\n", id1, retornaHX(info1), retornaHY(info1));
-			}
-			else if (tipo1 == 5)
-			{
-				fprintf(arquivoTxt, "semaforo -> id: %s x: %lf y: %lf\n", id1, retornaSX(info1), retornaSY(info1));
-			}
-			else if (tipo1 == 6)
-			{
-				fprintf(arquivoTxt, "radio base -> id: %s x: %lf y: %lf\n", id1, retornaRX(info1), retornaRY(info1));
-			}
+			fclose(arquivoTxt);
+			qry_crd(cidade, id1, nomeDoArquivoTxt);
+			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
 		else if (strcmp("trns", comando) == 0)
 		{

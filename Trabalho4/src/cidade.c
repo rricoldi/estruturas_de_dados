@@ -270,6 +270,51 @@ void removeDaCidade(Cidade cid, char id[], char txt[])
     return;
 }
 
+void qry_crd(Cidade cid, char id[], char txt[])
+{
+    FILE *arquivoTxt;
+    arquivoTxt = fopen(txt, "a");
+
+    cidade *city = (cidade *)cid;
+    Info info;
+
+    info = getPrimeiroRegistro(city->quadra_cep, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "quadra -> cep: %s x: %lf y: %lf w: %lf h: %lf\n", id, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->hidrante_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "hidrante -> id: %s x: %lf y: %lf\n", id, retornaHX(info), retornaHY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->semaforo_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "semaforo -> id: %s x: %lf y: %lf\n", id, retornaSX(info), retornaSY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    info = getPrimeiroRegistro(city->radio_id, id);
+    if (info != NULL)
+    {
+        fprintf(arquivoTxt, "radio base -> id: %s x: %lf y: %lf\n", id, retornaRX(info), retornaRY(info));
+        fclose(arquivoTxt);
+        return;
+    }
+
+    printf("Nao foi possivel achar o elemento na cidade\n");
+    fclose(arquivoTxt);
+    return;
+}
+
 void adicionarCirculo(Cidade cid, Info info)
 {
     cidade *city = (cidade *)cid;
