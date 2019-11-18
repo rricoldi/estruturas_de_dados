@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[])
+void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[])
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -289,6 +289,10 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 	char cor[30];
 	char cep[20];
 	char face[6];
+
+	//	Cria um arquivo temporário para quaisquer elementos que precisem
+	//acima da cidade no Svg, isso se aplica aos comandos de incêncio,
+	//ver quantidade de pessoas na quadra, procurar estabelecimentos, etc
 	char nomeDoArquivoDeArvoreSvg[100];
 
 	char* tempFileName = "tempFile.txt";
@@ -565,7 +569,7 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			char arqPol[51];
 			int tamanhoPoligono;
 			fscanf(arquivoQry, "%50s ", arqPol);
-			Reta *poligono = leiaPol(caminhoDoArquivoDeSaida, arqPol, &tamanhoPoligono);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamanhoPoligono);
 			qry_mplg(caminhoDoArquivoDeSaida, poligono, tamanhoPoligono, arquivoTxt, tempFileName, cidade);
 			for(int i=0;i<tamanhoPoligono;i++){
 				retaFinalizar(poligono[i]);
@@ -608,8 +612,21 @@ void leiaQry(char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade,
 			char arqPol[51], tipo[31];
 			int tamPolig=0;
 			fscanf(arquivoQry, "%50s %30s ", arqPol, tipo);
-			Reta *poligono = leiaPol(caminhoDoArquivoDeSaida, arqPol, &tamPolig);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamPolig);
 			qry_eplg(caminhoDoArquivoDeSaida, poligono, tamPolig, arquivoTxt, tempFileName, tipo, cidade);
+			for(int i=0;i<tamPolig;i++){
+				retaFinalizar(poligono[i]);
+			}
+			free(poligono);
+			verificador++;
+		}
+		else if(strcmp("catac", comando)==0){
+			char arqPol[51];
+			int tamPolig=0;
+			fscanf(arquivoQry, "%50s ", arqPol);
+			Reta *poligono = leiaPol(caminhoDoArquivoDeEntrada, arqPol, &tamPolig);
+			qry_catac(arquivoTxt, tempFileName, poligono, tamPolig, cidade);
+
 			for(int i=0;i<tamPolig;i++){
 				retaFinalizar(poligono[i]);
 			}
@@ -804,6 +821,7 @@ Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* arr
 	}
 	
 	fclose(arq);
+	free(nomeArqPol);
 	free(arrayPontos);
 	return arrayRetas;
 }

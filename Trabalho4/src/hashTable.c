@@ -158,21 +158,29 @@ int removeChave(HashTable tabela, char* key){
     struct tabela *essa = tabela;
     int posic = hashFunction(key, essa->tamanho);
 
-    struct registrado *aux = essa->reg[posic].reg;
-    struct registrado *aux2 = aux;
-    while(strcmp(aux->key, key) != 0){
-        aux2 = aux;
-        aux = aux->next;
-        if(aux == NULL){
+    struct registrado *toBeDeleted = essa->reg[posic].reg;
+    if(strcmp(toBeDeleted->key, key)==0){
+        essa->reg[posic].reg = toBeDeleted->next;
+        free(toBeDeleted->key);
+        toBeDeleted->key = NULL;
+        free(toBeDeleted);
+        toBeDeleted = NULL;
+        return posic;
+    }
+    struct registrado *previous = toBeDeleted;
+    while(strcmp(toBeDeleted->key, key) != 0){
+        previous = toBeDeleted;
+        toBeDeleted = toBeDeleted->next;
+        if(toBeDeleted == NULL){
             return -1;
         }
     }
 
-    aux2->next = aux->next;
-    free(aux->key);
-    aux->key = NULL;
-    free(aux);
-    aux = NULL;
+    previous->next = toBeDeleted->next;
+    free(toBeDeleted->key);
+    toBeDeleted->key = NULL;
+    free(toBeDeleted);
+    toBeDeleted = NULL;
 
     return posic;
 }
@@ -203,7 +211,7 @@ void HshTblMap(HashTable tabela, void (*func) (void*, va_list), ...){
 void* hashtableFinalizar(HashTable tabela){
     struct tabela *essa = (struct tabela*)tabela;
     if(essa == NULL){
-        return;
+        return NULL;
     }
     struct registrado *aux, *aux2;
     int posic;
@@ -214,10 +222,11 @@ void* hashtableFinalizar(HashTable tabela){
             do{
                 aux = aux2;
                 aux2 = aux->next;
-                if(aux->key)
+                if(aux->key != NULL){
                     free(aux->key);
-                free(aux);
-                aux = NULL;
+                    free(aux);
+                    aux = NULL;
+                }
             }while(aux2 != NULL);
         }
     }

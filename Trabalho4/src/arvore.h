@@ -41,4 +41,5 @@ void desalocaArvore(Tree tree);
 
 Node buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info));
 
+int arvoreGetQtdNodes(Tree);
 #endif

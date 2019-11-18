@@ -49,6 +49,9 @@ void setRetaB(Reta r, double x, double y);
 //Retorna o tamanho da reta
 double getRetaTamanho(Reta r);
 
+//Verifica se o ponto (x,y) está contido no dado poligono
+bool pontoDentroPoligono(double x, double y, Reta poligono[], int qtsLadosPoligono);
+
 //Verifica se um dado retangulo está inteiramente dentro do polígono
 //Retorna true caso esteja, false caso contrário
 bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int qtdRetasDoPoligono);

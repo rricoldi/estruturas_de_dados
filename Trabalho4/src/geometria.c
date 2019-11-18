@@ -4,7 +4,7 @@
 #include<stdbool.h>
 #include"geometria.h"
 
-#define SvgXMax 5000
+#define SvgXMax 50000
 
 struct ponto{
     double x;
@@ -204,6 +204,24 @@ double getRetaTamanho(Reta rr){
   return distanciaPontos(&(r->A), &(r->B));
 }
 
+bool pontoDentroPoligono(double x, double y, Reta* polig, int tamPolig){
+    struct reta *reta = criarReta(x, y, x+SvgXMax, y);
+    int qtdInterseccoes=0;
+
+    for(int i=0;i<tamPolig;i++){
+        if(intersecta(reta, polig[i]))
+            qtdInterseccoes++;
+    }
+    retaFinalizar(reta);
+
+    if(qtdInterseccoes%2 == 1){
+        return true;
+    }else{
+        return false;
+    }
+    
+
+}
 //Para cada reta do poligono, verifica se há interseccao com a reta dada
 bool retaInterPoligono(Reta rr, Reta poligono[], int tamPolig){
     for(int i=0;i<tamPolig;i++){

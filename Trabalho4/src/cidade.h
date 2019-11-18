@@ -82,5 +82,6 @@ void qry_dmprbt(Cidade cid, char* nomeDoArquivoSvg, char comando);
 void qry_mplg(char caminhoDoArquivo[], Reta poligono[], int tamanhoDoPoligono, FILE* arquivoTxt, char* nomeArquivoSvg, Cidade cidade);
 void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arquivoTxt, char* nomeArqSvg, char* tipo, Cidade cidade);
 void qry_nav(Cidade cid, char arvore);
+void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta poligono[], int tamPolig, Cidade);
 
 #endif

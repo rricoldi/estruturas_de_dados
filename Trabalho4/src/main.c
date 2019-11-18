@@ -31,7 +31,7 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 	return strtok(nomeDoArquivo,".");
 }
 
-void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo){
+void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo, char* caminhoDoArquivo){
     
     char comando[9];
     char nomeDoArquivoQry[100];
@@ -52,7 +52,7 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
             sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
 
             printf("Bloco do Qry inicializado\n");
-            leiaQry(prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
+            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
             printf("Bloco do Qry finalizado\n");
         }
         else if(strcmp(comando, "dmprbt")==0){
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(prefixoFinalDoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
+        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
 
     if(interativo)
     {
-        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
+        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, caminhoDoArquivo);
         free(nomeDoArquivoQry);
         free(prefixoDoAquivoQry);
         free(prefixoFinalDoQry);

@@ -21,6 +21,7 @@ typedef struct arvore
     No *raiz;
     No *nil;
     double (*comparaInfo) (Info, Info);
+    int qtdNodes;
 } Arvore;
 
 Tree criaArvore(double (*comparaInfo) (Info, Info))
@@ -35,6 +36,7 @@ Tree criaArvore(double (*comparaInfo) (Info, Info))
     arvore->nil = no;
     arvore->raiz = no;
     arvore->comparaInfo = comparaInfo;
+    arvore->qtdNodes = 0;
   /* Uma árvore é representada pelo endereço do nó raiz,
      essa função cria uma árvore com nenhum elemento,
      ou seja, cria uma árvore vazia, por isso retorna NULL. */
@@ -155,6 +157,7 @@ void insereNaArvore(Tree** tree, Info info)
     No *no = criaNo(info);
     No *folha = (*arvore)->nil;
     No *raiz = (*arvore)->raiz;
+    (*arvore)->qtdNodes = (*arvore)->qtdNodes+1;
     (*arvore)->comparaInfo(no->info, no->info);
     while(raiz != (*arvore)->nil)
     {
@@ -376,6 +379,7 @@ void deletaDaArvore(Tree tree, Node* node)
     }
     if(corOriginal == PRETA)
         reparaDelecao(arvore, x);
+    arvore->qtdNodes = arvore->qtdNodes-1;
 }
 
 void percorreArvorePorNo(No* no, void (*funcao) (Info, va_list), No* nil, va_list args)
@@ -486,7 +490,6 @@ void desalocaNo(No* no, No* nil)
     if(no->direita != nil)
         desalocaNo(no->direita, nil);
 
-    // free(no->info);
     free(no);
     no = NULL;
 }
@@ -496,4 +499,12 @@ void desalocaArvore(Tree tree)
     Arvore* arvore = (Arvore*) tree;
 
     desalocaNo(arvore->raiz, arvore->nil);
+    // free(arvore->nil);
+    free(arvore);
+    arvore = NULL;
+}
+
+int arvoreGetQtdNodes(Tree tree){
+    Arvore *arvore = tree;
+    return arvore->qtdNodes;
 }
