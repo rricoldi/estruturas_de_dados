@@ -14,22 +14,42 @@
 
 typedef void *Cidade;
 
+//Cria as estruturas de dados de uma cidade;
+//Pós condição: retorna uma Cidade.
 Cidade criarCidade();
 
 void iniciaComercios(Cidade, char* arquivoEc);
 
 void iniciaPessoas(Cidade, char* arquivoPm);
 
+//remove as estruturas de dados de uma cidade;
+//Pré-requisito: Cidade criada;
+//Pós condição: desaloca todos os elementos da cidade.
 void removeCidade(Cidade cid);
 
+//Imprime todos os circulos e retangulos de uma cidade;
+//Pré-requisito: cidade com circulos e retangulos;
+//Pós condição: imprime os circulos e retangulos da cidade no svg.
 void imprimeCirculosERetangulos(Cidade cid, char nomeDoArquivoSvg[]);
 
+//Imprime os elementos necessários do comando bb;
+//Pré-requisito: Cidade não vazia;
+//Pós condição: elipses e retangulos impressos no svg.
 void imprimeBoundingBox(Cidade cid, char nomeDoArquivoSvg[], char cor[]);
 
+//Imprime todos os elementos urbanos de uma cidade;
+//Pré-requisito: cidade com elementos urbanos;
+//Pós condição: imprime os elementos urbanos da cidade no svg.
 void imprimeCidade(Cidade cid, char nomeDoArquivoSvg[]);
 
+//Procura um elemento na cidade;
+//Pré-requisito: cidade com elementos urbanos, ponteiro para um int, e id do elemento desejado;
+//Pós condição: retorna o elemento e informa qual o tipo retornado.
 Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
+//Remove um elemento da cidade;
+//Pré-requisito: id;
+//Pós condição: remove da árvore, da hashtable e desaloca o nó.
 void removeDaCidade(Cidade cid, char id[], char txt[]);
 
 void adicionarCirculo(Cidade cid, Info info);
@@ -66,6 +86,10 @@ Predio getPredio(Cidade cid, char id[]);
 
 Muro getMuro(Cidade cid, int i);
 
+//Executa os comandos do .qry de mesmo nome;
+//Pré-requisito: todos os parâmetros devem existir (caminho do arquivo é opcional);
+//Pós condição: comandos executados;
+
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 
 void qry_fi(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
@@ -74,9 +98,6 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
 
 void resolveFS(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
-//Executa os comandos do .qry de mesmo nome;
-//Pré-requisito: todos os parâmetros devem existir (caminho do arquivo é opcional);
-//Pós condição: comandos executados;
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo);
 
 void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeDoArquivoTxt[]);

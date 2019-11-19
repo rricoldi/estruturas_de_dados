@@ -220,7 +220,7 @@ void imprimeArvore(Tree tree, void (*print) (Info))
             {
                 no = no->pai;
             }
-            if(no != arvore->nil)
+            if(no == arvore->raiz)
                 printf("\nRaiz ");
         }
     }
