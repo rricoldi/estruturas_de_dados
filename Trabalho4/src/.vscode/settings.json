@@ -7,6 +7,9 @@
         "leitura.h": "c",
         "comerciopessoas.h": "c",
         "quadra.h": "c",
-        "hidrante.h": "c"
+        "hidrante.h": "c",
+        "hashtable.h": "c",
+        "svg.h": "c",
+        "stdio.h": "c"
     }
 }

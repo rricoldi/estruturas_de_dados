@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "cidade.h"
 #include "comercioPessoas.h"
 #include "leitura.h"
@@ -173,9 +174,11 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
 {
     cidade *city = (cidade *)cid;
     Info info;
+
     info = getPrimeiroRegistro(city->circulo_id, id);
     if (info != NULL)
     {
+        
         *tipo = 1;
         return info;
     }
@@ -211,6 +214,16 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num)
     {
         *tipo = 6;
         return info;
+    }
+
+    info = getPrimeiroRegistro(city->predio_cep, id);
+    if (info != NULL)
+    {
+        if(strcmp(face, retornaPFace(info)) == 0 && num == retornaPNumero(info))
+        {
+            *tipo = 7;
+            return info;
+        }
     }
 
     printf("Nao foi possivel achar o elemento na cidade\n");
@@ -432,6 +445,36 @@ Muro getMuro(Cidade cid, int i)
 }
 
 
+void qry_trns_no(Info info, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    double fx = va_arg(variaveis, double);
+    double fy = va_arg(variaveis, double);
+    double largura = va_arg(variaveis, double);
+    double altura = va_arg(variaveis, double);
+    double dx = va_arg(variaveis, double);
+    double dy = va_arg(variaveis, double);
+    char *txt = va_arg(variaveis, char*);
+    FILE *arqTxt;
+    arqTxt = fopen(txt, "a");
+    if (verificaColisao(fx, fy, largura, altura, retornaQX(info), retornaQY(info), retornaQW(info), retornaQH(info)))
+        {
+            fprintf(arqTxt, "cep: %s x: %lf y: %lf novo x: %lf novo y: %lf\n", retornaQCEP(info), retornaQX(info), retornaQY(info), retornaQX(info)+dx, retornaQY(info)+dy);
+            setQX(info, retornaQX(info)+dx);
+            setQY(info, retornaQY(info)+dy);
+        }
+    fclose(arqTxt);
+    va_end(variaveis);
+    
+}
+
+void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[])
+{
+    cidade *city = cid;
+    percorreArvore(city->arvoreQuadra, qry_trns_no, x, y, largura, altura, dx, dy, nomeDoArquivoTxt);
+}
+
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy)
 {
     cidade *city = (cidade *)cid;
@@ -446,15 +489,51 @@ void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], cha
     }
 }
 
-void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+void transformaArvoreEmLista(Info info, va_list args)
 {
-    cidade *city = (cidade *)cid;
+    va_list variaveis;
+    va_copy(variaveis, args);
+    Lista lista = va_arg(variaveis, void*);
+    insereLista(lista, info);
+    va_end(variaveis);
+}
 
-    char comando[] = "fi";
-    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
-    int xa = 1 + 1;
-    resolveHidrantes(city->listaHidrante, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
-        
+void resolveHidrantes(Info informacao, va_list args)
+{
+    va_list variaveis;
+    va_copy(variaveis, args);
+    double xIncendio = va_arg(variaveis, double);
+    double yIncendio = va_arg(variaveis, double);
+    double raio = va_arg(variaveis, double);
+    char *nomeDoArquivoSvg = va_arg(variaveis, char*);
+    char *nomeDoArquivoTxt = va_arg(variaveis, char*);
+    FILE* arquivoTxt;
+    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+    char corB[] = "red";
+    char corP[] = "none";
+
+    if(pontoInternoCirculo(retornaHX(informacao), retornaHY(informacao), xIncendio, yIncendio, raio))
+    {
+        imprimirLinha(xIncendio, yIncendio, retornaHX(informacao), retornaHY(informacao), nomeDoArquivoSvg);
+        imprimirCirculo(2.5, retornaHX(informacao), retornaHY(informacao), "blue", corP, nomeDoArquivoSvg, 2);
+        imprimirCirculo(5.0, retornaHX(informacao), retornaHY(informacao), corB, corP, nomeDoArquivoSvg, 2);
+        fprintf(arquivoTxt, "%s\n", retornaHID(informacao));
+    }
+    fclose(arquivoTxt);
+    va_end(variaveis);
+}
+
+void qry_fi(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    cidade *city = cid;
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
+    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
+    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
+    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fi");
+
+    percorreArvore(city->arvoreHidrante, resolveHidrantes, x, y, raio, nomeDoArquivoSvg, nomeDoArquivoTxt);
 }
 
 void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
@@ -463,7 +542,7 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
     double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
     double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
     int sinal;
-    if ( numeroDeHidrantes < 0)
+    if (numeroDeHidrantes < 0)
     {
         sinal = 0;
         numeroDeHidrantes = -numeroDeHidrantes;
@@ -473,18 +552,27 @@ void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquiv
         sinal = 1;
     }
     
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreHidrante));
+    Info vetor[getTamanhoDaArvore(city->arvoreHidrante)];
+    percorreArvore(city->arvoreHidrante, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreHidrante), x, y, retornaHX, retornaHY);
     
-    resolveFHidrantes(city->listaHidrante, x, y, numeroDeHidrantes, sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
+    resolveFHidrantes(vetor, x, y, numeroDeHidrantes, getTamanhoDaArvore(city->arvoreHidrante), sinal, nomeDoArquivoSvg, nomeDoArquivoTxt);
 }
 
 void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
 {
     cidade *city = (cidade*) cid;
-    char comando[] = "fs";
     double x = (retornaQX(quadra) + retornaQW(quadra)) / 2;
     double y = (retornaQY(quadra) + retornaQH(quadra)) / 2;
 
-    resolveSemaforos(city->listaSemaforo, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, comando);
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreSemaforo));
+    Info vetor[getTamanhoDaArvore(city->arvoreSemaforo)];
+    percorreArvore(city->arvoreSemaforo, transformaArvoreEmLista, lista);
+    transformaListaEmVetor(lista, vetor);
+    heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
+    resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fs");
 }
 
 void qry_m(FILE* arquivoTxt, char cep[], Cidade cid){
@@ -579,6 +667,7 @@ void qry_dq_no(Node no, Info info, va_list args)
     char *id = va_arg(variaveis, char*);
     char *metrica = va_arg(variaveis, char*);
     int tipo = va_arg(variaveis, int);
+    Lista lista = va_arg(variaveis, void*);
     cidade *city = (cidade*) cid;
     FILE *arqSvg, *arqTxt;
     arqSvg = fopen(svg,"a");
@@ -591,9 +680,7 @@ void qry_dq_no(Node no, Info info, va_list args)
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
-            quadraFinalizar(info);
-            deletaDaArvore(city->arvoreQuadra, no);
-            removeChave(city->quadra_cep, retornaQCEP(info));
+            insereLista(lista, no);
         }
     }
     else if(strcmp("L2", metrica) == 0)
@@ -603,9 +690,7 @@ void qry_dq_no(Node no, Info info, va_list args)
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke= \"black\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"15\" stroke= \"yellow\" fill=\"none\" stroke-width=\"4\" stroke-oppacity=\"0.7\" />", fx, fy);
             fprintf(arqTxt, "cep: %s\n", retornaQCEP(info));
-            quadraFinalizar(info);
-            deletaDaArvore(city->arvoreQuadra, no);
-            removeChave(city->quadra_cep, retornaQCEP(info));
+            insereLista(lista, no);
         }
     }
     fclose(arqSvg);
@@ -615,8 +700,17 @@ void qry_dq_no(Node no, Info info, va_list args)
 
 void qry_dq(Cidade cid, Info info, double r, double fx, double fy, char svg[], char txt[], char id[], char metrica[], int tipo)
 {
+    
     cidade *city = cid;
-    percorreArvore2(city->arvoreQuadra, qry_dq_no, cid, r, fx, fy, svg, txt, id, metrica, tipo);
+    Lista lista = iniciaLista(getTamanhoDaArvore(city->arvoreQuadra));
+    Node vetor[getTamanhoDaArvore(city->arvoreQuadra)];
+    percorreArvore2(city->arvoreQuadra, qry_dq_no, cid, r, fx, fy, svg, txt, id, metrica, tipo, lista);
+    transformaListaEmVetor(lista, vetor);
+    for(int i = 0; i < lenght(lista); i++)
+    {
+        deletaDaArvore(city->arvoreQuadra, vetor[i]);
+        removeChave(city->quadra_cep, retornaQCEP(getInfo(vetor[i])));
+    }
 }
 
 void qry_cbq_no(Info info, va_list args)
@@ -909,7 +1003,7 @@ void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta* polig, int tamPolig
     FILE* arquivoSvg = fopen(nomeArquivoSvg, "a+");
     fprintf(arquivoTxt, "catac\n");
 
-    Node* nodeArray = malloc(arvoreGetQtdNodes(city->arvoreQuadra)*sizeof(Node));
+    Node* nodeArray = malloc(getTamanhoDaArvore(city->arvoreQuadra)*sizeof(Node));
     int nodeArraySize=0;
     percorreArvore2(city->arvoreQuadra, qry_catac_quadra, arquivoTxt, arquivoSvg, polig, tamPolig, cid, nodeArray, &nodeArraySize);
     for(int i=0;i<nodeArraySize;i++){

@@ -30,6 +30,8 @@ Info procuraNaCidade(Cidade cid, char id[], int *tipo, char face[], double num);
 
 void removeDaCidade(Cidade cid, char id[], char txt[]);
 
+void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[]);
+
 void qry_crd(Cidade cid, char id[], char txt[]);
 
 void adicionarCirculo(Cidade cid, Info info);
@@ -68,7 +70,7 @@ Muro getMuro(Cidade cid, int i);
 
 void percorreCidade(Cidade cid, double r, double fx, double fy, char tipo[], char svg[], char txt[], char id[], int option, char cor[], double largura, double altura, double dx, double dy);
 
-void resolveIncendios(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+void qry_fi(Cidade cid, double x, double y, double raio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 void resolveFH(Cidade cid, Info quadra, int numeroDeHidrantes, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 

@@ -13,6 +13,7 @@
 #include "predio.h"
 #include "muro.h"
 #include "hashTable.h"
+#include "qry.h"
 
 
 
@@ -41,5 +42,14 @@ void desalocaArvore(Tree tree);
 
 Node buscaNaArvore(Tree tree, Info info, char* (*retornaId) (Info));
 
-int arvoreGetQtdNodes(Tree);
+int getTamanhoDaArvore(Tree);
+
+Info getInfo(Node node);
+
+void heapsort(Info vetor[], int tamanho, double x, double y, double (*retorna)(Info), double (*retorna2)(Info));
+
+void resolveSemaforos(Info vetor[], double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char comando[]);
+
+void resolveFHidrantes(Info vetor[], double x, double y, int numeroDeHidrantes, int fim, int sinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
+
 #endif

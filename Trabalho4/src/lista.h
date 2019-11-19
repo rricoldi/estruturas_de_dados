@@ -87,13 +87,7 @@ void percorreListaR(Lista L, double x, double y, double w, double h, double dx, 
 
 int transformaListaEmVetor(Lista L, Info vetor[]);
 
-void resolveSemaforos(Lista L, double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char comando[]);
-
 void quickSortSemaforo(Info vetor[], int inicio, int fim, double xIncendio, double yIncendio);
-
-void resolveHidrantes(Lista L, double xIncendio, double yIncendio, double raio, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
-
-void resolveFHidrantes(Lista L, double x, double y, int numeroDeHidrantes, int sinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[]);
 
 void quickSortHidrante(Info vetor[], int inicio, int fim, double x, double y);
 

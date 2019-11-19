@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<stdarg.h>
+#include <string.h>
 #include "arvore.h"
 #include <math.h>
 
@@ -21,7 +22,7 @@ typedef struct arvore
     No *raiz;
     No *nil;
     double (*comparaInfo) (Info, Info);
-    int qtdNodes;
+    int tamanho;
 } Arvore;
 
 Tree criaArvore(double (*comparaInfo) (Info, Info))
@@ -36,7 +37,7 @@ Tree criaArvore(double (*comparaInfo) (Info, Info))
     arvore->nil = no;
     arvore->raiz = no;
     arvore->comparaInfo = comparaInfo;
-    arvore->qtdNodes = 0;
+    arvore->tamanho = 0;
   /* Uma árvore é representada pelo endereço do nó raiz,
      essa função cria uma árvore com nenhum elemento,
      ou seja, cria uma árvore vazia, por isso retorna NULL. */
@@ -157,7 +158,7 @@ void insereNaArvore(Tree** tree, Info info)
     No *no = criaNo(info);
     No *folha = (*arvore)->nil;
     No *raiz = (*arvore)->raiz;
-    (*arvore)->qtdNodes = (*arvore)->qtdNodes+1;
+    (*arvore)->tamanho = (*arvore)->tamanho+1;
     (*arvore)->comparaInfo(no->info, no->info);
     while(raiz != (*arvore)->nil)
     {
@@ -379,7 +380,7 @@ void deletaDaArvore(Tree tree, Node* node)
     }
     if(corOriginal == PRETA)
         reparaDelecao(arvore, x);
-    arvore->qtdNodes = arvore->qtdNodes-1;
+    arvore->tamanho = arvore->tamanho-1;
 }
 
 void percorreArvorePorNo(No* no, void (*funcao) (Info, va_list), No* nil, va_list args)
@@ -504,7 +505,122 @@ void desalocaArvore(Tree tree)
     arvore = NULL;
 }
 
-int arvoreGetQtdNodes(Tree tree){
+int getTamanhoDaArvore(Tree tree){
     Arvore *arvore = tree;
-    return arvore->qtdNodes;
+    return arvore->tamanho;
 }
+
+Info getInfo(Node node)
+{
+    No* no = (No*) node;
+    return no->info;
+}
+
+void heapsort(Info vetor[], int tamanho, double x, double y, double (*retorna)(Info), double (*retorna2)(Info))
+{
+   int i = tamanho / 2, pai, filho;
+   Info t;
+   
+   while(true) {
+      if (i > 0) {
+          i--;
+          t = vetor[i];
+      } else {
+          tamanho--;
+          if (tamanho <= 0) return;
+          t = vetor[tamanho];
+          vetor[tamanho] = vetor[0];
+      }
+      pai = i;
+      filho = i * 2 + 1;
+        while (filho < tamanho) {
+            if ((filho + 1 < tamanho)  &&  distancia(x, y, retorna(vetor[filho+1]), retorna2(vetor[filho+1])) > distancia(x, y, retorna(vetor[filho]), retorna2(vetor[filho])))
+                filho++;
+            if (distancia(x, y, retorna(vetor[filho]), retorna2(vetor[filho])) > distancia(x, y, retorna(t), retorna2(t)))
+            {
+                vetor[pai] = vetor[filho];
+                pai = filho;
+                filho = pai * 2 + 1;
+            }
+            else 
+            {
+                break;
+            }
+      }
+      vetor[pai] = t;
+   }
+}
+
+
+void resolveSemaforos(Info vetor[], double xIncendio, double yIncendio, int numeroDeSemaforos, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char comando[])
+{
+   FILE* arquivoTxt;
+   arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+   int inicio = 0;
+   
+   char corB[] = "red";
+   char corP[] = "none";
+
+   if((strcmp("fi", comando)) == 0)
+   {
+      imprimirIncendio(xIncendio, yIncendio, nomeDoArquivoSvg);
+      fprintf(arquivoTxt, "%s\n", comando);
+      for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+      }
+   }
+   else
+   {
+      fprintf(arquivoTxt, "%s\n", comando);
+      for(inicio = 0; inicio<numeroDeSemaforos; inicio++)
+      {
+         imprimirLinha(xIncendio, yIncendio, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), nomeDoArquivoSvg);
+         imprimirCirculo(2.5, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+         imprimirCirculo(5.0, retornaSX(vetor[inicio]), retornaSY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+         fprintf(arquivoTxt, "%s\n", retornaSID(vetor[inicio]));
+      }
+   }
+   
+
+   fclose(arquivoTxt);
+}
+
+void resolveFHidrantes(Info vetor[], double x, double y, int numeroDeHidrantes, int fim, int sinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[])
+{
+    FILE* arquivoTxt;
+    arquivoTxt = fopen(nomeDoArquivoTxt, "a");
+    int inicio = 0;
+    char corB[] = "red";
+    char corP[] = "none";
+    fprintf(arquivoTxt, "fh\n");
+    if(sinal == 0)
+    {
+        for(inicio = 0; inicio<numeroDeHidrantes; inicio++)
+        {
+            imprimirLinha(x, y, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), nomeDoArquivoSvg);
+            imprimirCirculo(2.5, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), "blue", corP, nomeDoArquivoSvg, 2);
+            imprimirCirculo(5.0, retornaHX(vetor[inicio]), retornaHY(vetor[inicio]), corB, corP, nomeDoArquivoSvg, 2);
+            fprintf(arquivoTxt, "%s\n", retornaHID(vetor[inicio]));
+        }
+    }
+    else
+    {
+        int final = fim - numeroDeHidrantes;
+        for(fim = fim-1; fim>=final; fim--)
+        {
+            printf("\n%d", fim);
+            imprimirLinha(x, y, retornaHX(vetor[fim]), retornaHY(vetor[fim]), nomeDoArquivoSvg);
+            imprimirCirculo(2.5, retornaHX(vetor[fim]), retornaHY(vetor[fim]), "blue", corP, nomeDoArquivoSvg, 2);
+            imprimirCirculo(5.0, retornaHX(vetor[fim]), retornaHY(vetor[fim]), corB, corP, nomeDoArquivoSvg, 2);
+            fprintf(arquivoTxt, "%s\n", retornaHID(vetor[fim]));
+        }
+    }
+    
+    
+
+    fclose(arquivoTxt);
+}  

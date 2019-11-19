@@ -484,7 +484,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			verificador++;
 			fprintf(arquivoTxt, "trns %lf %lf %lf %lf %lf %lf\n", x, y, largura, altura, dx, dy);
 			fclose(arquivoTxt);
-			percorreCidade(cidade, distancia, x, y, "L2", nomeDoArquivoSvg, nomeDoArquivoTxt, "0", 3, cor, largura, altura, dx, dy);
+			qry_trns(cidade, largura, altura, x, y, dx, dy, nomeDoArquivoTxt);
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 		}
 		else if (strcmp("fi", comando) == 0)
@@ -498,7 +498,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 				verificador2++;
 			}
 			fclose(arquivoTxt);
-			resolveIncendios(cidade, x, y, distancia, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
+			qry_fi(cidade, x, y, distancia, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt);
 			arquivoTxt = fopen(nomeDoArquivoTxt, "a");
 			verificador = 0;
 		}
