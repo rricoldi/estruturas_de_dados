@@ -193,7 +193,8 @@ int main(int argc, char *argv[])
         {
             arquivoQry = (char *)malloc((strlen(nomeDoArquivoQry)+1)*sizeof(char));
     	    strcpy(arquivoQry, nomeDoArquivoQry);
-        }if(nomeDoArquivoEc != NULL){
+        }
+        if(nomeDoArquivoEc != NULL){
             arquivoEc = malloc(sizeof(char)*(strlen(nomeDoArquivoEc) + 1));
             sprintf(arquivoEc, "%s", nomeDoArquivoEc);
         }
@@ -202,10 +203,6 @@ int main(int argc, char *argv[])
             sprintf(arquivoPm, "%s", nomeDoArquivoPm);
         }
 	}
-
-    if(arquivoPm != NULL){
-        // iniciaArquivoPm(arquivoPm);
-    }
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
     prefixoDoArquivoGeo = retornarPrefixoDoArquivo(nomeDoArquivoGeo);
@@ -234,11 +231,11 @@ int main(int argc, char *argv[])
     if(nomeDoArquivoQry != NULL)
     {
         //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
-        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));
+        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+strlen(caminhoDoArquivoDeSaida)+6)*sizeof(char));
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
+        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, caminhoDoArquivoDeSaida);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)

@@ -664,9 +664,6 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashT
 
 			sscanf(linha, "%*c %20s %[^\n]", tipo, descricao);
 
-			// tipo[20] = '\0';
-			// descricao[128] = '\0';
-
 			ComercioTipo ct = tipoComercioNovo(tipo, descricao);
 			int reg = insereRegistro(tiposComercio, tipo, ct);
 			if(reg<0){
@@ -679,12 +676,6 @@ void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashT
 			int num;
 
 			sscanf(linha, "%*c %18s %14s %20s %9s %c %d %[^\n]", cnpj, cpf, tipo, cep, &face, &num, nome);
-
-			// cnpj[18] = '\0';
-			// cpf[14] = '\0';
-			// tipo[20] = '\0';
-			// cep[9] = '\0';
-			// nome[84] = '\0';
 
 			if(!existeChave(tiposComercio, tipo)){
 				printf("O tipo de estabelecimento %s não existe\n", tipo);
