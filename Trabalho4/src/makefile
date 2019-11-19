@@ -18,6 +18,7 @@ CC=gcc
 # Flags
 CC_FLAGS=-c         \
 		 -g         \
+		 -w         \
          -W         \
          -Wall      \
 	 -std=c99	\
