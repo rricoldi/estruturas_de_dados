@@ -21,6 +21,7 @@ bool nearlyEqual(double a, double b, double epsilon);
 //  Retorna a distancia entre dois pontos a e b
 double distanciaPontos(Ponto a, Ponto b);
 //  Retorna o ponto de intersecção entre duas retas, NULL caso não intersectem
+//  CHAMAR A FUNÇÃO pontoFinalizar CASO O RETORNO NÃO SEJA NULL
 Ponto intersecta(Reta r, Reta s);
 //  Verifica se um dado ponto está entre outos dois
 bool estaEntre(Ponto a, Ponto b, Ponto entre);
