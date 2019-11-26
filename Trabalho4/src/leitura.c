@@ -649,7 +649,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashTable comercios_cpf){
 	FILE* ec = fopen(arquivoEc, "r");
 	if(!ec){
-		printf("Não foi possível abrir o arquivo ec: %s", arquivoEc);
+		printf("Não foi possível abrir o arquivo ec: %s\n", arquivoEc);
 		exit(-1);
 	}
 	
