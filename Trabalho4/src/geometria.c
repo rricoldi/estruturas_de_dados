@@ -3,6 +3,7 @@
 #include<math.h>
 #include<stdbool.h>
 #include"geometria.h"
+#include"qry.h"
 
 #define SvgXMax 50000
 
@@ -17,7 +18,18 @@ struct reta{
     struct ponto A;
     struct ponto B;
 };
-
+/*
+double max(double x, double y){
+    if(x>y)
+        return x;
+    return y;
+}
+double min(double x, double y){
+    if(x<y)
+        return x;
+    return y;
+}
+*/
 int retaSizeof(void){
   return sizeof(struct reta);
 }
@@ -54,54 +66,62 @@ struct ponto *interCasoA(struct reta *r, struct reta *s){
     struct ponto *c = malloc(sizeof(struct ponto));     //ponto de intersecção das retas
     c->x = (s->cl - r->cl)/(r->ca - s->ca);
     c->y = (r->cl*s->ca - s->cl*r->ca)/(s->ca - r->ca);
-    if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
-        pontoFinalizar(c);
-        return NULL;
-    }
-    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
-        pontoFinalizar(c);
-        return c;
-    }
-    else{
-        pontoFinalizar(c);
-        return NULL;
-    }
+    return c;
 }
 struct ponto *interCasoB(struct reta *r, struct reta *s){
     struct ponto *c = malloc(sizeof(struct ponto));
     c->x = r->cl;
     c->y = s->ca*r->cl + s->cl;
-    if(pontosIguais(&r->A, c) || pontosIguais(&r->B, c) || pontosIguais(&s->A, c) || pontosIguais(&s->B, c)){
-        pontoFinalizar(c);
-        return NULL;
-    }
-    if(estaEntre(&(r->A), &(r->B), c) && estaEntre(&(s->A), &(s->B), c)){
-        pontoFinalizar(c);
+    return c;
+}
+struct ponto *interCasoC(struct reta* r, struct reta* s){
+    struct ponto *c = malloc(sizeof(struct ponto));
+    if(estaEntre(&(r->A), &(s->B), &(r->B))){
+        c = &(s->B);
         return c;
     }
-    else{
-        pontoFinalizar(c);
-        return NULL;
-    }
+    c = &(s->A);
+    return c;
+}
+//Retorna 0 se colinear, 1 se horário, -1 se anti-horário
+int orientacao(struct ponto *a, struct ponto *b, struct ponto *c){
+    int val = (b->y - a->y)*(c->x - b->x) - (b->x - a->x)*(c->y - b->y);
+    if(val == 0)
+        return 0;
+    if(val > 0)
+        return 1;
+    return -1;
+}
+bool doIntersect(struct ponto* p1, struct ponto* q1, struct ponto* p2, struct ponto* q2){
+    int o1 = orientacao(p1, q1, p2);
+    int o2 = orientacao(p1, q1, q2);
+    int o3 = orientacao(p2, q2, p1);
+    int o4 = orientacao(p2, q2, q1);
+    
+    if(o1 != o2 && o3 != o4)
+        return true;
+    if(o1==0 && estaEntre(p1, p2, q1))
+        return true;
+    if(o2==0 && estaEntre(p1, q2, q1))
+        return true;
+    if(o3==0 && estaEntre(p2, p1, q2))
+        return true;
+    if(o4==0 && estaEntre(p2, q1, q2))
+        return true;
+    return false;
 }
 Ponto intersecta(Reta rr, Reta ss){
     struct reta *r = rr;
     struct reta *s = ss;
-    if(nearlyEqual(r->ca, s->ca, double_BAIXO)){
-        return NULL;
-    }
-    else{
-        if(r->ca != INFINITY && s->ca != INFINITY){
+    bool inter = doIntersect(&(r->A), &(r->B), &(s->A), &(s->B));
+    if(inter){
+        if(r->ca != INFINITY && s->ca != INFINITY)
             return interCasoA(r, s);
-        }
-        else{
-            if(r->ca == INFINITY){
-                return interCasoB(r, s);
-            }
-            else{
-                return interCasoB(s, r);
-            }
-        }
+        if(r->ca == INFINITY && s->ca != INFINITY)
+            return interCasoB(r, s);
+        if(s->ca == INFINITY && r->ca != INFINITY)
+            return interCasoB(s, r);
+        return interCasoC(r, s);
     }
 }
 bool estaEntre(Ponto aa, Ponto bb, Ponto cc){
@@ -111,10 +131,8 @@ bool estaEntre(Ponto aa, Ponto bb, Ponto cc){
     struct ponto *a = aa;
     struct ponto *b = bb;
     struct ponto *c = cc;
-    double distAB = distanciaPontos(a, b);
-    double distAC = distanciaPontos(a, c);
-    double distBC = distanciaPontos(b, c);
-    if(nearlyEqual(distAB, distAC+distBC, double_BAIXO))
+    if(b->x <= max(a->x, c->x) && b->x >= max(a->x, c->x) &&
+       b->y <= max(a->y, c->y) && b->y >= max(a->y, c->y))
         return true;
     else
         return false;

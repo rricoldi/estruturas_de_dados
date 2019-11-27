@@ -9,12 +9,11 @@
 struct registrado{
     char* key;
     Info info;
-    struct registrado *next;    //
+    struct registrado *next;
 };
 
 struct registros{
     struct registrado *reg;
-    // struct registros *next;
 };
 
 struct tabela{
@@ -41,7 +40,6 @@ HashTable criaTabela(int tam){
     struct tabela *tabela = malloc(sizeof(struct tabela));
 
     for(int i=0;i<tam;i++){
-        // registros[i].next = NULL;
         registros[i].reg = NULL;
     }
 
@@ -50,7 +48,6 @@ HashTable criaTabela(int tam){
 
     for(int i=0;i<tam;i++){
         tabela->reg[i].reg = NULL;
-        // tabela->reg[i].next = NULL;
     }
     
     return tabela;
@@ -59,29 +56,6 @@ HashTable criaTabela(int tam){
 int insereRegistro(HashTable tab, char* key, Info info){
     struct tabela *essa = tab;
     int posic = hashFunction(key, essa->tamanho);
-    // if(existeChave(tab, key)){
-    //     struct registrado *aux = essa->reg[posic].reg;
-    //     while(aux->next != NULL){
-    //         aux = aux->next;
-    //     }
-    //     aux->next = malloc(sizeof(struct registrado));
-    //     aux = aux->next;
-
-    //     aux->key = malloc(strlen(key));
-
-    //     strcpy(aux->key, key);
-    //     aux->info = info;
-    //     aux->next = NULL;
-    //     return posic;
-    // }
-    // essa->reg[posic].reg = malloc(sizeof(struct registrado));
-
-    // essa->reg[posic].reg->key = malloc(strlen(key));
-
-    // strcpy(essa->reg[posic].reg->key, key);
-    // essa->reg[posic].reg->info = info;
-    // essa->reg[posic].reg->next = NULL;
-    // return posic;
 
     struct registrado* aux = malloc(sizeof(struct registrado));
     if(!aux){
