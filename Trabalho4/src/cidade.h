@@ -7,6 +7,7 @@
 #include "svg.h"
 
 #include<stdio.h>
+
 /*  
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
     Tambem eh utilizada para resolver alguns problemas do Qry, e para conseguir os valores de uma determinada forma
@@ -105,7 +106,7 @@ void qry_cbq(Cidade cid, double raio, double x, double y, char cor[], char nomeD
 void qry_trns(Cidade cid, double largura, double altura, double x, double y, double dx, double dy, char nomeDoArquivoTxt[]);
 
 void qry_crd(Cidade cid, char id[], char txt[]);
-
+void qry_bombaRadiacaoLum(Cidade, double x, double y, char* nomeArqSvg);
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
 
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);

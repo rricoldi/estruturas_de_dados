@@ -12,6 +12,9 @@ typedef void* Ponto;
 
 //  Constante usasda como epsilon na função nearlyEqual
 #define double_BAIXO 0.000001
+double svgXMax;
+double svgYMax;
+#define M_PI 3.14159265358979323846
 
 //  Retorna o tamanho em bytes da struct reta
 int retaSizeof(void);
@@ -20,6 +23,11 @@ int retaSizeof(void);
 bool nearlyEqual(double a, double b, double epsilon);
 //  Retorna a distancia entre dois pontos a e b
 double distanciaPontos(Ponto a, Ponto b);
+double distanciaPontosD(double x1, double y1, double x2, double y2);
+
+//  Verifica como os 3 pontos estão orientados
+//  Retorna 0 caso sejam colineares, 1 para sentido horário, -1 para sentido anti-horário
+int verificaOrientacao(Ponto, Ponto, Ponto);
 //  Retorna o ponto de intersecção entre duas retas, NULL caso não intersectem
 //  CHAMAR A FUNÇÃO pontoFinalizar CASO O RETORNO NÃO SEJA NULL
 Ponto intersecta(Reta r, Reta s);
@@ -39,8 +47,12 @@ double getPontoY(Ponto a);
 
 //  Retorna o endereço de uma reta criada a partir de dois pontos
 Reta criarReta(double x1, double y1, double x2, double y2);
+//Retorna true caso 'r' seja menor que 's'
+bool retaMenor(Reta r, Reta s);
+double comparaReta(Reta, Reta);
 void* retaFinalizar(Reta);
 void retaPrint(Reta);
+void retaPrintSvg(Reta, FILE*);
 //  Retorna um ponto (A ou B) de uma reta
 Ponto getRetaA(Reta);
 Ponto getRetaB(Reta);

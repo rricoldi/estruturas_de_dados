@@ -6,6 +6,10 @@
 #include "comercioPessoas.h"
 #include "leitura.h"
 #include "quadra.h"
+
+extern double svgXMax=0;
+extern double svgYMax=0;
+
 typedef struct city
 {
     // Tree arvoreCirculo;
@@ -309,6 +313,11 @@ void adicionarQuadra(Cidade cid, Info info)
     cidade *city = (cidade *)cid;
     insereRegistro(city->quadra_cep, retornaQCEP(info), info);
     insereNaArvore(&(city->arvoreQuadra), info);
+    double x=retornaQX(info)+retornaQW(info), y=retornaQY(info)+retornaQH(info);
+    if(x>svgXMax)
+        svgXMax=x+50;
+    if(y>svgYMax)
+        svgYMax=y+50;
 }
 
 Quadra getQuadra(Cidade cid, char id[])
@@ -637,6 +646,98 @@ void resolveFS(Cidade cid, Info quadra, int numeroDeSemaforos, char nomeDoArquiv
     transformaListaEmVetor(lista, vetor);
     heapsort(vetor, getTamanhoDaArvore(city->arvoreSemaforo), x, y, retornaSX, retornaSY);
     resolveSemaforos(vetor, x, y, numeroDeSemaforos, nomeDoArquivoSvg, nomeDoArquivoTxt, "fs");
+}
+
+void qry_bombaFor(Info info, va_list args){
+    va_list vars;
+    va_copy(vars, args);
+    Reta linha = va_arg(vars, Reta);
+    Ponto *pontos = va_arg(vars, Ponto*);
+    int index = va_arg(vars, int);
+    Reta reta = info;
+
+    Ponto interseccao = intersecta(linha, reta);
+    if(!interseccao){
+        interseccao = criarPonto(getPontoX(getRetaB(linha)), getPontoY(getRetaB(linha)));
+    }
+    Reta teste = criarReta(getPontoX(getRetaA(linha)), getPontoY(getRetaA(linha)), getPontoX(interseccao), getPontoY(interseccao));
+    Reta atual = criarReta(getPontoX(getRetaA(linha)), getPontoY(getRetaA(linha)), getPontoX(pontos[index]), getPontoY(pontos[index]));
+    if(retaMenor(teste, atual)){
+        setPonto(pontos[index], getPontoX(interseccao), getPontoY(interseccao));
+    }
+    retaFinalizar(teste);
+    retaFinalizar(atual);
+
+    va_end(vars);
+}
+void qry_bombaRadiacaoArvoreMuros(Info info, va_list args){
+    va_list var;
+    va_copy(var, args);
+    Tree retas = va_arg(var, Tree);
+    Reta r = muroGetReta(info);
+    insereNaArvore(&retas, r);
+    va_end(var);
+}
+void qry_bombaRadiacaoArvorePredios(Info info, va_list args){
+    va_list vars;
+    va_copy(vars, args);
+    Tree retas = va_arg(vars, Tree);
+    Reta *r = retornaPredioLados(info);
+    for(int i=0;i<4;i++){
+        insereNaArvore(&retas, r[i]);
+    }
+    free(r);
+    va_end(vars);
+}
+void qry_bombaRadiacaoLum(Cidade cid, double x, double y, char* nomeSvg){
+    cidade *city = cid;
+
+    
+    double ang=0, seno=0, cosseno=0;
+    int raio = distanciaPontosD(0, 0, svgXMax, svgYMax), quantRaios=1440, i=0;
+    Reta linhaAtual = criarReta(x, y, svgXMax+100, svgYMax+100);
+    Tree retas = criaArvore(comparaReta);
+    percorreArvore(city->arvoreMuro, qry_bombaRadiacaoArvoreMuros, retas);
+    percorreArvore(city->arvorePredio, qry_bombaRadiacaoArvorePredios, retas);
+    Reta retaSvgXMin=criarReta(0, 0, 0, svgYMax), retaSvgYMin=criarReta(0, 0, svgXMax, 0);
+    Reta retaSvgXMax=criarReta(svgXMax, 0, svgXMax, svgYMax), retaSvgYMax=criarReta(0, svgYMax, svgXMax, svgYMax);
+    insereNaArvore(&retas, retaSvgXMin);
+    insereNaArvore(&retas, retaSvgYMin);
+    insereNaArvore(&retas, retaSvgXMax);
+    insereNaArvore(&retas, retaSvgYMax);
+    Ponto* pontos = malloc(retaSizeof()*quantRaios);
+    while(ang<2){
+        seno = raio*sin(ang*M_PI);
+        cosseno = raio*cos(ang*M_PI);
+        ang += 2.0/quantRaios;
+        setRetaB(linhaAtual, x+seno, y+cosseno);
+        pontos[i] = criarPonto(x+seno, y+cosseno);
+        percorreArvore(retas, qry_bombaFor, linhaAtual, pontos, i);
+        i++;
+    }
+    FILE* svg = fopen(nomeSvg, "a+");
+    // for(int j=0;j<quantRaios;j++){
+    //     fprintf(svg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:rgb(0,0,0);stroke-width:2\" />", x, y, getPontoX(pontos[j]), getPontoY(pontos[j]));
+    // }
+    fprintf(svg, "\n\t<polygon points=\"");
+    for(int i=0;i<quantRaios;i++){
+        if(i>0 && i<quantRaios-1){
+            if(verificaOrientacao(pontos[i], pontos[i-1], pontos[i+1])!=0)
+                fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
+        }else{
+            fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
+        }
+        // pontoFinalizar(pontos[i]);
+    }
+    retaFinalizar(retaSvgYMin);
+    retaFinalizar(retaSvgXMin);
+    retaFinalizar(retaSvgYMax);
+    retaFinalizar(retaSvgXMax);
+    desalocaArvore(retas);
+    free(pontos);
+    fprintf(svg, "\" style=\"fill:yellow;opacity:0.4\"/>\n\t");
+    fprintf(svg, "<circle cx=\"%lf\" cy=\"%lf\" r=\"1\" stroke=\"black\" stroke-width=\"3\" fill=\"black\" />\n\t", x, y);
+    fclose(svg);
 }
 
 void qry_m(FILE* arquivoTxt, char cep[], Cidade cid)

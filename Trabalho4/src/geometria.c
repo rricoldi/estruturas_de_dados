@@ -5,8 +5,6 @@
 #include"geometria.h"
 #include"qry.h"
 
-#define SvgXMax 50000
-
 struct ponto{
     double x;
     double y;
@@ -18,18 +16,7 @@ struct reta{
     struct ponto A;
     struct ponto B;
 };
-/*
-double max(double x, double y){
-    if(x>y)
-        return x;
-    return y;
-}
-double min(double x, double y){
-    if(x<y)
-        return x;
-    return y;
-}
-*/
+
 int retaSizeof(void){
   return sizeof(struct reta);
 }
@@ -51,6 +38,9 @@ double distanciaPontos(Ponto aa, Ponto bb){
     struct ponto *a = aa;
     struct ponto *b = bb;
     return sqrt((a->x - b->x)*(a->x - b->x) + (a->y - b->y)*(a->y - b->y));
+}
+double distanciaPontosD(double x1, double y1, double x2, double y2){
+    return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
 }
 
 bool pontosIguais(Ponto aa, Ponto bb){
@@ -92,6 +82,10 @@ int orientacao(struct ponto *a, struct ponto *b, struct ponto *c){
         return 1;
     return -1;
 }
+int verificaOrientacao(Ponto aa, Ponto bb, Ponto cc){
+    struct ponto *a=aa, *b=bb, *c=cc;
+    return orientacao(a, b, c);
+}
 bool doIntersect(struct ponto* p1, struct ponto* q1, struct ponto* p2, struct ponto* q2){
     int o1 = orientacao(p1, q1, p2);
     int o2 = orientacao(p1, q1, q2);
@@ -123,6 +117,7 @@ Ponto intersecta(Reta rr, Reta ss){
             return interCasoB(s, r);
         return interCasoC(r, s);
     }
+    return NULL;
 }
 bool estaEntre(Ponto aa, Ponto bb, Ponto cc){
     if(pontosIguais(aa, bb)){
@@ -189,6 +184,21 @@ Reta criarReta(double x1, double y1, double x2, double y2){
     setRetaCoeficientes(r, x1, y1, x2, y2);
     return r;
 }
+bool retaMenor(Reta rr, Reta ss){
+    struct reta *r=rr;
+    struct reta *s=ss;
+    if(distanciaPontos(&(r->A), &(r->B)) < distanciaPontos(&(s->A), &(s->B)))
+        return true;
+    return false;
+}
+double comparaReta(Reta rr, Reta ss){
+    struct reta *r=rr;
+    struct reta *s=ss;
+    if(r->A.x != s->A.x){
+        return (r->A.x - s->A.x);
+    }
+    return 0;
+}
 void* retaFinalizar(Reta rr){
     struct reta* r = (struct reta*) rr;
     free(r);
@@ -198,6 +208,10 @@ void* retaFinalizar(Reta rr){
 void retaPrint(Reta rr){
     struct reta *r = (struct reta*)rr;
     printf("%lf %lf, %lf %lf\n", r->A.x, r->A.y, r->B.x, r->B.y);
+}
+void retaPrintSvg(Reta rr, FILE* svg){
+    struct reta *r = rr;
+    fprintf(svg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:rgb(255,0,0);stroke-width:2\" />", r->A.x, r->A.y, r->B.x, r->B.y);
 }
 void setRetaA(Reta rr, double x, double y){
     struct reta *r = rr;
@@ -223,7 +237,7 @@ double getRetaTamanho(Reta rr){
 }
 
 bool pontoDentroPoligono(double x, double y, Reta* polig, int tamPolig){
-    struct reta *reta = criarReta(x, y, x+SvgXMax, y);
+    struct reta *reta = criarReta(x, y, x+svgXMax, y);
     int qtdInterseccoes=0;
 
     for(int i=0;i<tamPolig;i++){
@@ -263,7 +277,7 @@ bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int tamPoli
     for(int j=0;j<4;j++){
         qtdInterseccoes=0;
         struct reta *r = (struct reta*)retangulo[j];
-        struct reta *s = criarReta(r->A.x, r->A.y, SvgXMax, r->A.y);
+        struct reta *s = criarReta(r->A.x, r->A.y, svgXMax, r->A.y);
         for(int i=0;i<tamPolig;i++){
             if(intersecta(s, poligono[i])){
                 qtdInterseccoes++;

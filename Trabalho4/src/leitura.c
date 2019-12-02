@@ -538,16 +538,14 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			double brlX, brlY;
 			fscanf(arquivoQry, "%lf %lf ", &brlX, &brlY);
 
-			// <<
 			if(verificador2 == 0){
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
 				imprimeCidade(cidade, nomeDoArquivoSvg);	
 				verificador2++;
 			}
-			// >>
-
-			// qry_BombaRadiacao(cidade, x, y, nomeDoArquivoSvg);
+			
+			qry_bombaRadiacaoLum(cidade, brlX, brlY, nomeDoArquivoSvg);
 		}
 		else if(strcmp("mplg?", comando)==0){
 			char arqPol[51];

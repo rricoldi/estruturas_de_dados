@@ -33,10 +33,18 @@ Predio criarPredio(char cep[20], char face[10], double numero, double frente, do
     p->xNum         = xNum;
     p->yNum         = yNum;
     
-    p->superior = criarReta(x, y, x+xNum, y);
-    p->esquerda = criarReta(x, y, x, y+yNum);
-    p->direita = criarReta(x+xNum, y, x+xNum, y+yNum);
-    p->inferior = criarReta(x, y+yNum, x+xNum, y+yNum);
+    // double w, h;
+    // if(p->face[0] == 'N' || p->face == 'S'){
+    //     h = p->profundidade;
+    //     w = p->frente;
+    // }else{
+    //     h = p->frente;
+    //     w = p->profundidade;
+    // }
+    p->superior = criarReta(x, y, x+p->frente, y);
+    p->esquerda = criarReta(x, y, x, y+p->profundidade);
+    p->direita = criarReta(x+p->frente, y, x+p->frente, y+p->profundidade);
+    p->inferior = criarReta(x, y+p->profundidade, x+p->frente, y+p->profundidade);
 
     return p;
 }
@@ -175,6 +183,13 @@ void imprimirPredio2(Predio pred, va_list args)
     char *nomeDoArquivoSvg = va_arg(variaveis, char*);
     ItemP* predio = (ItemP*) pred;
     imprimirPredio(nomeDoArquivoSvg, getPontoX(getRetaA(predio->superior)), getPontoY(getRetaA(predio->superior)), predio->frente, predio->profundidade, predio->xCalcada, predio->yCalcada, predio->xCalcadaMax, predio->yCalcadaMax, predio->numero, predio->xNum,  predio->yNum);
+    // FILE* svg = fopen(nomeDoArquivoSvg, "a+");//
+    // retaPrintSvg(predio->superior, svg);
+    // retaPrintSvg(predio->esquerda, svg);
+    // retaPrintSvg(predio->direita, svg);
+    // retaPrintSvg(predio->inferior, svg);
+    // fclose(svg);//
+    va_end(variaveis);
 }
 
 

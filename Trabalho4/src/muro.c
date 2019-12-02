@@ -24,6 +24,11 @@ void muroFinalizar(Muro muro){
     m = NULL;
 }
 
+Reta muroGetReta(Muro mur){
+    ItemM *m = (ItemM*)mur;
+    return m->r;
+}
+
 double retornaMX1(Muro m)
 {
     ItemM* item = (ItemM*) m;
