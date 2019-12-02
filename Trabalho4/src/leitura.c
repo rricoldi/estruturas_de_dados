@@ -547,6 +547,20 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			
 			qry_bombaRadiacaoLum(cidade, brlX, brlY, nomeDoArquivoSvg);
 		}
+		else if(strcmp("brn", comando)==0){
+			double brnX, brnY;
+			char arqPol[51];
+			fscanf(arquivoQry, "%lf %lf %50s ", &brnX, &brnY, arqPol);
+			
+			if(verificador2 == 0){
+				remove(nomeDoArquivoSvg);
+				iniciaSvg(nomeDoArquivoSvg);
+				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				verificador2++;
+			}
+
+			qry_bombaRadiacaoNuc(cidade, brnX, brnY, nomeDoArquivoSvg, nomeDoArquivoTxt, arqPol, caminhoDoArquivoDeEntrada);
+		}
 		else if(strcmp("mplg?", comando)==0){
 			char arqPol[51];
 			int tamanhoPoligono;
@@ -749,11 +763,11 @@ Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* arr
 		return NULL;
 	}
 	*array_size = 0;
-	char linha[21];
+	char linha[41];
 
 	//Checa a quantidade de linhas do arquivo
 	while(!feof(arq)){
-		fgets(linha, 20, arq);
+		fgets(linha, 40, arq);
 		*array_size = *array_size +1;
 	}
 
@@ -767,7 +781,7 @@ Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* arr
 	int i=0;
 	while(!feof(arq)){
 		double x, y;
-		fgets(linha, 20, arq);
+		fgets(linha, 40, arq);
 		sscanf(linha, "%lf %lf ", &x, &y);
 		arrayPontos[i] = x;
 		i++;

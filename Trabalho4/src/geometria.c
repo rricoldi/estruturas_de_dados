@@ -75,7 +75,7 @@ struct ponto *interCasoC(struct reta* r, struct reta* s){
 }
 //Retorna 0 se colinear, 1 se horário, -1 se anti-horário
 int orientacao(struct ponto *a, struct ponto *b, struct ponto *c){
-    int val = (b->y - a->y)*(c->x - b->x) - (b->x - a->x)*(c->y - b->y);
+    double val = (b->y - a->y)*(c->x - b->x) - (b->x - a->x)*(c->y - b->y);
     if(val == 0)
         return 0;
     if(val > 0)
