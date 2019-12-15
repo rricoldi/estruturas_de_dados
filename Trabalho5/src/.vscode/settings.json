@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "cidade.h": "c",
+        "lista.h": "c",
+        "arvore.h": "c",
+        "radio.h": "c",
+        "leitura.h": "c",
+        "comerciopessoas.h": "c",
+        "quadra.h": "c",
+        "hidrante.h": "c",
+        "hashtable.h": "c",
+        "svg.h": "c",
+        "stdio.h": "c"
+    }
+}
