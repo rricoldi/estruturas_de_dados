@@ -4,6 +4,9 @@
         "radio.h": "c",
         "predio.h": "c",
         "leitura.h": "c",
-        "cidade.h": "c"
+        "cidade.h": "c",
+        "string.h": "c",
+        "comerciopessoas.h": "c",
+        "thread": "c"
     }
 }

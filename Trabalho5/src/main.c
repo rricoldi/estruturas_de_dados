@@ -95,6 +95,8 @@ int main(int argc, char *argv[])
     char *arquivoEc               = NULL;
     char *nomeDoArquivoPm         = NULL;
     char *arquivoPm               = NULL;
+    char *nomeDoArquivoVia        = NULL;
+    char *arquivoVia              = NULL;
 
     while(contador<argc)
     {
@@ -160,6 +162,17 @@ int main(int argc, char *argv[])
             nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoPm, argv[contador]);
         }
+        else if (strcmp("-v", argv[contador]) == 0)
+        {
+            contador++;
+            if (argv[contador] == NULL){    
+                printf("\n!Erro! Sem parametro para -v");
+                exit(1);
+            }
+
+            nomeDoArquivoVia = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
+            strcpy(nomeDoArquivoVia, argv[contador]);
+        }
         else if (strcmp("-i", argv[contador]) == 0)
         {
             interativo = 1;
@@ -185,6 +198,10 @@ int main(int argc, char *argv[])
             arquivoPm = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoPm) + 2));
             sprintf(arquivoPm, "%s/%s", caminhoDoArquivo, nomeDoArquivoPm);
         }
+        if(nomeDoArquivoVia != NULL){
+            arquivoVia = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoVia) + 2));
+            sprintf(arquivoVia, "%s/%s", caminhoDoArquivo, nomeDoArquivoVia);
+        }
 	}
     else
     {
@@ -204,6 +221,10 @@ int main(int argc, char *argv[])
             arquivoPm = malloc(sizeof(char)*(strlen(nomeDoArquivoPm) + 1));
             sprintf(arquivoPm, "%s", nomeDoArquivoPm);
         }
+        if(nomeDoArquivoVia != NULL){
+            arquivoVia = malloc(sizeof(char)*(strlen(nomeDoArquivoVia) + 1));
+            sprintf(arquivoVia, "%s", nomeDoArquivoVia);
+        }
 	}
 
 	prefixoDoArquivoGeo = (char *) malloc((strlen(nomeDoArquivoGeo)+1)*sizeof(char));	
@@ -222,6 +243,10 @@ int main(int argc, char *argv[])
     printf("Bloco do Geo inicializado\n");
 	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
     printf("Bloco do Geo finalizado\n");
+
+    printf("Bloco do Via inicializado\n");
+    Graph grafo = leiaVia(arquivoVia);
+    printf("Bloco do Via finalizado\n");
 
     if(arquivoEc != NULL){
         iniciaComercios(cidade, arquivoEc);
