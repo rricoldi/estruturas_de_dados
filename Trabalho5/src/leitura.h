@@ -22,7 +22,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 //Lê o arquivo qry e executa os comandos;
 //Pré-requisito: nome do arquivo, prefixo, cidade e arquivo de saída existem;
 //Pós condição: comandos do .qry executados.
-void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[]);
+void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[]);
 
 //Lê o arquivo ec;
 //Pré-requisito: arquivo e tabelas existem;

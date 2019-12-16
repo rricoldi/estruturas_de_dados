@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grafo.h"
+#include "svg.h"
 
 #define true 1
 #define false 0
 #define branco 0
 #define amarelo 1
 #define vermelho 2
-#define infinito 200000000
+#define infinito 2000000.0
 
 typedef struct adjacencia {
     int vertice;
@@ -192,7 +193,7 @@ void iniciaDijkstra(Grafo* grafo, double* distancia, int* pai, int noInicial) {
         distancia[i] = infinito;
         pai[i] = -1;
     }
-    distancia[noInicial] = 0;
+    distancia[noInicial] = 0.0;
 }
 
 void relaxaComprimento(Grafo* grafo, double* distancia, int* pai, int no1, int no2) {
@@ -239,11 +240,12 @@ bool existeAberto(Grafo* grafo, int* aberto) {
 }
 
 int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
-    int i, menor;
+    int i = 0, menor;
     
-    for(i = 0; i < grafo->numeroDeVertices; i++) {
+    while(i < grafo->numeroDeVertices) {
         if(aberto[i])
             break;
+        i++;
     }
     
     if(i == grafo->numeroDeVertices)
@@ -258,12 +260,17 @@ int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
     return menor;
 }
 
-double dijkstra(Grafo* grafo, int noInicial, int noFinal, int modo) {
+double dijkstra(Graph* graph, int noInicial, int noFinal, int modo) {
+    if(noInicial == -1 || noFinal == -1) {
+        printf("Os vertices nao foram encontrados");
+        exit(1);
+    }
+    Grafo* grafo = (Grafo*) graph;
     double* distancia = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
     int pai[grafo->numeroDeVertices], caminho[grafo->numeroDeVertices];
     int menor, aux, i;
     char* direcao, *direcaoAnterior;
-    bool aberto[grafo->numeroDeVertices];
+    int aberto[grafo->numeroDeVertices];
     Adjacencia* aresta;
     
     iniciaDijkstra(grafo, distancia, pai, noInicial);
@@ -298,6 +305,14 @@ double dijkstra(Grafo* grafo, int noInicial, int noFinal, int modo) {
         i--;
         aux = pai[aux];
     }
+    // iniciaSvg("output/c1.svg");
+    // for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+    //     if(caminho[i] == -1)
+    //         continue;
+
+    //     imprimirLinha2(grafo->arranjo[caminho[i]].x, grafo->arranjo[caminho[i]].y, grafo->arranjo[caminho[i+1]].x, grafo->arranjo[caminho[i+1]].y, "output/c1.svg");
+    // }
+    // finalizaSvg("output/c1.svg");
 
     direcaoAnterior = "direcaoAnterior";
 
@@ -313,14 +328,20 @@ double dijkstra(Grafo* grafo, int noInicial, int noFinal, int modo) {
             direcao = "Norte";
         else if(grafo->arranjo[caminho[i]].y > grafo->arranjo[caminho[i+1]].y)
             direcao = "Sul";
-        if(direcao == direcaoAnterior)
-            printf("Continue indo na direcao %s na Rua %s. ", direcao, aresta->nomeDaRua);
-        else
-            printf("Va para o %s na Rua %s. ", direcao, aresta->nomeDaRua);
 
+        // printf("%s %s %d\n", direcao, direcaoAnterior, contador);
+
+        if(direcaoAnterior == "direcaoAnterior") {
+            printf("Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);
+        }
+        else if(direcao != direcaoAnterior) {
+            printf("ate o cruzamento com a Rua %s. ", aresta->nomeDaRua);
+            printf("Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);        
+        }
+        
         direcaoAnterior = direcao;
     }
-
+    
     printf("Chegou em seu destino.\n");
 
     return distancia[noFinal];

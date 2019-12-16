@@ -31,4 +31,6 @@ bool getAtivo(Info info);
 
 void imprimeGrafo(Graph* graph);
 
+double dijkstra(Graph* graph, int noInicial, int noFinal, int modo);
+
 #endif

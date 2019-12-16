@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[])
+void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[])
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -882,6 +882,9 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 			break;
 		}
 	}
-	// imprimeGrafo(grafo);
+
+	// // (b0|2,2)(b0|3,2).0 (b0|8,5)(b0|7,5).0
+	// dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
+	// // imprimeGrafo(grafo);
 	return grafo;
 }
