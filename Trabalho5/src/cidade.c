@@ -1217,3 +1217,4 @@ void qry_ATgQM(char* id, Ponto* R, int index, Cidade cid){
             R[index] = criarPonto(retornaRX(info), retornaRY(info));
             break;
     }
+}
