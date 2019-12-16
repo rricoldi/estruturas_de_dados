@@ -126,4 +126,9 @@ void qry_nav(Cidade cid, char arvore);
 
 void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta poligono[], int tamPolig, Cidade);
 
+//Comandos @'algumacoisa'?
+void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade);
+void qry_ATeQM(char* cep, char face, int num, Ponto* R, int index, Cidade);
+void qry_ATgQM(char* id, Ponto* R, int index, Cidade);
+
 #endif

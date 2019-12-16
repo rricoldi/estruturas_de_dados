@@ -31,7 +31,7 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 	return strtok(nomeDoArquivo,".");
 }
 
-void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo, char* caminhoDoArquivo, Graph grafo){
+void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo, char* caminhoDoArquivo){
     
     char comando[9];
     char nomeDoArquivoQry[100];
@@ -39,8 +39,7 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
     char arvore;
     char *prefixoFinalDoArquivoQry = NULL;
     char *nomeFinalDoArquivoSvg = NULL;
-    svgXMax=0;
-    svgYMax=0;
+    
 
     while(1)
     {
@@ -54,7 +53,7 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
             sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
 
             printf("Bloco do Qry inicializado\n");
-            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida);
+            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, caminhoDoArquivoDeSaida);
             printf("Bloco do Qry finalizado\n");
         }
         else if(strcmp(comando, "dmprbt")==0){
@@ -95,8 +94,6 @@ int main(int argc, char *argv[])
     char *arquivoEc               = NULL;
     char *nomeDoArquivoPm         = NULL;
     char *arquivoPm               = NULL;
-    char *nomeDoArquivoVia        = NULL;
-    char *arquivoVia              = NULL;
 
     while(contador<argc)
     {
@@ -162,17 +159,6 @@ int main(int argc, char *argv[])
             nomeDoArquivoPm = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
             strcpy(nomeDoArquivoPm, argv[contador]);
         }
-        else if (strcmp("-v", argv[contador]) == 0)
-        {
-            contador++;
-            if (argv[contador] == NULL){    
-                printf("\n!Erro! Sem parametro para -v");
-                exit(1);
-            }
-
-            nomeDoArquivoVia = (char *)malloc((strlen(argv[contador])+1)*sizeof(char));
-            strcpy(nomeDoArquivoVia, argv[contador]);
-        }
         else if (strcmp("-i", argv[contador]) == 0)
         {
             interativo = 1;
@@ -198,10 +184,6 @@ int main(int argc, char *argv[])
             arquivoPm = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoPm) + 2));
             sprintf(arquivoPm, "%s/%s", caminhoDoArquivo, nomeDoArquivoPm);
         }
-        if(nomeDoArquivoVia != NULL){
-            arquivoVia = malloc(sizeof(char)*(strlen(caminhoDoArquivo) + strlen(nomeDoArquivoVia) + 2));
-            sprintf(arquivoVia, "%s/%s", caminhoDoArquivo, nomeDoArquivoVia);
-        }
 	}
     else
     {
@@ -220,10 +202,6 @@ int main(int argc, char *argv[])
         if(nomeDoArquivoPm != NULL){
             arquivoPm = malloc(sizeof(char)*(strlen(nomeDoArquivoPm) + 1));
             sprintf(arquivoPm, "%s", nomeDoArquivoPm);
-        }
-        if(nomeDoArquivoVia != NULL){
-            arquivoVia = malloc(sizeof(char)*(strlen(nomeDoArquivoVia) + 1));
-            sprintf(arquivoVia, "%s", nomeDoArquivoVia);
         }
 	}
 
@@ -244,10 +222,6 @@ int main(int argc, char *argv[])
 	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
     printf("Bloco do Geo finalizado\n");
 
-    printf("Bloco do Via inicializado\n");
-    Graph grafo = leiaVia(arquivoVia);
-    printf("Bloco do Via finalizado\n");
-
     if(arquivoEc != NULL){
         iniciaComercios(cidade, arquivoEc);
     }
@@ -262,7 +236,7 @@ int main(int argc, char *argv[])
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
         printf("Bloco do Qry inicializado\n");
-        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, grafo, caminhoDoArquivoDeSaida);
+        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, caminhoDoArquivoDeSaida);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)
@@ -276,7 +250,7 @@ int main(int argc, char *argv[])
 
     if(interativo)
     {
-        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, grafo, caminhoDoArquivo);
+        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, caminhoDoArquivo);
         free(nomeDoArquivoQry);
         free(prefixoDoAquivoQry);
         free(prefixoFinalDoQry);

@@ -7,8 +7,8 @@
 #include "leitura.h"
 #include "quadra.h"
 
-extern double svgXMax;
-extern double svgYMax;
+// extern double svgXMax;
+// extern double svgYMax;
 
 typedef struct city
 {
@@ -29,6 +29,7 @@ typedef struct city
     HashTable radio_cep;
     HashTable semaforo_cep;
     HashTable predio_cep;
+    HashTable predio_endereco;
     Tree arvoreCirculo;
     Tree arvoreRetangulo;
     Tree arvoreQuadra;
@@ -62,6 +63,7 @@ Cidade criarCidade()
     city->radio_cep = criaTabela(997);
     city->semaforo_cep = criaTabela(997);
     city->predio_cep = criaTabela(997);
+    city->predio_endereco = criaTabela(997);
     city->pessoas_cpf = NULL;
     city->moradiaPessoa_cep = NULL;
     city->moradias_cpf = NULL;
@@ -381,6 +383,10 @@ void adicionarPredio(Cidade cid, Info info)
     cidade *city = (cidade *)cid;
     insereRegistro(city->predio_cep, retornaPCep(info), info);
     insereNaArvore(&(city->arvorePredio), info);
+    char endereco[30];
+    sprintf(endereco, "%s/%c/%lf", retornaPCep(info), retornaPFace(info)[0], retornaPNumero(info));
+    insereRegistro(city->predio_endereco, endereco, info);
+    printf("ADDRESS: |%s|\n", endereco);
 }
 
 Predio getPredio(Cidade cid, char id[])
@@ -694,7 +700,7 @@ void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* colo
     int raio = distanciaPontosD(0, 0, svgXMax, svgYMax), quantRaios=1000, i=0;
     Reta linhaAtual = criarReta(x, y, svgXMax+100, svgYMax+100);
     Ponto* pontos = malloc(retaSizeof()*quantRaios);
-    Reta retaSvgXMin=criarReta(0, 0, 0, svgYMax), retaSvgYMin=criarReta(0, 0, svgXMax, 0);
+    Reta retaSvgXMin=criarReta(-1, -1, -1, svgYMax), retaSvgYMin=criarReta(-1, -1, svgXMax, -1);
     Reta retaSvgXMax=criarReta(svgXMax, 0, svgXMax, svgYMax), retaSvgYMax=criarReta(0, svgYMax, svgXMax, svgYMax);
 
     if(x>svgXMax || y>svgYMax){
@@ -1179,4 +1185,39 @@ void qry_nav(Cidade cid, char arvore)
         imprimeArvore(city->arvorePredio, navegaPredio);
     else if(arvore == 'm')
         imprimeArvore(city->arvoreMuro, navegaMuro);
+}
+
+void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade cid){
+    cidade *city = cid;
+    Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
+    char endereco[30];
+    sprintf(endereco, "%s/%c/%lf", moradiaGetCep(mor), moradiaGetFace(mor), (double)moradiaGetNum(mor));
+    printf("ENDERECO: |%s|\n", endereco);
+    Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);
+    if(pred)
+        R[index] = criarPonto(retornaPX(pred), retornaPY(pred));
+}
+void qry_ATeQM(char* cep, char face, int num, Ponto* R, int index, Cidade cid){
+    cidade *city = cid;
+    char endereco[30];
+    sprintf(endereco, "%s/%c/%d", cep, face, num);
+    Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);
+    if(pred)
+        R[index] = criarPonto(retornaPX(pred), retornaPY(pred));
+}
+void qry_ATgQM(char* id, Ponto* R, int index, Cidade cid){
+    cidade *city = cid;
+    int tipo;
+    Info info = procuraNaCidade(cid, id, &tipo, NULL, 0.0);
+    switch(tipo){
+        case 4:
+            R[index] = criarPonto(retornaHX(info), retornaHY(info));
+            break;
+        case 5:
+            R[index] = criarPonto(retornaSX(info), retornaSY(info));
+            break;
+        case 6:
+            R[index] = criarPonto(retornaRX(info), retornaRY(info));
+            break;
+    }
 }

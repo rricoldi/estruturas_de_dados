@@ -9,10 +9,8 @@
 #include "svg.h"
 #include "qry.h"
 #include "cidade.h"
-#include "hashTable.h"
-#include "geometria.h"
-#include "grafo.h"
-#include "listaDinamica.h"
+#include"hashTable.h"
+#include"geometria.h"
 
 //Lê o arquivo geo e retorna a cidade;
 //Pré-requisito: arquivo geo deve existir;
@@ -22,7 +20,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 //Lê o arquivo qry e executa os comandos;
 //Pré-requisito: nome do arquivo, prefixo, cidade e arquivo de saída existem;
 //Pós condição: comandos do .qry executados.
-void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[]);
+void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, char caminhoDoArquivoDeSaida[]);
 
 //Lê o arquivo ec;
 //Pré-requisito: arquivo e tabelas existem;
@@ -38,6 +36,4 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 //Pós condição: arquivo lido;
 //Nota: Todas as retas, tal como o vetor, são alocadas na memória, portanto deve ser dado um free() para cada reta e para o vetor.
 Reta* leiaPol(char* caminhoDoArquivo, char* nomeDoArquivoPoligono, int *array_size);
-
-Graph leiaVia(char* nomeDoArquivoVia);
 #endif

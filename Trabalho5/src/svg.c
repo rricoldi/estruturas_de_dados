@@ -6,13 +6,13 @@ void iniciaSvg(char nomeDoArquivoSvg[])
 {
     FILE *arquivoSvg;
     
-    arquivoSvg = fopen(nomeDoArquivoSvg, "w+");
+    arquivoSvg = fopen(nomeDoArquivoSvg, "w");
     if (arquivoSvg == NULL){ 
         printf("Nao foi possivel abrir o arquivo svg!\n");
         exit(1);
     }
     
-    fprintf(arquivoSvg, "<svg viewBox=\"0 0 0 0\"  xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">");
+    fprintf(arquivoSvg, "<svg>");
     
     fclose(arquivoSvg);
 }
@@ -114,21 +114,6 @@ void imprimirLinha(float x1, float y1, float x2, float y2, char svg[])
 	}
 
 	fprintf(arq, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:black\" />", x1, y1, x2, y2);
-
-    fclose(arq);
-}
-
-void imprimirLinha2(float x1, float y1, float x2, float y2, char svg[])
-{
-    FILE *arq;
-    
-    arq = fopen(svg, "a");
-    if (arq == NULL){
-        printf("Erro ao abrir o arquivo de saida");
-        exit(1);
-	}
-
-	fprintf(arq, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke-width:3;stroke:green;stroke-oppacity:0.1\" />", x1, y1, x2, y2);
 
     fclose(arq);
 }

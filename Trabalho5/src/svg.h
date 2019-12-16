@@ -26,7 +26,6 @@ void escreverNoSvg(float x, float y, char texto[], char svg[]);
 void imprimirElipse(char svg[], double cx, double cy, double rx, double ry, char corP[], char corB[], double espessura);
 void imprimirPredio(char svg[], double x, double y, double tamanhoDaFrente, double tamanhoDoLado, double xCalcada, double yCalcada, double xCalcadaMax, double yCalcadaMax, double numeroDoPredio, double xNum, double yNum);
 void imprimirLinha(float x1, float y1, float x2, float y2, char svg[]);
-void imprimirLinha2(float x1, float y1, float x2, float y2, char svg[]);
 void escreverDistancia(float x1, float y1, float x2, float y2, float distancia, char svg[]);
 void imprimirIncendio(double x, double y, char nomeDoArquivoSvg[]);
 
