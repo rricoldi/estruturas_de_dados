@@ -7,8 +7,8 @@
 #include "leitura.h"
 #include "quadra.h"
 
-extern double svgXMax;
-extern double svgYMax;
+// extern double svgXMax;
+// extern double svgYMax;
 
 typedef struct city
 {
@@ -700,7 +700,7 @@ void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* colo
     int raio = distanciaPontosD(0, 0, svgXMax, svgYMax), quantRaios=1000, i=0;
     Reta linhaAtual = criarReta(x, y, svgXMax+100, svgYMax+100);
     Ponto* pontos = malloc(retaSizeof()*quantRaios);
-    Reta retaSvgXMin=criarReta(0, 0, 0, svgYMax), retaSvgYMin=criarReta(0, 0, svgXMax, 0);
+    Reta retaSvgXMin=criarReta(-1, -1, -1, svgYMax), retaSvgYMin=criarReta(-1, -1, svgXMax, -1);
     Reta retaSvgXMax=criarReta(svgXMax, 0, svgXMax, svgYMax), retaSvgYMax=criarReta(0, svgYMax, svgXMax, svgYMax);
 
     if(x>svgXMax || y>svgYMax){

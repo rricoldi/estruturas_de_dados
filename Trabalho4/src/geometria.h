@@ -12,8 +12,8 @@ typedef void* Ponto;
 
 //  Constante usasda como epsilon na função nearlyEqual
 #define double_BAIXO 0.000001
-double svgXMax;
-double svgYMax;
+extern double svgXMax;
+extern double svgYMax;
 #define M_PI 3.14159265358979323846
 
 //  Retorna o tamanho em bytes da struct reta
