@@ -5,6 +5,9 @@
 #include"geometria.h"
 #include"qry.h"
 
+double svgXMax = -1;
+double svgYMax = -1;
+
 struct ponto{
     double x;
     double y;
