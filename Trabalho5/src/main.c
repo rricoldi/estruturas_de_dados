@@ -39,8 +39,6 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
     char arvore;
     char *prefixoFinalDoArquivoQry = NULL;
     char *nomeFinalDoArquivoSvg = NULL;
-    svgXMax=0;
-    svgYMax=0;
 
     while(1)
     {
