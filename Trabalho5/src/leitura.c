@@ -68,6 +68,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 
 	size_t bufsize = 32;
 	Info info;
+	Ponto R[11] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
 	iniciaSvg(nomeDoArquivoSvg);
 
@@ -630,6 +631,38 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			verificador++;
 		}
 	}
+	else if(strcmp("@m?", comando)==0){
+			char cpf[15], registrador[4];
+			fscanf(arquivoQry, "%3s %14s ", registrador, cpf);
+			int index = atoi(registrador+1);
+			if(index>=0 && index<=10){
+				qry_ATmQM(cpf, R, index, cidade);
+			}
+		}
+		else if(strcmp("@e?", comando)==0){
+			char cep[10], registrador[4], face;
+			int num;
+			fscanf(arquivoQry, "%3s %9s %c %d ", registrador, cep, &face, &num);
+			int index = atoi(registrador+1);
+			if(index>=0 && index<=10){
+				qry_ATeQM(cep, face, num, R, index, cidade);
+			}
+		}
+		else if(strcmp("@g?", comando)==0){
+			char registrador[4], id[20];
+			fscanf(arquivoQry, "%3s %19s ", registrador, id);
+			int index = atoi(registrador+1);
+			if(index>=0 && index<=10){
+				qry_ATgQM(id, R, index, cidade);
+			}
+		}
+		else if(strcmp("@xy", comando)==0){
+			char registrador[4];
+			double x, y;
+			fscanf(arquivoQry, "%3s %lf %lf ", registrador, &x, &y);
+			int index = atoi(registrador+1);
+			R[index] = criarPonto(x, y);
+		}
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
@@ -653,7 +686,11 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 	free(nomeDoArquivoSvg);
 	nomeDoArquivoSvg = NULL;
 	free(nomeDoArquivoTxt);
-	nomeDoArquivoTxt = NULL;	
+	nomeDoArquivoTxt = NULL;
+	for(int i=0;i<11;i++){
+		if(R[i])
+			pontoFinalizar(R[i]);
+	}
 
 	fclose(arquivoQry);
 }
