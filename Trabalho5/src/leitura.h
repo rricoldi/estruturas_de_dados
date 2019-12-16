@@ -9,8 +9,10 @@
 #include "svg.h"
 #include "qry.h"
 #include "cidade.h"
-#include"hashTable.h"
-#include"geometria.h"
+#include "hashTable.h"
+#include "geometria.h"
+#include "grafo.h"
+#include "listaDinamica.h"
 
 //Lê o arquivo geo e retorna a cidade;
 //Pré-requisito: arquivo geo deve existir;
@@ -36,4 +38,6 @@ void leiaPm(char* arquivoPm, HashTable pessoas, HashTable moradias, HashTable mo
 //Pós condição: arquivo lido;
 //Nota: Todas as retas, tal como o vetor, são alocadas na memória, portanto deve ser dado um free() para cada reta e para o vetor.
 Reta* leiaPol(char* caminhoDoArquivo, char* nomeDoArquivoPoligono, int *array_size);
+
+Graph leiaVia(char* nomeDoArquivoVia);
 #endif

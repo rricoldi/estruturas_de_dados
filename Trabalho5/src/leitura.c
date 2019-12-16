@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include "leitura.h"
-#include"cidade.h"
-#include"comercioPessoas.h"
-#include"geometria.h"
+#include "cidade.h"
+#include "comercioPessoas.h"
+#include "geometria.h"
 
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
@@ -813,4 +813,75 @@ Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* arr
 	free(nomeArqPol);
 	free(arrayPontos);
 	return arrayRetas;
+}
+
+Graph leiaVia(char* nomeDoArquivoVia) {
+	FILE* arquivoVia;
+
+	List lista;
+	Graph grafo;
+
+	char comando = 'v';
+	char id[100];
+	char nome[100];
+	char ladoDireito[100];
+	char ladoEsquerdo[100];
+	char v1[100];
+	char v2[100];
+	char nomeDaRua[100];
+
+	double x, y, comprimento, velocidade;
+
+	printf("nome do arquivo: %s\n", nomeDoArquivoVia);
+
+	arquivoVia = fopen(nomeDoArquivoVia, "r");
+	if(!arquivoVia){
+		printf("Erro ao abrir o arquivo pm \'%s\'\n", nomeDoArquivoVia);
+		exit(1);
+	}
+
+	lista = criaLista();
+
+	while (1)
+	{
+		fscanf(arquivoVia, "\n%c", &comando);
+		if (feof(arquivoVia))
+			break;
+		
+		if ('v' == comando) {
+			fscanf(arquivoVia, "%s %lf %lf", id, &x, &y);
+			criaNoListaDinamica(lista, id, x, y);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	grafo = criaGrafo(getTamanho(lista));
+	insereVertice(grafo, lista);
+
+	if ('e' == comando) {
+		fscanf(arquivoVia, "%s %s %s %s %lf %lf %s", v1, v2, ladoDireito, ladoEsquerdo, &comprimento, &velocidade, nomeDaRua);
+		insereAresta(grafo, getIndiceVertice(grafo, v1), getIndiceVertice(grafo, v2), ladoDireito, ladoEsquerdo, comprimento, velocidade, nomeDaRua);
+	}
+
+	while (1)
+	{
+		fscanf(arquivoVia, "\n%c", &comando);
+
+		if (feof(arquivoVia))
+			break;
+		
+		if ('e' == comando) {
+			fscanf(arquivoVia, "%s %s %s %s %lf %lf %s", v1, v2, ladoDireito, ladoEsquerdo, &comprimento, &velocidade, nomeDaRua);
+			insereAresta(grafo, getIndiceVertice(grafo, v1), getIndiceVertice(grafo, v2), ladoDireito, ladoEsquerdo, comprimento, velocidade, nomeDaRua);
+		}
+		else
+		{
+			break;
+		}
+	}
+	// imprimeGrafo(grafo);
+	return grafo;
 }
