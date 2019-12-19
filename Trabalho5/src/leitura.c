@@ -674,19 +674,17 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			int index1 = atoi(registrador1+1);
 			int index2 = atoi(registrador2+1);
 
-			
-			// 95, 95 1445 1045
+			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
+			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoQry, sufixoDoArquivo);
 
-			
-			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
-			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoDeSaida, sufixoDoArquivo);
-
-			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
-			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoDeSaida, sufixoDoArquivo);
+			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
+			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoQry, sufixoDoArquivo);
 			iniciaSvg(arquivoDeSaidaGrafoSvg);
 			imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
 			imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
-			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), 95, 95), retornaIndiceVertice(getLista(grafo), 1445, 1045), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido);
+			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 1);
+			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 2);
+			finalizaSvg(arquivoDeSaidaGrafoSvg);
 			verificador = 0;
 			verificador2 = 1;
 		}
