@@ -31,6 +31,8 @@ bool getAtivo(Info info);
 
 void setLista(Graph* graph, List* lista);
 
+List* getLista(Graph* graph);
+
 void imprimeGrafo(Graph* graph);
 
 double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[]);

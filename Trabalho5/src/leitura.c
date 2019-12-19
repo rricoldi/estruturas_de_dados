@@ -676,16 +676,18 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			int index2 = atoi(registrador2+1);
 
 			
+			// 95, 95 1445 1045
+
+			
 			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
 			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoDeSaida, sufixoDoArquivo);
 
 			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
 			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoDeSaida, sufixoDoArquivo);
-
 			iniciaSvg(arquivoDeSaidaGrafoSvg);
 			imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
 			imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
-			dijkstra(grafo, 342, 405, arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido);
+			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), 95, 95), retornaIndiceVertice(getLista(grafo), 1445, 1045), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido);
 			verificador = 0;
 			verificador2 = 1;
 		}
@@ -924,9 +926,10 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 	}
 
 	grafo = criaGrafo(getTamanho(lista));
-	setLista(grafo, lista);
 
 	insereVertice(grafo, lista);
+
+	setLista(grafo, lista);
 
 	if ('e' == comando) {
 		fscanf(arquivoVia, "%s %s %s %s %lf %lf %s", v1, v2, ladoDireito, ladoEsquerdo, &comprimento, &velocidade, nomeDaRua);

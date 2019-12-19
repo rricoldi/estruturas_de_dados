@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "listaDinamica.h"
+#include "qry.h"
 
 typedef struct no {
     struct no *prox;
@@ -78,5 +79,24 @@ void insereVertice(Graph grafo, List list) {
         no = no->prox;
     }
 
-    excluirLista(list);
+    // excluirLista(list);
+}
+
+int retornaIndiceVertice(List* list, double x, double y) {
+    Listaligada* lista = (Listaligada*) list;
+    No* no = lista->inicio;
+    double menorDistancia;
+    int index = 0, menorIndex = 0;
+
+
+    menorDistancia = distanciaPontos(criarPonto(no->x, no->y), criarPonto(x, y));
+    while(index < lista->tamanho - 1) {
+        index++;
+        no = no->prox;
+        if(distanciaPontos(criarPonto(no->x, no->y), criarPonto(x, y)) < menorDistancia) {
+            menorDistancia = distanciaPontos(criarPonto(no->x, no->y), criarPonto(x, y));
+            menorIndex = index;
+        }
+    }
+    return menorIndex;
 }

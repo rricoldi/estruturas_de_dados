@@ -121,6 +121,11 @@ void setLista(Graph* graph, List* lista) {
     grafo->lista = lista;
 }
 
+List* getLista(Graph* graph) {
+    Grafo* grafo = (Grafo*) graph;
+    return grafo->lista;
+}
+
 void defineInfoAresta(Graph* graph, int noInicial, int noFinal, char nomeDaRua[], char ladoDireito[], char ladoEsquerdo[], double comprimento, double velocidade) {
     Grafo* grafo = (Grafo*) graph;
     Adjacencia *aresta = grafo->arranjo[noInicial].inicio;
@@ -230,7 +235,6 @@ void relaxaVelocidade(Grafo* grafo, double* distancia, int* pai, int no1, int no
         aresta = aresta->proximo;
 
     if(aresta) {
-        // printf("%lf %lf\t", aresta->velocidade, aresta->comprimento);
         if(distancia[no2] > distancia[no1] + (aresta->velocidade)) {
             distancia[no2] = distancia[no1] + (aresta->velocidade);
             pai[no2] = no1;
@@ -375,36 +379,23 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
     } 
 }
 
-void imprimeGrafo(Graph* graph) {
-        Grafo* grafo = (Grafo*) graph;
-    if (grafo == NULL) {
-        printf("Grafo vazio!\n");
-        return;
-    }
+// void imprimeGrafo(Graph* graph) {
+//         Grafo* grafo = (Grafo*) graph;
+//     if (grafo == NULL) {
+//         printf("Grafo vazio!\n");
+//         return;
+//     }
 
-    printf("Vertices: %d. Arestas: %d.\n", grafo->numeroDeVertices, grafo->numeroDeArestas);
+//     printf("Vertices: %d. Arestas: %d.\n", grafo->numeroDeVertices, grafo->numeroDeArestas);
 
-    for(int i = 0; i < grafo->numeroDeVertices; i++) {
-        printf("v%d: ", i);
-        Adjacencia *adjacencia = grafo->arranjo[i].inicio;
-        while(adjacencia) {
-            printf("v%d ", adjacencia->vertice);
+//     for(int i = 0; i < grafo->numeroDeVertices; i++) {
+//         printf("v%d: ", i);
+//         Adjacencia *adjacencia = grafo->arranjo[i].inicio;
+//         while(adjacencia) {
+//             printf("v%d ", adjacencia->vertice);
 
-            adjacencia = adjacencia->proximo;
-        }
-        printf("\n");
-    }
-}
-
-// int grafos() {
-//     // Grafo* grafo = criaGrafo(8);
-
-//     // defineInfoVertice(grafo, 0, "0", 10.0, 10.0);
-
-//     // insereAresta(grafo, 0, 1, "–", "cep1", 1, 1, "A");
-
-//     // double r = dijkstra(grafo, 0, 4, 1);
-
-//     return 0;
-
+//             adjacencia = adjacencia->proximo;
+//         }
+//         printf("\n");
+//     }
 // }

@@ -13,4 +13,6 @@ int getTamanho(List* list);
 
 void insereVertice(Graph grafo, List list);
 
+int retornaIndiceVertice(List* list, double x, double y);
+
 #endif
