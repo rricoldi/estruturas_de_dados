@@ -7,6 +7,12 @@
 #include "comercioPessoas.h"
 #include "geometria.h"
 
+typedef struct pBombas{
+	Reta* bomba;
+	int tamBomba;
+	struct pBombas *next;
+}Bomba;
+
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
 	FILE *arquivoGeo;
@@ -301,6 +307,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 	
 	Info info1 = 0, info2 = 0;
 	Ponto R[11] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+	Bomba* brns = NULL;
 
 	FILE *arquivoQry;
 	printf("%s\n", nomeDoArquivoQry);
@@ -547,20 +554,26 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			}
 			
 			qry_bombaRadiacaoLum(cidade, brlX, brlY, nomeDoArquivoSvg);
+
 		}
 		else if(strcmp("brn", comando)==0){
 			double brnX, brnY;
 			char arqPol[51];
+			int tamBomba;
 			fscanf(arquivoQry, "%lf %lf %50s ", &brnX, &brnY, arqPol);
 			
 			if(verificador2 == 0){
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
-				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				imprimeCidade(cidade, nomeDoArquivoSvg);
+				imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
 				verificador2++;
 			}
-
-			qry_bombaRadiacaoNuc(cidade, brnX, brnY, nomeDoArquivoSvg, nomeDoArquivoTxt, arqPol, caminhoDoArquivoDeEntrada);
+			Bomba* atual = malloc(sizeof(Bomba));
+			atual->next = brns;
+			brns = atual;
+			atual->bomba = qry_bombaRadiacaoNuc(cidade, brnX, brnY, nomeDoArquivoSvg, nomeDoArquivoTxt, arqPol, caminhoDoArquivoDeEntrada, &tamBomba);
+			atual->tamBomba = tamBomba;
 		}
 		else if(strcmp("mplg?", comando)==0){
 			char arqPol[51];
@@ -706,6 +719,8 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 		}
 		finalizaSvg(nomeDoArquivoSvg);
 	}
+	if(verificador2 != 0)
+		finalizaSvg(nomeDoArquivoSvg);
 
 	if (verificador == 84)
 		remove(nomeDoArquivoSvg);
