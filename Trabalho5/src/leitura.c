@@ -682,12 +682,12 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
 			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoDeSaida, sufixoDoArquivo);
 
-			printf("%d %d\n", index1, index2);
 			iniciaSvg(arquivoDeSaidaGrafoSvg);
 			imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
 			imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
-			
-
+			dijkstra(grafo, 342, 405, arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido);
+			verificador = 0;
+			verificador2 = 1;
 		}
 	}
 	if(verificador != 0 && verificador2 == 0){
@@ -705,9 +705,9 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			remove(tempFileName);
 			fclose(arquivoSvg);
 		}
+		finalizaSvg(nomeDoArquivoSvg);
 	}
 
-	finalizaSvg(nomeDoArquivoSvg);
 	if (verificador == 84)
 		remove(nomeDoArquivoSvg);
 
@@ -951,7 +951,7 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 	}
 
 	// (b0|2,2)(b0|3,2).0 (b0|8,5)(b0|7,5).0
-	dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
+	// dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
 	// imprimeGrafo(grafo);
 	return grafo;
 }

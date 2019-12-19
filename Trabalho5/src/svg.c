@@ -118,7 +118,7 @@ void imprimirLinha(float x1, float y1, float x2, float y2, char svg[])
     fclose(arq);
 }
 
-void imprimirLinha2(float x1, float y1, float x2, float y2, char svg[])
+void imprimirLinha2(float x1, float y1, float x2, float y2, char cor[], char svg[])
 {
     FILE *arq;
     
@@ -128,7 +128,7 @@ void imprimirLinha2(float x1, float y1, float x2, float y2, char svg[])
         exit(1);
 	}
 
-	fprintf(arq, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke-width:3;stroke:green;stroke-oppacity:0.1\" />", x1, y1, x2, y2);
+	fprintf(arq, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke-width:3;stroke:%s;stroke-oppacity:0.1\" />", x1, y1, x2, y2, cor);
 
     fclose(arq);
 }

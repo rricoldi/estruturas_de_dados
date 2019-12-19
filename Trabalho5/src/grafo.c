@@ -230,8 +230,9 @@ void relaxaVelocidade(Grafo* grafo, double* distancia, int* pai, int no1, int no
         aresta = aresta->proximo;
 
     if(aresta) {
-        if(distancia[no2] > distancia[no1] + (aresta->comprimento/aresta->velocidade)) {
-            distancia[no2] = distancia[no1] + aresta->comprimento/aresta->velocidade;
+        // printf("%lf %lf\t", aresta->velocidade, aresta->comprimento);
+        if(distancia[no2] > distancia[no1] + (aresta->velocidade)) {
+            distancia[no2] = distancia[no1] + (aresta->velocidade);
             pai[no2] = no1;
         }
     }
@@ -267,91 +268,111 @@ int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
     return menor;
 }
 
-double dijkstra(Graph* graph, int noInicial, int noFinal, int modo) {
+double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[]) {
     if(noInicial == -1 || noFinal == -1) {
         printf("Os vertices nao foram encontrados");
         exit(1);
     }
-    Grafo* grafo = (Grafo*) graph;
-    double* distancia = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
-    int pai[grafo->numeroDeVertices], caminho[grafo->numeroDeVertices];
-    int menor, aux, i;
-    char* direcao, *direcaoAnterior;
-    int aberto[grafo->numeroDeVertices];
-    Adjacencia* aresta;
+
+    int modo;
     
-    iniciaDijkstra(grafo, distancia, pai, noInicial);
-
-    for(i = 0; i < grafo->numeroDeVertices; i++) 
-        aberto[i] = true;
-
-    while (existeAberto(grafo, aberto))
-    {
-        menor = menorDistancia(grafo, aberto, distancia);
-        aberto[menor] = false;
-
-        aresta = grafo->arranjo[menor].inicio;
-        while(aresta) {
-            if(modo == 2)
-                relaxaVelocidade(grafo, distancia, pai, menor, aresta->vertice);
-            else
-                relaxaComprimento(grafo, distancia, pai, menor, aresta->vertice);
-                
-            aresta = aresta->proximo;
-        }
-    }
-
-    aux = noFinal;
-
-    for(i = 0; i < grafo->numeroDeVertices; i++)
-        caminho[i] = -1;
-
-    i = grafo->numeroDeVertices-1;
-    while(aux != -1) {
-        caminho[i] = aux;
-        i--;
-        aux = pai[aux];
-    }
-    // iniciaSvg("output/c1.svg");
-    // for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
-    //     if(caminho[i] == -1)
-    //         continue;
-
-    //     imprimirLinha2(grafo->arranjo[caminho[i]].x, grafo->arranjo[caminho[i]].y, grafo->arranjo[caminho[i+1]].x, grafo->arranjo[caminho[i+1]].y, "output/c1.svg");
-    // }
-    // finalizaSvg("output/c1.svg");
-
-    direcaoAnterior = "direcaoAnterior";
-
-    for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
-        if(caminho[i] == -1)
-            continue;
-        aresta = (Adjacencia*) getInfoAresta(grafo, caminho[i], caminho[i+1]);
-        if(grafo->arranjo[caminho[i]].x < grafo->arranjo[caminho[i+1]].x)
-            direcao = "Oeste";
-        else if(grafo->arranjo[caminho[i]].x > grafo->arranjo[caminho[i+1]].x)
-            direcao = "Leste";
-        else if(grafo->arranjo[caminho[i]].y < grafo->arranjo[caminho[i+1]].y)
-            direcao = "Norte";
-        else if(grafo->arranjo[caminho[i]].y > grafo->arranjo[caminho[i+1]].y)
-            direcao = "Sul";
-
-        // printf("%s %s %d\n", direcao, direcaoAnterior, contador);
-
-        if(direcaoAnterior == "direcaoAnterior") {
-            printf("Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);
-        }
-        else if(direcao != direcaoAnterior) {
-            printf("ate o cruzamento com a Rua %s. ", aresta->nomeDaRua);
-            printf("Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);        
-        }
+    for(modo = 1; modo <= 2; modo++){
+        FILE* arquivoTxt = fopen(nomeDoArquivoTxt, "a+");
+        Grafo* grafo = (Grafo*) graph;
+        double* distancia = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
+        int pai[grafo->numeroDeVertices], caminho[grafo->numeroDeVertices];
+        int menor, aux, i;
+        char* direcao, *direcaoAnterior;
+        int aberto[grafo->numeroDeVertices];
+        Adjacencia* aresta;
         
-        direcaoAnterior = direcao;
-    }
-    
-    printf(". Chegou em seu destino.\n");
+        
+        iniciaDijkstra(grafo, distancia, pai, noInicial);
 
-    return distancia[noFinal];
+        for(i = 0; i < grafo->numeroDeVertices; i++) 
+            aberto[i] = true;
+
+        while (existeAberto(grafo, aberto))
+        {
+            menor = menorDistancia(grafo, aberto, distancia);
+            aberto[menor] = false;
+
+            aresta = grafo->arranjo[menor].inicio;
+            while(aresta) {
+                if(modo == 2)
+                    relaxaVelocidade(grafo, distancia, pai, menor, aresta->vertice);
+                else
+                    relaxaComprimento(grafo, distancia, pai, menor, aresta->vertice);
+                    
+                aresta = aresta->proximo;
+            }
+        }
+
+        aux = noFinal;
+
+        for(i = 0; i < grafo->numeroDeVertices; i++)
+            caminho[i] = -1;
+
+        i = grafo->numeroDeVertices-1;
+        while(aux != -1) {
+            caminho[i] = aux;
+            i--;
+            aux = pai[aux];
+        }
+        for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+            if(caminho[i] == -1)
+                continue;
+
+            if(modo == 1)
+                imprimirLinha2(grafo->arranjo[caminho[i]].x, grafo->arranjo[caminho[i]].y, grafo->arranjo[caminho[i+1]].x, grafo->arranjo[caminho[i+1]].y, cor1, nomeDoArquivoSvg);
+            else
+                imprimirLinha2(grafo->arranjo[caminho[i]].x - 4, grafo->arranjo[caminho[i]].y - 4, grafo->arranjo[caminho[i+1]].x - 4, grafo->arranjo[caminho[i+1]].y - 4, cor2, nomeDoArquivoSvg);
+        }
+        if(modo == 2)
+            finalizaSvg(nomeDoArquivoSvg);
+
+        if(modo == 1)
+            fprintf(arquivoTxt, "Caminho mais curto: ");
+        else
+            fprintf(arquivoTxt, "Caminho mais rapido: ");
+
+
+        direcaoAnterior = "direcaoAnterior";
+
+        for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+            if(caminho[i] == -1)
+                continue;
+            aresta = (Adjacencia*) getInfoAresta(grafo, caminho[i], caminho[i+1]);
+            if(grafo->arranjo[caminho[i]].x < grafo->arranjo[caminho[i+1]].x)
+                direcao = "Oeste";
+            else if(grafo->arranjo[caminho[i]].x > grafo->arranjo[caminho[i+1]].x)
+                direcao = "Leste";
+            else if(grafo->arranjo[caminho[i]].y < grafo->arranjo[caminho[i+1]].y)
+                direcao = "Norte";
+            else if(grafo->arranjo[caminho[i]].y > grafo->arranjo[caminho[i+1]].y)
+                direcao = "Sul";
+
+            // printf("%s %s %d\n", direcao, direcaoAnterior, contador);
+            if(direcaoAnterior == "direcaoAnterior") {
+                fprintf(arquivoTxt, "Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);
+            }
+            else if(direcao != direcaoAnterior) {
+                fprintf(arquivoTxt, "ate o cruzamento com a Rua %s. ", aresta->nomeDaRua);
+                fprintf(arquivoTxt, "Siga na direcao %s na Rua %s ", direcao, aresta->nomeDaRua);        
+            }
+            
+            direcaoAnterior = direcao;
+        }
+        if(strcmp(direcaoAnterior, "direcaoAnterior") == 0){
+            fprintf(arquivoTxt, "Nao ha caminho entre esses dois pontos.\n");        
+        } else {
+            fprintf(arquivoTxt, ". Chegou em seu destino.\n");
+        }
+        fclose(arquivoTxt);
+
+        if(modo == 2)
+            return distancia[noFinal];
+    } 
 }
 
 void imprimeGrafo(Graph* graph) {

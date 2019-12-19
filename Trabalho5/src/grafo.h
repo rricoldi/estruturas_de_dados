@@ -33,6 +33,6 @@ void setLista(Graph* graph, List* lista);
 
 void imprimeGrafo(Graph* graph);
 
-double dijkstra(Graph* graph, int noInicial, int noFinal, int modo);
+double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[]);
 
 #endif
