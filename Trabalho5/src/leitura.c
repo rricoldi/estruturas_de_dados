@@ -639,7 +639,6 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 				}
 			}
 		else if(strcmp("@e?", comando)==0){
-			scanf("%d", numeroDeSemaforos);
 			char cep[10], registrador[4], face;
 			int num;
 			fscanf(arquivoQry, "%3s %9s %c %d ", registrador, cep, &face, &num);

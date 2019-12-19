@@ -383,6 +383,7 @@ void adicionarPredio(Cidade cid, Info info)
     char endereco[30];
     sprintf(endereco, "%s/%c/%lf", retornaPCep(info), retornaPFace(info)[0], retornaPNumero(info));
     insereRegistro(city->predio_endereco, endereco, info);
+    // printf("address: %s\n", endereco);
 }
 
 Predio getPredio(Cidade cid, char id[])
@@ -733,8 +734,10 @@ void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* colo
     fprintf(svg, "\n\t<polygon points=\"");
     for(int i=0;i<quantRaios;i++){
         if(i>0 && i<quantRaios-1){
-            if(verificaOrientacao(pontos[i], pontos[i-1], pontos[i+1])!=0)
+            if(verificaOrientacao(pontos[i], pontos[i-1], pontos[i+1])!=0){
                 fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
+
+            }
             pontoFinalizar(pontos[i-1]);
         }else{
             fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
@@ -1197,7 +1200,7 @@ void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade cid){
 void qry_ATeQM(char* cep, char face, int num, Ponto* R, int index, Cidade cid){
     cidade *city = cid;
     char endereco[30];
-    sprintf(endereco, "%s/%c/%d", cep, face, num);
+    sprintf(endereco, "%s/%c/%lf", cep, face, (double)num);
     if(!endereco)
         return;
     Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);
