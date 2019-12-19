@@ -7,6 +7,12 @@
         "cidade.h": "c",
         "string.h": "c",
         "comerciopessoas.h": "c",
-        "thread": "c"
+        "thread": "c",
+        "svg.h": "c",
+        "hashtable.h": "c",
+        "lista.h": "c",
+        "qry.h": "c",
+        "arvore.h": "c",
+        "geometria.h": "c"
     }
 }

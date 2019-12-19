@@ -46,13 +46,15 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
         scanf("%s", comando);
         if(strcmp(comando, "q")==0){
             scanf("%s", nomeDoArquivoQry);
+            char* prefixoDoArquivoDeSaida = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6)*sizeof(char));
+            sprintf(prefixoDoArquivoDeSaida, "%s/%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
 
             // interativoQ(argumento1, cidade);
             prefixoFinalDoArquivoQry = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6+strlen(retornarPrefixoDoArquivo(nomeDoArquivoQry)))*sizeof(char));
             sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
 
             printf("Bloco do Qry inicializado\n");
-            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida);
+            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida);
             printf("Bloco do Qry finalizado\n");
         }
         else if(strcmp(comando, "dmprbt")==0){
@@ -256,11 +258,14 @@ int main(int argc, char *argv[])
     if(nomeDoArquivoQry != NULL)
     {
         //    ARRUMA O PREFIXO DO NOME DO ARQUIVO QRY
-        prefixoFinalDoQry = (char *) malloc((strlen(nomeDoArquivoSvg)+strlen(prefixoDoAquivoQry)+strlen(caminhoDoArquivoDeSaida)+6)*sizeof(char));
+        prefixoFinalDoQry = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+strlen(prefixoDoAquivoQry)+6)*sizeof(char));
         sprintf(prefixoFinalDoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, prefixoDoAquivoQry);
 
+        char* prefixoDoArquivoDeSaida = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6)*sizeof(char));
+        sprintf(prefixoDoArquivoDeSaida, "%s/%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
+
         printf("Bloco do Qry inicializado\n");
-        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, grafo, caminhoDoArquivoDeSaida);
+        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida);
         printf("Bloco do Qry finalizado\n");
 
         if(!interativo)

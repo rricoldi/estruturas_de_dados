@@ -1,9 +1,7 @@
 #ifndef __LISTADINAMICA_H
 #define __LISTADINAMICA_H
 
-#include "grafo.h"
-
-typedef void* List;
+#include "tipos.h"
 
 List* criaLista();
 

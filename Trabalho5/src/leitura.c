@@ -268,7 +268,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[])
+void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[], char prefixoDoArquivoDeSaida[])
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -639,6 +639,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 				}
 			}
 		else if(strcmp("@e?", comando)==0){
+			scanf("%d", numeroDeSemaforos);
 			char cep[10], registrador[4], face;
 			int num;
 			fscanf(arquivoQry, "%3s %9s %c %d ", registrador, cep, &face, &num);
@@ -648,6 +649,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			}
 		}
 		else if(strcmp("@g?", comando)==0){
+			scanf("%d", numeroDeSemaforos);
 			char registrador[4], id[20];
 			fscanf(arquivoQry, "%3s %19s ", registrador, id);
 			int index = atoi(registrador+1);
@@ -661,6 +663,27 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			fscanf(arquivoQry, "%3s %lf %lf ", registrador, &x, &y);
 			int index = atoi(registrador+1);
 			R[index] = criarPonto(x, y);
+		}
+		else if(strcmp("p?", comando)==0) {
+			char corMaisCurto[20];
+			char corMaisRapido[20];
+			char registrador1[4];
+			char registrador2[4];
+			char sufixoDoArquivo[100];
+
+			fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
+			int index1 = atoi(registrador1+1);
+			int index2 = atoi(registrador2+1);
+			
+			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
+			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoDeSaida, sufixoDoArquivo);
+
+			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
+			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoDeSaida, sufixoDoArquivo);
+
+			printf("%s %s\n", arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt);
+			// getPontoX(R[index1]);
+
 		}
 	}
 	if(verificador != 0 && verificador2 == 0){
@@ -896,6 +919,8 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 	}
 
 	grafo = criaGrafo(getTamanho(lista));
+	setLista(grafo, lista);
+
 	insereVertice(grafo, lista);
 
 	if ('e' == comando) {
@@ -920,8 +945,8 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 		}
 	}
 
-	// // (b0|2,2)(b0|3,2).0 (b0|8,5)(b0|7,5).0
-	// dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
-	// // imprimeGrafo(grafo);
+	// (b0|2,2)(b0|3,2).0 (b0|8,5)(b0|7,5).0
+	dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
+	// imprimeGrafo(grafo);
 	return grafo;
 }

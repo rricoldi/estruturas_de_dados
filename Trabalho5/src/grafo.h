@@ -1,9 +1,9 @@
 #ifndef __GRAFO_H
 #define __GRAFO_H
 
-#include "cidade.h"
-
-typedef void* Graph;
+#include "leitura.h"
+#include "listaDinamica.h"
+#include "tipos.h"
 
 Graph *criaGrafo(int numeroDeVertices);
 
@@ -28,6 +28,8 @@ char* getID(Info info);
 int getIndiceVertice(Graph* graph, char id[]);
 
 bool getAtivo(Info info);
+
+void setLista(Graph* graph, List* lista);
 
 void imprimeGrafo(Graph* graph);
 

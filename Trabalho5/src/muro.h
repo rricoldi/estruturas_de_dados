@@ -4,10 +4,9 @@
 #include <stdarg.h>
 #include "svg.h"
 #include"geometria.h"
+#include "tipos.h"
 
 //Todas as funções de objetos são analogas às funções em circulo.h
-
-typedef void *Muro;
 
 Muro criarMuro(double x1, double x2, double y1, double y2);
 void muroFinalizar(Muro);

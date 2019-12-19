@@ -11,8 +11,8 @@
 #include "cidade.h"
 #include "hashTable.h"
 #include "geometria.h"
+#include "tipos.h"
 #include "grafo.h"
-#include "listaDinamica.h"
 
 //Lê o arquivo geo e retorna a cidade;
 //Pré-requisito: arquivo geo deve existir;
@@ -22,11 +22,11 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[]);
 //Lê o arquivo qry e executa os comandos;
 //Pré-requisito: nome do arquivo, prefixo, cidade e arquivo de saída existem;
 //Pós condição: comandos do .qry executados.
-void leiaQry(char caminhoDoArquivoEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[]);
+void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[], char prefixoDoArquivoDeSaida[]);
 
 //Lê o arquivo ec;
 //Pré-requisito: arquivo e tabelas existem;
-//Pós condição: tabelas populadas com os tipos e estabelecimentos do arquivo;
+//Pós condição: tabelas populadas comcompopuladascompopuladaspopuladas os tipos e estabelecimentos do arquivo;
 void leiaEc(char* arquivoEc, HashTable comercios, HashTable tiposComercio, HashTable comercios_cpf);
 //Lê o arquivo pm;
 //Pré-requisito: arquivo e tabelas existem;

@@ -3,6 +3,7 @@
 
 #include "lista.h"
 #include "arvore.h"
+#include "tipos.h"
 #include "hashTable.h"
 #include "svg.h"
 
@@ -12,8 +13,6 @@
     Aqui implementamos uma cidade onde todas as listas estao, aqui podemos inicia-las, remove-las, e eh ponte para todas as funcoes envolvendo as listas e os seus elementos 
     Tambem eh utilizada para resolver alguns problemas do Qry, e para conseguir os valores de uma determinada forma
 */
-
-typedef void *Cidade;
 
 //Cria as estruturas de dados de uma cidade;
 //Pós condição: retorna uma Cidade.

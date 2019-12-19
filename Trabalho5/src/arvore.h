@@ -14,12 +14,7 @@
 #include "muro.h"
 #include "hashTable.h"
 #include "qry.h"
-
-
-
-typedef void *Info;
-typedef void *Node;
-typedef void *Tree;
+#include "tipos.h"
 
 //Cria uma arvore vazia, e define sua folha (nil);
 //Pré-requisito: uma função que recebe dois Infos e retorna a subtracao de um pelo outro;

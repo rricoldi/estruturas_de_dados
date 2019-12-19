@@ -32,19 +32,21 @@ typedef struct grafo {
     int numeroDeVertices;
     int numeroDeArestas;
     Vertice *arranjo;
+    List *lista;
 } Grafo;
 
 Graph *criaGrafo(int numeroDeVertices) {
-    Grafo *g = (Grafo *) malloc(sizeof(Grafo));
-    g->numeroDeVertices = numeroDeVertices;
-    g->numeroDeArestas = 0;
-    g->arranjo = (Vertice *) malloc(numeroDeVertices*sizeof(Vertice));
+    Grafo *grafo = (Grafo *) malloc(sizeof(Grafo));
+    grafo->numeroDeVertices = numeroDeVertices;
+    grafo->numeroDeArestas = 0;
+    grafo->arranjo = (Vertice *) malloc(numeroDeVertices*sizeof(Vertice));
+    grafo->lista = criaLista();
     
     for(int i = 0; i<numeroDeVertices; i++) {
-        g->arranjo[i].inicio = NULL;
-        g->arranjo[i].ativo = true;
+        grafo->arranjo[i].inicio = NULL;
+        grafo->arranjo[i].ativo = true;
     }
-    return g;
+    return grafo;
 }
 
 Adjacencia *criaAdjacencia(int noFinal, char nomeDaRua[], char ladoDireito[], char ladoEsquerdo[], double comprimento, double velocidade) {
@@ -112,6 +114,11 @@ int getIndiceVertice(Graph* graph, char id[]) {
 bool getAtivo(Info info) {
     Vertice* vertice = (Vertice*) info;
     return vertice->ativo;
+}
+
+void setLista(Graph* graph, List* lista) {
+    Grafo* grafo = (Grafo*) graph;
+    grafo->lista = lista;
 }
 
 void defineInfoAresta(Graph* graph, int noInicial, int noFinal, char nomeDaRua[], char ladoDireito[], char ladoEsquerdo[], double comprimento, double velocidade) {
@@ -342,7 +349,7 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, int modo) {
         direcaoAnterior = direcao;
     }
     
-    printf("Chegou em seu destino.\n");
+    printf(". Chegou em seu destino.\n");
 
     return distancia[noFinal];
 }
