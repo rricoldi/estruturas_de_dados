@@ -76,6 +76,8 @@ int insereRegistro(HashTable tab, char* key, Info info){
 
 bool existeChave(HashTable tab, char* key){
     struct tabela *essa = tab;
+    printf("%s\n", key);
+    printf("%d", essa->tamanho);
     int posic = hashFunction(key, essa->tamanho);
     if(essa->reg[posic].reg == NULL){
         return false;
@@ -92,7 +94,7 @@ Info getPrimeiroRegistro(HashTable tabela, char* key){
     struct registrado *aux = essa->reg[posic].reg;
     while(strcmp(aux->key, key) != 0){
         aux = aux->next;
-        if(aux == NULL || aux->key == NULL)     //
+        if(aux == NULL || aux->key == NULL)
             return NULL;
     }
 
