@@ -674,6 +674,7 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
 			int index1 = atoi(registrador1+1);
 			int index2 = atoi(registrador2+1);
+
 			
 			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
 			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoDeSaida, sufixoDoArquivo);
@@ -681,13 +682,17 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoDeSaida) + sizeof(sufixoDoArquivo) + 3);
 			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoDeSaida, sufixoDoArquivo);
 
-			printf("%s %s\n", arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt);
-			// getPontoX(R[index1]);
+			printf("%d %d\n", index1, index2);
+			iniciaSvg(arquivoDeSaidaGrafoSvg);
+			imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
+			imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
+			
 
 		}
 	}
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
+		imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
 		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
 		if(arquivoSvg != NULL){
 			FILE* tempFile = fopen(tempFileName, "r+");
