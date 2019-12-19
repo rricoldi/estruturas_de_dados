@@ -383,7 +383,6 @@ void adicionarPredio(Cidade cid, Info info)
     char endereco[30];
     sprintf(endereco, "%s/%c/%lf", retornaPCep(info), retornaPFace(info)[0], retornaPNumero(info));
     insereRegistro(city->predio_endereco, endereco, info);
-    printf("ADDRESS: |%s|\n", endereco);
 }
 
 Predio getPredio(Cidade cid, char id[])
@@ -1189,7 +1188,8 @@ void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade cid){
     Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
     char endereco[30];
     sprintf(endereco, "%s/%c/%lf", moradiaGetCep(mor), moradiaGetFace(mor), (double)moradiaGetNum(mor));
-    printf("ENDERECO: |%s|\n", endereco);
+    if(!endereco)
+        return;
     Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);
     if(pred)
         R[index] = criarPonto(retornaPX(pred), retornaPY(pred));
@@ -1198,6 +1198,8 @@ void qry_ATeQM(char* cep, char face, int num, Ponto* R, int index, Cidade cid){
     cidade *city = cid;
     char endereco[30];
     sprintf(endereco, "%s/%c/%d", cep, face, num);
+    if(!endereco)
+        return;
     Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);
     if(pred)
         R[index] = criarPonto(retornaPX(pred), retornaPY(pred));
