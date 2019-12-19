@@ -692,11 +692,12 @@ void qry_bombaRadiacaoArvorePredios(Info info, va_list args){
     free(r);
     va_end(vars);
 }
-void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* color){
+Ponto* qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* color){
     double ang=0, seno=0, cosseno=0;
     int raio = distanciaPontosD(0, 0, svgXMax, svgYMax), quantRaios=1000, i=0;
     Reta linhaAtual = criarReta(x, y, svgXMax+100, svgYMax+100);
     Ponto* pontos = malloc(retaSizeof()*quantRaios);
+    // Reta*bomba = malloc(retaSizeof()*quantRaios);
     Reta retaSvgXMin=criarReta(-1, -1, -1, svgYMax), retaSvgYMin=criarReta(-1, -1, svgXMax, -1);
     Reta retaSvgXMax=criarReta(svgXMax, -1, svgXMax, svgYMax), retaSvgYMax=criarReta(-1, svgYMax, svgXMax, svgYMax);
 
@@ -736,8 +737,8 @@ void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* colo
         if(i>0 && i<quantRaios-1){
             if(verificaOrientacao(pontos[i], pontos[i-1], pontos[i+1])!=0){
                 fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
-
             }
+            
             pontoFinalizar(pontos[i-1]);
         }else{
             fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
@@ -753,6 +754,7 @@ void qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* colo
     pontoFinalizar(pontos[quantRaios]);
     free(pontos);
     fclose(svg);
+    return pontos;
 }
 void qry_bombaRadiacaoLum(Cidade cid, double x, double y, char* nomeSvg){
     cidade *city = cid;
@@ -764,7 +766,7 @@ void qry_bombaRadiacaoLum(Cidade cid, double x, double y, char* nomeSvg){
     
     desalocaArvore(retas);
 }
-void qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* nomeTxt, char* arqPol, char* caminhoDoArquivo){
+Ponto* qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* nomeTxt, char* arqPol, char* caminhoDoArquivo){
     cidade *city = cid;
     Tree retas = criaArvore(comparaReta);
     percorreArvore(city->arvoreMuro, qry_bombaRadiacaoArvoreMuros, retas);
@@ -774,13 +776,14 @@ void qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* n
         insereNaArvore(&retas, polig[i]);
     }
 
-    qry_bombaRadiacao(x, y, nomeSvg, retas, "green");
+    Ponto* bomba = qry_bombaRadiacao(x, y, nomeSvg, retas, "green");
     
     for(int i=0;i<tamPol;i++){
         retaFinalizar(polig[i]);
     }
     free(polig);
     desalocaArvore(retas);
+    return bomba;
 }
 
 void qry_m(FILE* arquivoTxt, char cep[], Cidade cid)
