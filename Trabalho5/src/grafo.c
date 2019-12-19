@@ -329,8 +329,6 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
             else
                 imprimirLinha2(grafo->arranjo[caminho[i]].x - 4, grafo->arranjo[caminho[i]].y - 4, grafo->arranjo[caminho[i+1]].x - 4, grafo->arranjo[caminho[i+1]].y - 4, cor2, nomeDoArquivoSvg);
         }
-        if(modo == 2)
-            finalizaSvg(nomeDoArquivoSvg);
 
         if(modo == 1)
             fprintf(arquivoTxt, "Caminho mais curto: ");

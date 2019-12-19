@@ -92,7 +92,7 @@ Info getPrimeiroRegistro(HashTable tabela, char* key){
     struct registrado *aux = essa->reg[posic].reg;
     while(strcmp(aux->key, key) != 0){
         aux = aux->next;
-        if(aux == NULL || aux->key == NULL)     //
+        if(aux == NULL || aux->key == NULL)
             return NULL;
     }
 
