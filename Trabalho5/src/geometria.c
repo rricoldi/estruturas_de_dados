@@ -23,6 +23,9 @@ struct reta{
 int retaSizeof(void){
   return sizeof(struct reta);
 }
+int pontoSizeof(void){
+    return sizeof(struct ponto);
+}
 
 bool nearlyEqual(double a, double b, double epsilon){
     double absA = fabs(a);

@@ -106,7 +106,7 @@ void qry_trns(Cidade cid, double largura, double altura, double x, double y, dou
 
 void qry_crd(Cidade cid, char id[], char txt[]);
 void qry_bombaRadiacaoLum(Cidade, double x, double y, char* nomeArqSvg);
-void qry_bombaRadiacaoNuc(Cidade, double x, double y, char* nomeArqSvg, char* nomeArqTxt, char* nomeArqPol, char* caminhoDoArquivo);
+Ponto* qry_bombaRadiacaoNuc(Cidade, double x, double y, char* nomeArqSvg, char* nomeArqTxt, char* nomeArqPol, char* caminhoDoArquivo);
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
 
 void qry_dm(FILE* arquivoTxt, char* cpf, Cidade);

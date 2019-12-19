@@ -18,6 +18,7 @@ extern double svgYMax;
 
 //  Retorna o tamanho em bytes da struct reta
 int retaSizeof(void);
+int pontoSizeof(void);
 
 //  Verifica se a diferença entre dois a e b é negligenciavel em relação à epsilon
 bool nearlyEqual(double a, double b, double epsilon);
@@ -61,6 +62,9 @@ void setRetaA(Reta r, double x, double y);
 void setRetaB(Reta r, double x, double y);
 //Retorna o tamanho da reta
 double getRetaTamanho(Reta r);
+
+//Para cada reta do poligono, verifica se há interseccao com a reta dada
+bool retaInterPoligono(Reta rr, Reta poligono[], int tamPolig);
 
 //Verifica se o ponto (x,y) está contido no dado poligono
 bool pontoDentroPoligono(double x, double y, Reta poligono[], int qtsLadosPoligono);
