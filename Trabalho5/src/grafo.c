@@ -272,15 +272,12 @@ int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
     return menor;
 }
 
-double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[]) {
+double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[], int modo) {
     if(noInicial == -1 || noFinal == -1) {
         printf("Os vertices nao foram encontrados");
         exit(1);
     }
 
-    int modo;
-    
-    for(modo = 1; modo <= 2; modo++){
         FILE* arquivoTxt = fopen(nomeDoArquivoTxt, "a+");
         Grafo* grafo = (Grafo*) graph;
         double* distancia = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
@@ -374,9 +371,7 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
         }
         fclose(arquivoTxt);
 
-        if(modo == 2)
             return distancia[noFinal];
-    } 
 }
 
 // void imprimeGrafo(Graph* graph) {
