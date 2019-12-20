@@ -106,6 +106,8 @@ void qry_trns(Cidade cid, double largura, double altura, double x, double y, dou
 
 void qry_crd(Cidade cid, char id[], char txt[]);
 void qry_bombaRadiacaoLum(Cidade, double x, double y, char* nomeArqSvg);
+
+//Executa o comando "brn" e retorna um vetor de retas que representam a bomba
 Reta* qry_bombaRadiacaoNuc(Cidade, double x, double y, char* nomeArqSvg, char* nomeArqTxt, char* nomeArqPol, char* caminhoDoArquivo, int* tamBomba);
 void qry_m(FILE* arquivoTxt, char* cep, Cidade);
 
@@ -124,6 +126,7 @@ void qry_eplg(char* caminhoDoArquivo, Reta poligono[], int tamPolig, FILE* arqui
 void qry_nav(Cidade cid, char arvore);
 
 void qry_catac(FILE* arquivoTxt, char* nomeArquivoSvg, Reta poligono[], int tamPolig, Cidade);
+
 //Comandos @'algumacoisa'?
 void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade);
 void qry_ATeQM(char* cep, char face, int num, Ponto* R, int index, Cidade);

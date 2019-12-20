@@ -65,6 +65,7 @@ double getRetaTamanho(Reta r);
 
 //Para cada reta do poligono, verifica se há interseccao com a reta dada
 bool retaInterPoligono(Reta rr, Reta poligono[], int tamPolig);
+//Verifica se uma reta está, pelo menos parcialmente, dentro de um dado polígono
 bool retaDentroPoligono(Reta rr, Reta poligono[], int tampoligono);
 //Verifica se o ponto (x,y) está contido no dado poligono
 bool pontoDentroPoligono(double x, double y, Reta poligono[], int qtsLadosPoligono);
