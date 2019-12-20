@@ -35,6 +35,8 @@ List* getLista(Graph* graph);
 
 void imprimeGrafo(Graph* graph);
 
-double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[], int modo);
+void auxilioDirecao(Graph graph, int *caminho, int modo, int noFinal);
+
+int* dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[], int modo);
 
 #endif

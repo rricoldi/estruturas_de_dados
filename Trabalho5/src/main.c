@@ -31,14 +31,17 @@ char *retornarPrefixoDoArquivo(char nomeDoArquivo[])
 	return strtok(nomeDoArquivo,".");
 }
 
-void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo, char* caminhoDoArquivo, Graph grafo){
+void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* prefixoDoArquivoGeo, char* caminhoDoArquivo, char* nomeDoArquivoVia){
     
     char comando[9];
+    char comando2[3];
     char nomeDoArquivoQry[100];
     char nomeDoArquivoSvg[100];
     char arvore;
     char *prefixoFinalDoArquivoQry = NULL;
     char *nomeFinalDoArquivoSvg = NULL;
+    Graph* grafo = leiaVia(nomeDoArquivoVia);
+    int modo;
 
     while(1)
     {
@@ -49,12 +52,11 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
             char* prefixoDoArquivoDeSaida = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6)*sizeof(char));
             sprintf(prefixoDoArquivoDeSaida, "%s/%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
 
-            // interativoQ(argumento1, cidade);
             prefixoFinalDoArquivoQry = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6+strlen(retornarPrefixoDoArquivo(nomeDoArquivoQry)))*sizeof(char));
             sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
 
             printf("Bloco do Qry inicializado\n");
-            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida);
+            leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida, 0);
             printf("Bloco do Qry finalizado\n");
         }
         else if(strcmp(comando, "dmprbt")==0){
@@ -72,6 +74,43 @@ void resolverInterativos(Cidade cidade, char* caminhoDoArquivoDeSaida, char* pre
         else if(strcmp(comando, "nav")==0){
             scanf(" %c", &arvore);
             qry_nav(cidade, arvore);
+        }
+        else if(strcmp(comando, "qr")==0 || strcmp(comando, "qc")==0){
+            if(strcmp(comando, "qc")==0)
+                modo = 1;
+            else
+                modo = 2;
+            scanf("%s", nomeDoArquivoQry);
+            char* prefixoDoArquivoDeSaida = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6)*sizeof(char));
+            sprintf(prefixoDoArquivoDeSaida, "%s/%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
+
+            prefixoFinalDoArquivoQry = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6+strlen(retornarPrefixoDoArquivo(nomeDoArquivoQry)))*sizeof(char));
+            sprintf(prefixoFinalDoArquivoQry, "%s/%s-%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, retornarPrefixoDoArquivo(nomeDoArquivoQry));
+            Ponto *R = leiaQry(caminhoDoArquivo, prefixoFinalDoArquivoQry, nomeDoArquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida, 1);
+
+            char corMaisCurto[20];
+            char corMaisRapido[20];
+            char registrador1[4];
+            char registrador2[4];
+            char sufixoDoArquivo[100];
+            FILE* arquivoQry = fopen(nomeDoArquivoQry, "a+");
+                
+            while(1){
+                fscanf(arquivoQry, "%s", sufixoDoArquivo);
+                if(strcmp(sufixoDoArquivo, "p?") == 0)
+                    break;
+            }   
+
+            fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
+            fclose(arquivoQry);
+            int index1 = atoi(registrador1+1);
+            int index2 = atoi(registrador2+1);
+
+            char* direcao;
+            int* caminho;
+
+            caminho = dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), "removivel.svg", "removivel.txt", corMaisCurto, corMaisRapido, modo);
+            auxilioDirecao(grafo, caminho, modo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])));
         }
     }
 }
@@ -240,13 +279,11 @@ int main(int argc, char *argv[])
     sprintf(nomeDoArquivoSvg, "%s/%s.svg", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
 
     //BLOCO QUE RESOLVE O GEO
-    printf("Bloco do Geo inicializado\n");
 	Cidade cidade = leiaGeo(arquivoGeo, nomeDoArquivoSvg);
-    printf("Bloco do Geo finalizado\n");
-
-    printf("Bloco do Via inicializado\n");
-    Graph grafo = leiaVia(arquivoVia);
-    printf("Bloco do Via finalizado\n");
+    Graph* grafo;
+    if(arquivoVia != NULL){
+        grafo = leiaVia(arquivoVia);
+    }
 
     if(arquivoEc != NULL){
         iniciaComercios(cidade, arquivoEc);
@@ -264,9 +301,7 @@ int main(int argc, char *argv[])
         char* prefixoDoArquivoDeSaida = (char *) malloc((strlen(caminhoDoArquivoDeSaida)+strlen(prefixoDoArquivoGeo)+6)*sizeof(char));
         sprintf(prefixoDoArquivoDeSaida, "%s/%s", caminhoDoArquivoDeSaida, prefixoDoArquivoGeo);
 
-        printf("Bloco do Qry inicializado\n");
-        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida);
-        printf("Bloco do Qry finalizado\n");
+        leiaQry(caminhoDoArquivo, prefixoFinalDoQry, arquivoQry, cidade, grafo, caminhoDoArquivoDeSaida, prefixoDoArquivoDeSaida, 0);
 
         if(!interativo)
         {
@@ -279,7 +314,7 @@ int main(int argc, char *argv[])
 
     if(interativo)
     {
-        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, grafo, caminhoDoArquivo);
+        resolverInterativos(cidade, caminhoDoArquivoDeSaida, prefixoDoArquivoGeo, caminhoDoArquivo, arquivoVia);
         free(nomeDoArquivoQry);
         free(prefixoDoAquivoQry);
         free(prefixoFinalDoQry);

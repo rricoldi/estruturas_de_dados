@@ -383,7 +383,6 @@ void adicionarPredio(Cidade cid, Info info)
     char endereco[30];
     sprintf(endereco, "%s/%c/%lf", retornaPCep(info), retornaPFace(info)[0], retornaPNumero(info));
     insereRegistro(city->predio_endereco, endereco, info);
-    // printf("address: %s\n", endereco);
 }
 
 Predio getPredio(Cidade cid, char id[])
@@ -397,12 +396,6 @@ void adicionarMuro(Cidade cid, Info info)
     cidade *city = (cidade *)cid;
     insereNaArvore(&(city->arvoreMuro), info);
 }
-
-// Muro getMuro(Cidade cid, int i)
-// {
-//     cidade *city = (cidade *)cid;
-//     return;
-// }
 
 void transformaArvoreEmLista(Info info, va_list args)
 {
@@ -1194,6 +1187,7 @@ void qry_ATmQM(char* cpf, Ponto* R, int index, Cidade cid){
     Moradia mor = getPrimeiroRegistro(city->moradias_cpf, cpf);
     char endereco[30];
     sprintf(endereco, "%s/%c/%lf", moradiaGetCep(mor), moradiaGetFace(mor), (double)moradiaGetNum(mor));
+
     if(!endereco)
         return;
     Predio pred = getPrimeiroRegistro(city->predio_endereco, endereco);

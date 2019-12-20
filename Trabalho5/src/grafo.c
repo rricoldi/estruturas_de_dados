@@ -272,7 +272,81 @@ int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
     return menor;
 }
 
-double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[], int modo) {
+void auxilioDirecao(Graph graph, int *caminho, int modo, int noFinal) {
+    Grafo* grafo = (Grafo*) graph;
+    char *direcaoAnterior;
+    int i;
+    Adjacencia* aresta;
+    char *direcao;
+    char comando[3];
+    double x, y, xInicial, yInicial;
+
+    for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+        if(caminho[i] == -1)
+            continue;
+        aresta = (Adjacencia*) getInfoAresta(grafo, caminho[i], caminho[i+1]);
+        if(grafo->arranjo[caminho[i]].x < grafo->arranjo[caminho[i+1]].x)
+            direcao = "Oeste";
+        else if(grafo->arranjo[caminho[i]].x > grafo->arranjo[caminho[i+1]].x)
+            direcao = "Leste";
+        else if(grafo->arranjo[caminho[i]].y < grafo->arranjo[caminho[i+1]].y)
+            direcao = "Norte";
+        else if(grafo->arranjo[caminho[i]].y > grafo->arranjo[caminho[i+1]].y)
+            direcao = "Sul";
+
+        xInicial = grafo->arranjo[caminho[i]].x;
+        yInicial = grafo->arranjo[caminho[i]].y;
+        break;
+    }
+    x = xInicial;
+    y = yInicial;
+
+    while(1){
+        if(distanciaPontos(criarPonto(x,y), criarPonto(xInicial,yInicial)) > 200)
+            caminho = dijkstra(graph, retornaIndiceVertice(grafo->lista, x, y), noFinal, "removivel.svg", "removivel.txt", "black", "black", modo);
+        if(x == grafo->arranjo[noFinal].x && y == grafo->arranjo[noFinal].y) {
+            printf("Voce chegou ao seu destino.\n");
+        }
+        printf("Va para o ");
+        for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+            if(caminho[i] == -1)
+                continue;
+            aresta = (Adjacencia*) getInfoAresta(grafo, caminho[i], caminho[i+1]);
+            if(x < grafo->arranjo[caminho[i+1]].x)
+                direcao = "Oeste";
+            else if(x > grafo->arranjo[caminho[i+1]].x)
+                direcao = "Leste";
+            else if(y < grafo->arranjo[caminho[i+1]].y)
+                direcao = "Norte";
+            else if(y > grafo->arranjo[caminho[i+1]].y)
+                direcao = "Sul";
+
+            printf("%s.\n", direcao);
+            break;
+        }
+        scanf("%s", comando);
+        if(strcmp(comando, "n") == 0) {
+            y++;   
+        } else if(strcmp(comando, "s") == 0) {
+            x--;   
+        } else if(strcmp(comando, "l") == 0) {
+            y--;   
+        } else if(strcmp(comando, "o") == 0) {
+            x++;   
+        } else if(strcmp(comando, "rr") == 0) {
+            caminho = dijkstra(graph, retornaIndiceVertice(grafo->lista, x, y), noFinal, "removivel.svg", "removivel.txt", "black", "black", 2);
+        } else if(strcmp(comando, "rc") == 0) {
+            caminho = dijkstra(graph, retornaIndiceVertice(grafo->lista, x, y), noFinal, "removivel.svg", "removivel.txt", "black", "black", 1);
+        } else if(strcmp(comando, "x") == 0) {
+            remove("removivel.svg");
+            remove("removivel.txt");
+            return;
+        }
+    }
+
+}
+
+int* dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[], char nomeDoArquivoTxt[], char cor1[], char cor2[], int modo) {
     if(noInicial == -1 || noFinal == -1) {
         printf("Os vertices nao foram encontrados");
         exit(1);
@@ -281,7 +355,8 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
         FILE* arquivoTxt = fopen(nomeDoArquivoTxt, "a+");
         Grafo* grafo = (Grafo*) graph;
         double* distancia = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
-        int pai[grafo->numeroDeVertices], caminho[grafo->numeroDeVertices];
+        int* caminho = (double*) malloc(grafo->numeroDeVertices*sizeof(double));
+        int pai[grafo->numeroDeVertices];
         int menor, aux, i;
         char* direcao, *direcaoAnterior;
         int aberto[grafo->numeroDeVertices];
@@ -320,6 +395,8 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
             i--;
             aux = pai[aux];
         }
+            imprimirCirculo(3, grafo->arranjo[caminho[grafo->numeroDeVertices - 1]].x, grafo->arranjo[caminho[grafo->numeroDeVertices - 1]].y, "red", "black", nomeDoArquivoSvg, 2);        
+            escreverNoSvg(grafo->arranjo[caminho[grafo->numeroDeVertices - 1]].x, grafo->arranjo[caminho[grafo->numeroDeVertices - 1]].y, "DESTINO", nomeDoArquivoSvg);
         for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
             if(caminho[i] == -1)
                 continue;
@@ -329,6 +406,7 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
             else
                 imprimirLinha2(grafo->arranjo[caminho[i]].x - 4, grafo->arranjo[caminho[i]].y - 4, grafo->arranjo[caminho[i+1]].x - 4, grafo->arranjo[caminho[i+1]].y - 4, cor2, nomeDoArquivoSvg);
         }
+
 
         if(modo == 1)
             fprintf(arquivoTxt, "Caminho mais curto: ");
@@ -369,7 +447,9 @@ double dijkstra(Graph* graph, int noInicial, int noFinal, char nomeDoArquivoSvg[
         }
         fclose(arquivoTxt);
 
-            return distancia[noFinal];
+        free(distancia);
+
+            return caminho;
 }
 
 // void imprimeGrafo(Graph* graph) {

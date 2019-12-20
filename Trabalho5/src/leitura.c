@@ -10,8 +10,6 @@
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
 	FILE *arquivoGeo;
-	printf("%s\n", nomeDoArquivoGeo);
-	printf("%s\n", nomeDoArquivoSvg);
 	arquivoGeo = fopen(nomeDoArquivoGeo, "r");
 	if (arquivoGeo == NULL)
 	{
@@ -268,7 +266,7 @@ Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 	return cidade;
 }
 
-void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph grafo, char caminhoDoArquivoDeSaida[], char prefixoDoArquivoDeSaida[])
+Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char nomeDoArquivoQry[], Cidade cidade, Graph* grafo, char caminhoDoArquivoDeSaida[], char prefixoDoArquivoDeSaida[], int modo)
 {
 	int tipo1, tipo2;
 	int verificador = 0;
@@ -300,10 +298,9 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 	fclose(tempFile);
 	
 	Info info1 = 0, info2 = 0;
-	Ponto R[11] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+	Ponto *R = malloc(sizeof(Ponto) * 11);
 
 	FILE *arquivoQry;
-	printf("%s\n", nomeDoArquivoQry);
 	arquivoQry = fopen(nomeDoArquivoQry, "r");
 	if (arquivoQry == NULL)
 	{
@@ -664,29 +661,34 @@ void leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], char 
 			R[index] = criarPonto(x, y);
 		}
 		else if(strcmp("p?", comando)==0) {
-			char corMaisCurto[20];
-			char corMaisRapido[20];
-			char registrador1[4];
-			char registrador2[4];
-			char sufixoDoArquivo[100];
+			if(modo == 0){
+				char corMaisCurto[20];
+				char corMaisRapido[20];
+				char registrador1[4];
+				char registrador2[4];
+				char sufixoDoArquivo[100];
 
-			fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
-			int index1 = atoi(registrador1+1);
-			int index2 = atoi(registrador2+1);
+				fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
+				int index1 = atoi(registrador1+1);
+				int index2 = atoi(registrador2+1);
 
-			char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
-			sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoQry, sufixoDoArquivo);
+				char* arquivoDeSaidaGrafoSvg = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
+				sprintf(arquivoDeSaidaGrafoSvg, "%s-%s.svg", prefixoDoArquivoQry, sufixoDoArquivo);
 
-			char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
-			sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoQry, sufixoDoArquivo);
-			iniciaSvg(arquivoDeSaidaGrafoSvg);
-			imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
-			imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
-			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 1);
-			dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 2);
-			finalizaSvg(arquivoDeSaidaGrafoSvg);
-			verificador = 0;
-			verificador2 = 1;
+				char* arquivoDeSaidaGrafoTxt = malloc(sizeof(prefixoDoArquivoQry) + sizeof(sufixoDoArquivo) + 3);
+				sprintf(arquivoDeSaidaGrafoTxt, "%s-%s.txt", prefixoDoArquivoQry, sufixoDoArquivo);
+				iniciaSvg(arquivoDeSaidaGrafoSvg);
+				imprimeCidade(cidade, arquivoDeSaidaGrafoSvg);
+				imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
+				dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 1);
+				dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 2);
+				finalizaSvg(arquivoDeSaidaGrafoSvg);
+				verificador = 0;
+				verificador2 = 1;
+			}else{
+				fclose(arquivoQry);
+				return R;
+			}
 		}
 	}
 	if(verificador != 0 && verificador2 == 0){
@@ -879,11 +881,11 @@ Reta* leiaPol(char* caminhoDoArquivoDeSaida, char* nomeArquivoPoligono, int* arr
 	return arrayRetas;
 }
 
-Graph leiaVia(char* nomeDoArquivoVia) {
+Graph* leiaVia(char* nomeDoArquivoVia) {
 	FILE* arquivoVia;
 
 	List lista;
-	Graph grafo;
+	Graph* grafo;
 
 	char comando = 'v';
 	char id[100];
@@ -896,7 +898,6 @@ Graph leiaVia(char* nomeDoArquivoVia) {
 
 	double x, y, comprimento, velocidade;
 
-	printf("nome do arquivo: %s\n", nomeDoArquivoVia);
 
 	arquivoVia = fopen(nomeDoArquivoVia, "r");
 	if(!arquivoVia){

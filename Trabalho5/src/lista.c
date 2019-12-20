@@ -21,14 +21,14 @@ typedef struct Vetor
    int ultimo;
    int capacidade;
    int tamanho;
-}List;
+}Listasimples;
 
 Lista iniciaLista(int capacidade)
 {
    Lista l;    //Colocar _t
 
-   l = (List*) calloc(1, sizeof(List));
-   List* lista = (List*) l;
+   l = (Listasimples*) calloc(1, sizeof(Listasimples));
+   Listasimples* lista = (Listasimples*) l;
    lista->capacidade = capacidade;
    lista->v = (No *) calloc (capacidade, sizeof(No)); //Aloca a lista
 
@@ -49,7 +49,7 @@ Lista iniciaLista(int capacidade)
 
 void finalizaLista(Lista L)
 {
-   List* lista = (List*) L;
+   Listasimples* lista = (Listasimples*) L;
    if( lista->tamanho != 0)
    {
       free(lista->v);
@@ -60,13 +60,13 @@ void finalizaLista(Lista L)
 
 int lenght(Lista L)
 {
-   List* lista = (List*) L;
+   Listasimples* lista = (Listasimples*) L;
    return lista->tamanho;
 }
 
 int getLivre(Lista L)
 {
-   List* lista = (List*) L; //CASTING LISTA para LIST
+   Listasimples* lista = (Listasimples*) L; //CASTING LISTA para LIST
    int posLivre = lista->livre;
    lista->livre = lista->v[lista->livre].prox; //recebe o próximo livre
    return posLivre;
@@ -74,7 +74,7 @@ int getLivre(Lista L)
 
 Posic insereLista(Lista L, Info info)
 {
-  List* lista = (List*) L; //CASTING LISTA para LIST
+  Listasimples* lista = (Listasimples*) L; //CASTING LISTA para LIST
   int iLivre = getLivre(L); // semelhante ao malloc
 
   if (iLivre == -1) //verifica se a lista nao esta cheia ao ver se o livre nao e nulo
@@ -109,7 +109,7 @@ Posic insereLista(Lista L, Info info)
 
 void removerDaLista(Lista L, Posic pos)
 {
-   List* lista = (List*) L;
+   Listasimples* lista = (Listasimples*) L;
 
    lista->v[pos].info = NULL; //informacao da posicao e removida
 
@@ -137,7 +137,7 @@ void removerDaLista(Lista L, Posic pos)
 
 int transformaListaEmVetor(Lista L, Info vetor[])
 {
-   List* lista = (List*) L;
+   Listasimples* lista = (Listasimples*) L;
 
    int i = lista->primeiro;
    int contador = 0;

@@ -13,6 +13,7 @@
         "lista.h": "c",
         "qry.h": "c",
         "arvore.h": "c",
-        "geometria.h": "c"
+        "geometria.h": "c",
+        "tipos.h": "c"
     }
 }
