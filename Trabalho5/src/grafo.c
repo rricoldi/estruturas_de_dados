@@ -3,6 +3,7 @@
 #include <string.h>
 #include "grafo.h"
 #include "svg.h"
+#include"geometria.h"
 
 #define true 1
 #define false 0
@@ -19,6 +20,10 @@ typedef struct adjacencia {
     double comprimento;
     double velocidade;
     struct adjacencia *proximo;
+    double x1;
+    double y1;
+    double x2;
+    double y2;
 } Adjacencia;
 
 typedef struct vertice {
@@ -159,6 +164,43 @@ Info getInfoAresta(Graph* graph, int noInicial, int noFinal) {
         return NULL;
 }
 
+double arestaGetX1(Info info){
+    Adjacencia *aresta = info;
+    return aresta->x1;
+}
+double arestaGetY1(Info info){
+    Adjacencia *aresta = info;
+    return aresta->y1;
+}
+double arestaGetX2(Info info){
+    Adjacencia *aresta = info;
+    return aresta->x2;
+}
+double arestaGetY2(Info info){
+    Adjacencia *aresta = info;
+    return aresta->y2;
+}
+void setArestaComprimento(Info info, double comprimento){
+    Adjacencia* aresta = info;
+    aresta->comprimento = comprimento;
+}
+void setArestaVelocidade(Info info, double velocidade){
+    Adjacencia* aresta = info;
+    aresta->velocidade = velocidade;
+}
+
+void percorreArestas(Graph g, void (*func) (Reta*, Info, int), Reta* polig, int tamPolig){
+    Grafo *graf = g;
+    Vertice* aux = graf->arranjo;
+    for(int i=0;i<graf->numeroDeVertices;i++){
+        Adjacencia* aux2 = aux[i].inicio;
+        while(aux2){
+            func(polig, aux2, tamPolig);
+            aux2 = aux2->proximo;
+        }
+    }
+}
+
 void removeAresta(Graph* graph, int noInicial, int noFinal) {
     Grafo* grafo = (Grafo*) graph;
     Adjacencia *adjacencia = grafo->arranjo[noInicial].inicio;
@@ -167,9 +209,9 @@ void removeAresta(Graph* graph, int noInicial, int noFinal) {
         if(adjacencia->vertice == noFinal){
             grafo->numeroDeArestas--;
             if(grafo->arranjo[noInicial].inicio == adjacencia){
-            grafo->arranjo[noInicial].inicio = adjacencia->proximo;
+                grafo->arranjo[noInicial].inicio = adjacencia->proximo;
             } else {
-            aux->proximo = adjacencia->proximo;
+                aux->proximo = adjacencia->proximo;
             }              
             free(adjacencia);
             return;
@@ -191,7 +233,10 @@ bool insereAresta(Graph* graph, int noInicial, int noFinal, char ladoDireito[], 
         return false;
 
     Adjacencia *novo = criaAdjacencia(noFinal, nomeDaRua, ladoDireito, ladoEsquerdo, comprimento, velocidade);
-    
+    novo->x1 = grafo->arranjo[noInicial].x;
+    novo->y1 = grafo->arranjo[noInicial].y;
+    novo->x2 = grafo->arranjo[noFinal].x;
+    novo->y2 = grafo->arranjo[noFinal].y;
     novo->proximo = grafo->arranjo[noInicial].inicio;
     grafo->arranjo[noInicial].inicio = novo;
 

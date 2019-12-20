@@ -722,6 +722,7 @@ Ponto* qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* co
     insereNaArvore(&retas, retaSvgXMax);
     insereNaArvore(&retas, retaSvgYMax);
 
+    *tamBomba = 0;
     while(ang<2){
         seno = raio*sin(ang*M_PI);
         cosseno = raio*cos(ang*M_PI);
@@ -733,7 +734,6 @@ Ponto* qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* co
     }
     FILE* svg = fopen(nomeSvg, "a+");
     fprintf(svg, "\n\t<polygon points=\"");
-    *tamBomba = 0;
     for(int i=0;i<quantRaios;i++){
         if(i>0 && i<quantRaios-1){
             if(verificaOrientacao(pontos[i], pontos[i-1], pontos[i+1])!=0){
@@ -746,7 +746,8 @@ Ponto* qry_bombaRadiacao(double x, double y, char* nomeSvg, Tree retas, char* co
         }else{
             fprintf(svg, "%lf,%lf ", getPontoX(pontos[i]), getPontoY(pontos[i]));
         }
-        *tamBomba = i;
+        if(pontos[i])
+            *tamBomba = i;
     }
     fprintf(svg, "\" style=\"fill:%s;opacity:0.4\"/>\n\t", color);
     fprintf(svg, "<circle cx=\"%lf\" cy=\"%lf\" r=\"1\" stroke=\"black\" stroke-width=\"3\" fill=\"black\" />\n\t", x, y);
@@ -780,7 +781,7 @@ Reta* qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* 
     for(int i=0;i<tamPol;i++){
         insereNaArvore(&retas, polig[i]);
     }
-
+    *tamBomba = 0;
     int tamBombaNova;
     Ponto* bombaPontos = qry_bombaRadiacao(x, y, nomeSvg, retas, "green", &tamBombaNova);
     
@@ -790,6 +791,7 @@ Reta* qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* 
     for(i=1;i<tamBombaNova;i++){
         bomba[i-1] = criarReta(getPontoX(bombaPontos[i-1]), getPontoY(bombaPontos[i-1]),
                        getPontoX(bombaPontos[i]), getPontoY(bombaPontos[i]));
+        *tamBomba = *tamBomba + 1;
     }
     bomba[i] = criarReta(getPontoX(bombaPontos[i-1]), getPontoY(bombaPontos[i-1]),
                        getPontoX(bombaPontos[0]), getPontoY(bombaPontos[0]));
@@ -801,7 +803,10 @@ Reta* qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* 
     }
     free(polig);
     desalocaArvore(retas);
-    *tamBomba = tamBombaNova;
+
+    // FILE* arquivoTxt = fopen(nomeTxt, "a+");
+
+
     return bomba;
 }
 
