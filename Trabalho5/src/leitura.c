@@ -660,7 +660,6 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 			}
 		}
 		else if(strcmp("@g?", comando)==0){
-			scanf("%d", numeroDeSemaforos);
 			char registrador[4], id[20];
 			fscanf(arquivoQry, "%3s %19s ", registrador, id);
 			int index = atoi(registrador+1);
