@@ -296,6 +296,22 @@ bool existeAberto(Grafo* grafo, int* aberto) {
     return false;
 }
 
+bool adjacente(Graph graph, int v1, int v2) {
+    Grafo* grafo = (Grafo*) graph;
+    Adjacencia* aresta = grafo->arranjo[v1].inicio;
+
+    for(int i = 0; i < grafo->numeroDeArestas; i++) {
+        if(aresta->vertice == v2)
+            return true;
+    }
+    return false;
+}
+
+Adjacencia* adjacentes(Graph graph, int v1) {
+    Grafo* grafo = (Grafo*) graph;
+    return grafo->arranjo[v1].inicio;
+}
+
 int menorDistancia(Grafo* grafo, int* aberto, double* distancia) {
     int i = 0, menor;
     
@@ -345,37 +361,46 @@ void auxilioDirecao(Graph graph, int *caminho, int modo, int noFinal) {
     }
     x = xInicial;
     y = yInicial;
-
+    int xint = 0, yint = 0, xint2 = 10, yint2 = 10;
+    int contador = 0;
     while(1){
         if(distanciaPontos(criarPonto(x,y), criarPonto(xInicial,yInicial)) > 200)
             caminho = dijkstra(graph, retornaIndiceVertice(grafo->lista, x, y), noFinal, "removivel.svg", "removivel.txt", "black", "black", modo);
-        if(x == grafo->arranjo[noFinal].x && y == grafo->arranjo[noFinal].y) {
+        if((int)x == (int)grafo->arranjo[noFinal].x && (int)y == (int)grafo->arranjo[noFinal].y) {
             printf("Voce chegou ao seu destino.\n");
+        }
+        if(xint == xint2 && yint == yint2) {
+            contador++;            
         }
         printf("Va para o ");
         for(i = 0; i < grafo->numeroDeVertices - 1; i++) {
+            xint = (int) x;
+            yint = (int) y;
+            xint2 = (int) grafo->arranjo[caminho[i+1+contador]].x;
+            yint2 = (int) grafo->arranjo[caminho[i+1+contador]].y;
+            
             if(caminho[i] == -1)
                 continue;
             aresta = (Adjacencia*) getInfoAresta(grafo, caminho[i], caminho[i+1]);
-            if(x < grafo->arranjo[caminho[i+1]].x)
+            if(xint < xint2 && xint != xint2)
                 direcao = "Oeste";
-            else if(x > grafo->arranjo[caminho[i+1]].x)
+            else if(xint > xint2 && xint != xint2)
                 direcao = "Leste";
-            else if(y < grafo->arranjo[caminho[i+1]].y)
+            else if( yint < yint2 && yint != yint2)
                 direcao = "Norte";
-            else if(y > grafo->arranjo[caminho[i+1]].y)
+            else if(yint > yint2 && yint != yint2)
                 direcao = "Sul";
 
-            printf("%s.\n", direcao);
+            printf("%s.x atual: %d y atual: %d x esperado: %d y esperado: %d\n", direcao, xint , yint, xint2,  yint2);
             break;
         }
         scanf("%s", comando);
         if(strcmp(comando, "n") == 0) {
             y++;   
         } else if(strcmp(comando, "s") == 0) {
-            x--;   
-        } else if(strcmp(comando, "l") == 0) {
             y--;   
+        } else if(strcmp(comando, "l") == 0) {
+            x--;   
         } else if(strcmp(comando, "o") == 0) {
             x++;   
         } else if(strcmp(comando, "rr") == 0) {

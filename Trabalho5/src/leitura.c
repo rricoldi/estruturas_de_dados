@@ -713,15 +713,16 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 						char buffer[301];
 						fgets(buffer, 300, tempFile);
 						fputs(buffer, arquivoSvg);
-						// char a;
-						// a = getc(tempFile);
-						// putc(a, tempFile);
 					}
 					fclose(tempFile);
-					// remove(tempFileName);
 					fclose(arquivoSvg);
 				}
 				finalizaSvg(arquivoDeSaidaGrafoSvg);
+				if(verificador == 0){
+					fclose(arquivoTxt);
+					remove(nomeDoArquivoSvg);
+					remove(nomeDoArquivoTxt);
+				}
 				verificador = 0;
 				verificador2 = 1;
 			}else{

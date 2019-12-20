@@ -796,10 +796,6 @@ Reta* qry_bombaRadiacaoNuc(Cidade cid, double x, double y, char* nomeSvg, char* 
     }
     free(polig);
     desalocaArvore(retas);
-
-    // FILE* arquivoTxt = fopen(nomeTxt, "a+");
-
-
     return bomba;
 }
 

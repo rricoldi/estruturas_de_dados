@@ -331,6 +331,7 @@ int main(int argc, char *argv[])
     
     free(nomeDoArquivoSvg);
     printf("Mémoria desalocada\n");
+    remove("tempFile.txt");
     
     return 0;
 }
