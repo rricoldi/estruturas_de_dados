@@ -269,6 +269,16 @@ bool retaInterPoligono(Reta rr, Reta poligono[], int tamPolig){
     }
     return false;
 }
+bool retaDentroPoligono(Reta rr, Reta poligono[], int tamPolig){
+    struct reta *r = rr;
+    if(retaInterPoligono(rr, poligono, tamPolig)){
+        return true;
+    }
+    if(pontoDentroPoligono(r->A.x, r->A.y, poligono, tamPolig)){
+        return true;
+    }
+    return false;
+}
 bool retanguloTotalDentroPoligono(Reta retangulo[], Reta poligono[], int tamPolig){
     //Se qualquer reta do retangulo intersectar o poligono ao menos uma vez,
     //isso indica que o retangulo nao esta totalmente contido no poligono

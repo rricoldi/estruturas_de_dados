@@ -25,6 +25,15 @@ double getY(Info info);
 
 char* getID(Info info);
 
+double arestaGetX1(Info);
+double arestaGetY1(Info);
+double arestaGetX2(Info);
+double arestaGetY2(Info);
+void setArestaComprimento(Info info, double comprimento);
+void setArestaVelocidade(Info info, double velocidade);
+
+void percorreArestas(Graph, void (*func) (Reta*, Info, int), Reta* polig, int tamPolig);
+
 int getIndiceVertice(Graph* graph, char id[]);
 
 bool getAtivo(Info info);

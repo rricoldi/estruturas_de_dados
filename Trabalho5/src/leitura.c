@@ -7,6 +7,14 @@
 #include "comercioPessoas.h"
 #include "geometria.h"
 
+typedef struct pBombas{
+	Reta* bomba;
+	int tamBomba;
+	struct pBombas *next;
+}Bomba;
+
+void qry_pQM(Reta* bomba, Info aresta, int tamBomba);
+
 Cidade leiaGeo(char nomeDoArquivoGeo[], char nomeDoArquivoSvg[])
 {
 	FILE *arquivoGeo;
@@ -299,6 +307,7 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 	
 	Info info1 = 0, info2 = 0;
 	Ponto *R = malloc(sizeof(Ponto) * 11);
+	Bomba* brns = NULL;
 
 	FILE *arquivoQry;
 	arquivoQry = fopen(nomeDoArquivoQry, "r");
@@ -544,20 +553,26 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 			}
 			
 			qry_bombaRadiacaoLum(cidade, brlX, brlY, nomeDoArquivoSvg);
+
 		}
 		else if(strcmp("brn", comando)==0){
 			double brnX, brnY;
 			char arqPol[51];
+			int tamBomba;
 			fscanf(arquivoQry, "%lf %lf %50s ", &brnX, &brnY, arqPol);
 			
 			if(verificador2 == 0){
 				remove(nomeDoArquivoSvg);
 				iniciaSvg(nomeDoArquivoSvg);
-				imprimeCidade(cidade, nomeDoArquivoSvg);	
+				imprimeCidade(cidade, nomeDoArquivoSvg);
+				imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
 				verificador2++;
 			}
-
-			qry_bombaRadiacaoNuc(cidade, brnX, brnY, nomeDoArquivoSvg, nomeDoArquivoTxt, arqPol, caminhoDoArquivoDeEntrada);
+			Bomba* atual = malloc(sizeof(Bomba));
+			atual->next = brns;
+			brns = atual;
+			atual->bomba = qry_bombaRadiacaoNuc(cidade, brnX, brnY, tempFileName, nomeDoArquivoTxt, arqPol, caminhoDoArquivoDeEntrada, &tamBomba);
+			atual->tamBomba = tamBomba;
 		}
 		else if(strcmp("mplg?", comando)==0){
 			char arqPol[51];
@@ -668,6 +683,15 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 				char registrador2[4];
 				char sufixoDoArquivo[100];
 
+				if(brns){
+					Bomba* aux = brns;
+					Reta* teste = brns->bomba;
+					while(aux){
+						percorreArestas(grafo, qry_pQM, aux->bomba, aux->tamBomba);
+						aux = aux->next;
+					}
+				}
+				
 				fscanf(arquivoQry, " %s %s %s %s %s", sufixoDoArquivo, registrador1, registrador2, corMaisCurto, corMaisRapido);
 				int index1 = atoi(registrador1+1);
 				int index2 = atoi(registrador2+1);
@@ -682,6 +706,21 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 				imprimeCirculosERetangulos(cidade, arquivoDeSaidaGrafoSvg);
 				dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 1);
 				dijkstra(grafo, retornaIndiceVertice(getLista(grafo), getPontoX(R[index1]), getPontoY(R[index1])), retornaIndiceVertice(getLista(grafo), getPontoX(R[index2]), getPontoY(R[index2])), arquivoDeSaidaGrafoSvg, arquivoDeSaidaGrafoTxt, corMaisCurto, corMaisRapido, 2);
+				FILE* arquivoSvg = fopen(arquivoDeSaidaGrafoSvg, "a+");
+				if(arquivoSvg != NULL){
+					FILE* tempFile = fopen(tempFileName, "r+");
+					while(!feof(tempFile)){
+						char buffer[301];
+						fgets(buffer, 300, tempFile);
+						fputs(buffer, arquivoSvg);
+						// char a;
+						// a = getc(tempFile);
+						// putc(a, tempFile);
+					}
+					fclose(tempFile);
+					// remove(tempFileName);
+					fclose(arquivoSvg);
+				}
 				finalizaSvg(arquivoDeSaidaGrafoSvg);
 				verificador = 0;
 				verificador2 = 1;
@@ -689,25 +728,32 @@ Ponto* leiaQry(char caminhoDoArquivoDeEntrada[], char prefixoDoArquivoQry[], cha
 				fclose(arquivoQry);
 				return R;
 			}
+			
 		}
 	}
 	if(verificador != 0 && verificador2 == 0){
 		imprimeCidade(cidade, nomeDoArquivoSvg);
 		imprimeCirculosERetangulos(cidade, nomeDoArquivoSvg);
-		FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
-		if(arquivoSvg != NULL){
-			FILE* tempFile = fopen(tempFileName, "r+");
-			while(!feof(tempFile)){
-				char buffer[301];
-				fgets(buffer, 300, tempFile);
-				fputs(buffer, arquivoSvg);
-			}
-			fclose(tempFile);
-			remove(tempFileName);
-			fclose(arquivoSvg);
-		}
+		
 		finalizaSvg(nomeDoArquivoSvg);
 	}
+	FILE* arquivoSvg = fopen(nomeDoArquivoSvg, "a");
+	if(arquivoSvg != NULL){
+		FILE* tempFile = fopen(tempFileName, "r+");
+		while(!feof(tempFile)){
+			char buffer[301];
+			fgets(buffer, 300, tempFile);
+			fputs(buffer, arquivoSvg);
+			// char a;
+			// a = getc(tempFile);
+			// putc(a, tempFile);
+		}
+		fclose(tempFile);
+		// remove(tempFileName);
+		fclose(arquivoSvg);
+	}
+	if(verificador2 != 0)
+		finalizaSvg(nomeDoArquivoSvg);
 
 	if (verificador == 84)
 		remove(nomeDoArquivoSvg);
@@ -955,4 +1001,14 @@ Graph* leiaVia(char* nomeDoArquivoVia) {
 	// dijkstra(grafo, getIndiceVertice(grafo, "(b0|10,10)"), getIndiceVertice(grafo, "(b0|1,1)"), 1);
 	// imprimeGrafo(grafo);
 	return grafo;
+}
+
+void qry_pQM(Reta* bomba, Info aresta, int tamBomba){
+	// printf("%lf, %lf, %lf, %lf\n", arestaGetX1(aresta), arestaGetY1(aresta), arestaGetX2(aresta), arestaGetY2(aresta));
+	Reta* r = criarReta(arestaGetX1(aresta), arestaGetY1(aresta), arestaGetX2(aresta), arestaGetY2(aresta));
+	if(retaDentroPoligono(r, bomba, tamBomba)){
+		setArestaComprimento(aresta, 2000000);
+		setArestaVelocidade(aresta, 2000000);
+	}
+	retaFinalizar(r);
 }
